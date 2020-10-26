@@ -1,0 +1,13 @@
+---
+title: 'Liquid'
+---
+
+<ul>
+	{%- for test in tests %}
+		<li>
+			<pre><code class="language-{{ test.language }}">
+				{{ test.code }}
+			</code></pre>
+		</li>
+	{%- endfor %}
+</ul>

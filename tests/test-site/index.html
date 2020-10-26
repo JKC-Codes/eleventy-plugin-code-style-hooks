@@ -1,0 +1,13 @@
+---
+title: Tests
+eleventyExcludeFromCollections: true
+---
+
+<ul id="list">
+	{%- for page in collections.all %}
+		<li class="test">
+			<a href="{{ page.url }}" class="title">{{ page.data.title }}</a> &mdash; <span class="status">checking status&hellip;</span>
+			{{ page.templateContent }}
+		</li>
+	{%- endfor %}
+</ul>
