@@ -4,6 +4,10 @@ title: 'Handlebars'
 
 <ul>
 	{{#each tests}}
-		<li><pre><code class="language-{{this.language}}">{{this.code}}</code></pre></li>
+		<li>
+			<pre><code class="language-{{this.language}}">
+				{{this.code}}
+			</code></pre>
+		</li>
 	{{/each}}
 </ul>
