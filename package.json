@@ -33,6 +33,10 @@
 		"test": "npm-run-all --parallel ava eleventy",
 		"prepublishOnly": "npm run test"
 	},
+	"dependencies": {
+		"posthtml": "^0.13.4",
+		"posthtml-prism": "^1.0.1"
+	},
 	"devDependencies": {
 		"@11ty/eleventy": "^0.11.0",
 		"ava": "^3.13.0",
