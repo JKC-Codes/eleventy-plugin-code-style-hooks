@@ -1,6 +1,6 @@
 module.exports = [
 	{
-		language: 'foo',
+		language: 'js',
 		code: `function bar(){
 			return baz;
 		}`
