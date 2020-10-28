@@ -6,9 +6,6 @@ module.exports = function(eleventyConfig, options) {
 		if(outputPath.endsWith('.html')) {
 			return highlight(code);
 		}
-		else {
-			return code;
-		}
 	});
 }
 
