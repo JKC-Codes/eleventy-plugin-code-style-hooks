@@ -1,22 +1,3 @@
-const posthtml = require('posthtml');
-const prism = require('posthtml-prism');
-
-module.exports = function(eleventyConfig, options) {
-	eleventyConfig.addTransform('syntaxHighlighter', function(code, outputPath) {
-		if(outputPath.endsWith('.html')) {
-			return highlight(code);
-		}
-	});
-}
-
-function highlight(code) {
-	return posthtml([prism()])
-  .process(code)
-  .then(result => result.html)
-}
-
-
-
 /*
 TODO:
 	load additional languages
@@ -25,3 +6,13 @@ TODO:
 		highlight specific line numbers
 	auto add css
 */
+
+const transformed = require('./components/transformHTML.js');
+
+module.exports = function(eleventyConfig, options) {
+	eleventyConfig.addTransform('syntaxHighlighter', function(HTMLString, outputPath) {
+		if(outputPath.endsWith('.html')) {
+			return transformed(HTMLString);
+		}
+	});
+}
