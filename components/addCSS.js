@@ -1,4 +1,6 @@
 // ast = Abstract Syntax Tree from HTML Parser
-module.exports = function(ast) {
-	return ast;
+module.exports = function(options) {
+	return function(ast) {
+		return ast;
+	}
 }
