@@ -11,7 +11,7 @@ const transformed = require('./components/transform-HTML.js');
 
 module.exports = function(eleventyConfig, options) {
 	eleventyConfig.addTransform('syntaxHighlighter', function(HTMLString, outputPath) {
-		if(outputPath.endsWith('.html')) {
+		if(outputPath && outputPath.endsWith('.html')) {
 			return transformed(HTMLString);
 		}
 	});
