@@ -1,10 +1,88 @@
+const regEx = require('./regular-expressions.js');
 const Prism = require('prismjs');
 const loadLanguages = require('prismjs/components/');
 
-// ast = Abstract Syntax Tree from HTML Parser
-module.exports = function(ast) {
-	return ast;
+module.exports = function(options) {
+	// AST = Abstract Syntax Tree from HTML Parser
+	return function(AST) {
+
+		addLanguageToCode(AST);
+
+		return AST;
+	}
 }
+
+function addLanguageToCode(AST) {
+	const codeElements = getNodes(AST, AST, {tag: 'code'});
+	const languageClassRegEx = new RegExp(regEx.class.language.className, 'i');
+	const languageClassSelector = {attrs: {class: languageClassRegEx}};
+
+	codeElements.forEach(codeElement => {
+		const hasClassAttribute = codeElement.attrs && codeElement.attrs.class;
+		const hasLanguageClass = hasClassAttribute && languageClassRegEx.test(codeElement.attrs.class);
+
+		if(!hasLanguageClass) {
+			inheritClass(AST, codeElement, languageClassSelector)
+		}
+	});
+}
+
+function getNodes(fullTree, tree, selector) {
+	let nodes = [];
+
+	fullTree.match.call(tree, selector, function(matchingNode) {
+		nodes.push(matchingNode);
+		return matchingNode;
+	});
+	return nodes;
+}
+
+function inheritClass(fullTree, subject, selector) {
+	const nodesWithClass = getNodes(fullTree, fullTree, selector);
+	let lastMatchingNode;
+
+	for(node of nodesWithClass) {
+		fullTree.match.call(node, subject, match => {
+			lastMatchingNode = node;
+			return match;
+		});
+	}
+
+	if(lastMatchingNode) {
+		const parentClass = lastMatchingNode.attrs.class;
+		const languageClassRegEx = new RegExp(regEx.class.language.className, 'i');
+		const className = parentClass.match(languageClassRegEx)[0];
+
+		addClass(subject, className);
+	}
+}
+
+function addClass(node, className) {
+	if(!node.attrs) {
+		node.attrs = {};
+	}
+
+	if(!node.attrs.class) {
+		node.attrs.class = '';
+	}
+
+	// Regex = start of line or whitespace + classname + end of line or whitespace
+	const classRegex = new RegExp(/(?:^|\s)${className}(?:$|\s)/, 'i');
+	const hasClass = classRegex.test(node.attrs.class);
+
+	if(!hasClass) {
+		if(node.attrs.class === '' || node.attrs.class.endsWith(' ')) {
+			node.attrs.class += className;
+		}
+		else {
+			node.attrs.class += ' ' + className;
+		}
+	}
+}
+
+
+
+
 
 
 
@@ -13,8 +91,12 @@ module.exports = function(ast) {
 /*
 
 Code inherits language from ancestors' language-xxx class
+
 If code is a direct child of pre: add language-xxx class to pre (override existing language class)
+
+
 If language-none class on code: don't highlight
+
 Run prism on code
 
 */
