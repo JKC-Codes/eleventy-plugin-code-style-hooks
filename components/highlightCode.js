@@ -2,18 +2,27 @@ const regEx = require('./regular-expressions.js');
 const Prism = require('prismjs');
 const loadLanguages = require('prismjs/components/');
 
-module.exports = function(options) {
+module.exports = function(AST, codeElements, preElements) {
 	// AST = Abstract Syntax Tree from HTML Parser
-	return function(AST) {
 
-		addLanguageToCode(AST);
+	addLanguageToCode(AST, codeElements);
+	addLanguageToPre(AST, preElements);
 
-		return AST;
-	}
+	return AST;
 }
 
-function addLanguageToCode(AST) {
-	const codeElements = getNodes(AST, AST, {tag: 'code'});
+
+function getNodes(fullTree, tree, selector) {
+	let nodes = [];
+
+	fullTree.match.call(tree, selector, matchingNode => {
+		nodes.push(matchingNode);
+		return matchingNode;
+	});
+	return nodes;
+}
+
+function addLanguageToCode(AST, codeElements) {
 	const languageClassRegEx = new RegExp(regEx.class.language.className, 'i');
 	const languageClassSelector = {attrs: {class: languageClassRegEx}};
 
@@ -27,26 +36,16 @@ function addLanguageToCode(AST) {
 	});
 }
 
-function getNodes(fullTree, tree, selector) {
-	let nodes = [];
-
-	fullTree.match.call(tree, selector, function(matchingNode) {
-		nodes.push(matchingNode);
-		return matchingNode;
-	});
-	return nodes;
-}
-
 function inheritClass(fullTree, subject, selector) {
 	const nodesWithClass = getNodes(fullTree, fullTree, selector);
 	let lastMatchingNode;
 
-	for(node of nodesWithClass) {
+	nodesWithClass.forEach(node => {
 		fullTree.match.call(node, subject, match => {
 			lastMatchingNode = node;
 			return match;
 		});
-	}
+	})
 
 	if(lastMatchingNode) {
 		const parentClass = lastMatchingNode.attrs.class;
@@ -58,6 +57,8 @@ function inheritClass(fullTree, subject, selector) {
 }
 
 function addClass(node, className) {
+	className = className.trim();
+
 	if(!node.attrs) {
 		node.attrs = {};
 	}
@@ -80,7 +81,32 @@ function addClass(node, className) {
 	}
 }
 
+function addLanguageToPre(AST, preElements) {
+	const languageClassRegEx = new RegExp(regEx.class.language.className, 'i');
 
+	preElements.forEach(preElement => {
+		const preHasClassAttribute = preElement.attrs && preElement.attrs.class;
+		const preHasLanguageClass = preHasClassAttribute && languageClassRegEx.test(preElement.attrs.class);
+
+		AST.match.call(preElement, {tag: 'code'}, codeElement => {
+			const codeHasClassAttribute = codeElement.attrs && codeElement.attrs.class;
+			const codeHasLanguageClass = codeHasClassAttribute && languageClassRegEx.test(codeElement.attrs.class);
+
+			if(codeHasLanguageClass) {
+				if(preHasLanguageClass) {
+					// Mimic Prism removing existing language class(es)
+					// Regex = language class + optional whitespace
+					const languageClassRegexGlobal = new RegExp(`${regEx.class.language.className}(?: )?`, 'gi');
+					preElement.attrs.class = preElement.attrs.class.replace(languageClassRegexGlobal, '');
+				}
+
+				addClass(preElement, codeElement.attrs.class.match(languageClassRegEx)[0]);
+			}
+
+			return codeElement;
+		});
+	})
+}
 
 
 
@@ -90,10 +116,9 @@ function addClass(node, className) {
 
 /*
 
-Code inherits language from ancestors' language-xxx class
+Only add class to pre if direct parent
 
-If code is a direct child of pre: add language-xxx class to pre (override existing language class)
-
+Change lang to language
 
 If language-none class on code: don't highlight
 

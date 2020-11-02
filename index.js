@@ -7,12 +7,17 @@ TODO:
 	auto add css
 */
 
-const transformed = require('./components/transform-HTML.js');
+const posthtml = require('posthtml');
+const transformHTML = require('./components/transform-HTML.js');
 
 module.exports = function(eleventyConfig, options) {
 	eleventyConfig.addTransform('syntaxHighlighter', function(HTMLString, outputPath) {
 		if(outputPath && outputPath.endsWith('.html')) {
-			return transformed(HTMLString);
+			return posthtml([transformHTML()])
+			.process(HTMLString)
+			.then(transformedAbstractSyntaxTree => {
+				return transformedAbstractSyntaxTree.html
+			})
 		}
 	});
 }
