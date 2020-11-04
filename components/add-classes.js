@@ -1,5 +1,6 @@
 /*
 	Change lang to language on pre and code only
+	code keeps languages, pre doesn't
 	Code inherits class from closest ancestor if no language
 		Don't inherit if no-language on Code or ancestor
 	Pre inherits class from code and overwrites
@@ -36,12 +37,13 @@ function addLanguageToCode(AST, codeElements) {
 }
 
 function inheritClass(fullTree, subject) {
-	const classSelector = {attrs: {class: new RegExp(regEx.classLanguage, 'i')}};
+	const classLanguage = {attrs: {class: new RegExp(regEx.classLanguage, 'i')}};
+	const classNoLanguage = {attrs: {class: new RegExp(regEx.classExclude, 'i')}};
 	let lastMatchingNode;
 
-	// Get all nodes with a language class
-	fullTree.match(classSelector, nodeWithLanguage => {
-		// Find the closest ancestor with a language class
+	// Get all nodes with a language/no-language class
+	fullTree.match([classLanguage, classNoLanguage], nodeWithLanguage => {
+		// Find the closest ancestor with a language/no-language class
 		fullTree.match.call(nodeWithLanguage, subject, match => {
 			if(match === subject) {
 				lastMatchingNode = nodeWithLanguage;
@@ -53,9 +55,14 @@ function inheritClass(fullTree, subject) {
 
 	if(lastMatchingNode) {
 		const ancestorClass = lastMatchingNode.attrs.class;
-		const languageClass = ancestorClass.match(new RegExp(regEx.classLanguage, 'i'))[0];
+		const languageClasses = ancestorClass.match(new RegExp(regEx.classLanguage, 'gi'));
 
-		addClass(subject, languageClass);
+		// If it has a language class use it, otherwise it must be no-language so ignore
+		if(languageClasses) {
+			languageClasses.forEach(languageClass => {
+				addClass(subject, languageClass);
+			})
+		}
 	}
 }
 
@@ -72,19 +79,10 @@ function addClass(node, className) {
 function normaliseClass(node) {
 	if(node.attrs && node.attrs.class) {
 		let classes = node.attrs.class.split(' ');
-		let firstMatch = true;
 
 		classes.forEach(function(className, index) {
 			if(new RegExp(regEx.classLanguage, 'i').test(className)) {
-				// Only normalise first lang(uage)-xxxx class
-				if(firstMatch) {
-					firstMatch = false;
-					classes[index] = classes[index].toLowerCase().replace('lang-', 'language-');
-				}
-				else {
-					// Remove additional language classes
-					classes.splice(index, 1);
-				}
+				classes[index] = classes[index].toLowerCase().replace('lang-', 'language-');
 			}
 		});
 
