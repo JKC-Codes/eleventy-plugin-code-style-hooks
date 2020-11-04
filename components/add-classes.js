@@ -24,7 +24,7 @@ module.exports = function(AST, codeElements, preElements) {
 function addLanguageToCode(AST, codeElements) {
 	codeElements.forEach(codeElement => {
 		const hasClass = codeElement.attrs && codeElement.attrs.class;
-		const hasLanguageClass = hasClass && new RegExp(regEx.class).test(codeElement.attrs.class);
+		const hasLanguageClass = hasClass && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
 
 		if(!hasLanguageClass) {
 			inheritClass(AST, codeElement);
@@ -35,7 +35,7 @@ function addLanguageToCode(AST, codeElements) {
 }
 
 function inheritClass(fullTree, subject) {
-	const classSelector = {attrs: {class: new RegExp(regEx.class)}};
+	const classSelector = {attrs: {class: new RegExp(regEx.classLanguage, 'i')}};
 	let lastMatchingNode;
 
 	// Get all nodes with a language class
@@ -52,7 +52,7 @@ function inheritClass(fullTree, subject) {
 
 	if(lastMatchingNode) {
 		const parentClass = lastMatchingNode.attrs.class;
-		const languageClass = parentClass.match(new RegExp(regEx.class))[0];
+		const languageClass = parentClass.match(new RegExp(regEx.classLanguage, 'i'))[0];
 
 		addClass(subject, languageClass);
 	}
@@ -74,8 +74,8 @@ function normaliseClass(node) {
 		let firstMatch = true;
 
 		classes.forEach(function(className, index) {
-			if(new RegExp(regEx.class).test(className)) {
-				// Only normalise first lang(uage)-xxx class
+			if(new RegExp(regEx.classLanguage, 'i').test(className)) {
+				// Only normalise first lang(uage)-xxxx class
 				if(firstMatch) {
 					firstMatch = false;
 					classes[index] = classes[index].toLowerCase().replace('lang-', 'language-');
@@ -92,7 +92,7 @@ function normaliseClass(node) {
 }
 
 function addLanguageToPre(AST, preElements) {
-	const languageClassRegEx = new RegExp(regEx.class);
+	const languageClassRegEx = new RegExp(regEx.classLanguage, 'i');
 
 	preElements.forEach(preElement => {
 		const preHasClassAttribute = preElement.attrs && preElement.attrs.class;
@@ -106,7 +106,7 @@ function addLanguageToPre(AST, preElements) {
 				if(preHasLanguageClass) {
 					// Mimic Prism removing existing language class(es)
 					// Regex = language class + optional whitespace
-					const languageClassRegexGlobal = new RegExp(`${regEx.class}(?: )?`, 'g');
+					const languageClassRegexGlobal = new RegExp(`${regEx.classLanguage}(?: )?`, 'gi');
 					preElement.attrs.class = preElement.attrs.class.replace(languageClassRegexGlobal, '');
 				}
 
