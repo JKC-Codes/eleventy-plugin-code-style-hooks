@@ -14,7 +14,7 @@ module.exports = function(AST, codeElements, preElements) {
 	// If no language class, inherit one from closest ancestor
 	addLanguageToCode(AST, codeElements);
 
-	// Inherit language class from direct child Code elements
+	// Inherit language class from direct children Code elements
 	addLanguageToPre(AST, preElements);
 
 	return AST;
@@ -24,9 +24,10 @@ module.exports = function(AST, codeElements, preElements) {
 function addLanguageToCode(AST, codeElements) {
 	codeElements.forEach(codeElement => {
 		const hasClass = codeElement.attrs && codeElement.attrs.class;
-		const hasLanguageClass = hasClass && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
+		const hasClassLanguage = hasClass && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
+		const hasClassNoLanguage = hasClass && new RegExp(regEx.classExclude, 'i').test(codeElement.attrs.class);
 
-		if(!hasLanguageClass) {
+		if(!hasClassLanguage && !hasClassNoLanguage) {
 			inheritClass(AST, codeElement);
 		}
 
@@ -39,20 +40,20 @@ function inheritClass(fullTree, subject) {
 	let lastMatchingNode;
 
 	// Get all nodes with a language class
-	fullTree.match(classSelector, matchingNode => {
+	fullTree.match(classSelector, nodeWithLanguage => {
 		// Find the closest ancestor with a language class
-		fullTree.match.call(matchingNode, subject, match => {
-			lastMatchingNode = matchingNode;
+		fullTree.match.call(nodeWithLanguage, subject, match => {
+			if(match === subject) {
+				lastMatchingNode = nodeWithLanguage;
+			}
 			return match;
 		});
-		return matchingNode;
+		return nodeWithLanguage;
 	})
 
-//TODO skip if no-language found
-
 	if(lastMatchingNode) {
-		const parentClass = lastMatchingNode.attrs.class;
-		const languageClass = parentClass.match(new RegExp(regEx.classLanguage, 'i'))[0];
+		const ancestorClass = lastMatchingNode.attrs.class;
+		const languageClass = ancestorClass.match(new RegExp(regEx.classLanguage, 'i'))[0];
 
 		addClass(subject, languageClass);
 	}
