@@ -36,16 +36,19 @@ function addLanguageToCode(AST, codeElements) {
 
 function inheritClass(fullTree, subject) {
 	const classSelector = {attrs: {class: new RegExp(regEx.class)}};
-	const nodesWithClass = getNodes(fullTree, fullTree, classSelector);
 	let lastMatchingNode;
-//TODO skip if no-language found
-	// Find the closest ancestor with a language class
-	nodesWithClass.forEach(nodeWithClass => {
-		fullTree.match.call(nodeWithClass, subject, match => {
-			lastMatchingNode = nodeWithClass;
+
+	// Get all nodes with a language class
+	fullTree.match(classSelector, matchingNode => {
+		// Find the closest ancestor with a language class
+		fullTree.match.call(matchingNode, subject, match => {
+			lastMatchingNode = matchingNode;
 			return match;
 		});
+		return matchingNode;
 	})
+
+//TODO skip if no-language found
 
 	if(lastMatchingNode) {
 		const parentClass = lastMatchingNode.attrs.class;
@@ -55,33 +58,36 @@ function inheritClass(fullTree, subject) {
 	}
 }
 
-function getNodes(fullTree, tree, selector) {
-	let nodes = [];
-
-	fullTree.match.call(tree, selector, matchingNode => {
-		nodes.push(matchingNode);
-		return matchingNode;
-	});
-	return nodes;
-}
-
 function addClass(node, className) {
-	// Ensure class key exists before referencing it
 	if(!node.attrs || !node.attrs.class) {
-		Object.assign(node, {attrs: {class: ''}});
+		node.attrs = node.attrs || {};
+		node.attrs.class = className;
 	}
-
-	const classes = node.attrs.class.split(' ');
-	classes.push(className);
-	node.attrs.class = classes.join(' ');
+	else {
+		node.attrs.class += ' ' + className;
+	}
 }
 
 function normaliseClass(node) {
 	if(node.attrs && node.attrs.class) {
-		// lower case language
-		// change lang- to language-
-		// remove additional languages
+		let classes = node.attrs.class.split(' ');
+		let firstMatch = true;
 
+		classes.forEach(function(className, index) {
+			if(new RegExp(regEx.class).test(className)) {
+				// Only normalise first lang(uage)-xxx class
+				if(firstMatch) {
+					firstMatch = false;
+					classes[index] = classes[index].toLowerCase().replace('lang-', 'language-');
+				}
+				else {
+					// Remove additional language classes
+					classes.splice(index, 1);
+				}
+			}
+		});
+
+		node.attrs.class = classes.join(' ');
 	}
 }
 
