@@ -1,12 +1,3 @@
-/*
-	Change lang to language on pre and code only
-	code keeps languages, pre doesn't
-	Code inherits class from closest ancestor if no language
-		Don't inherit if no-language on Code or ancestor
-	Pre inherits class from code and overwrites
-		Only add class to pre if direct parent
-*/
-
 const regEx = require('./regular-expressions.js');
 
 module.exports = function(AST, codeElements, preElements) {
@@ -16,7 +7,7 @@ module.exports = function(AST, codeElements, preElements) {
 	addLanguageToCode(AST, codeElements);
 
 	// Inherit language class from direct children Code elements
-	addLanguageToPre(AST, preElements);
+	addLanguageToPre(preElements);
 
 	return AST;
 }
@@ -60,19 +51,15 @@ function inheritClass(fullTree, subject) {
 		// If it has a language class use it, otherwise it must be no-language so ignore
 		if(languageClasses) {
 			languageClasses.forEach(languageClass => {
-				addClass(subject, languageClass);
+				if(!subject.attrs || !subject.attrs.class) {
+					subject.attrs = subject.attrs || {};
+					subject.attrs.class = languageClass;
+				}
+				else {
+					subject.attrs.class += ' ' + languageClass;
+				}
 			})
 		}
-	}
-}
-
-function addClass(node, className) {
-	if(!node.attrs || !node.attrs.class) {
-		node.attrs = node.attrs || {};
-		node.attrs.class = className;
-	}
-	else {
-		node.attrs.class += ' ' + className;
 	}
 }
 
@@ -86,33 +73,51 @@ function normaliseClass(node) {
 			}
 		});
 
-		node.attrs.class = classes.join(' ');
+		// Set removes duplicates before updating the classes
+		node.attrs.class = [...new Set(classes)].join(' ');
 	}
 }
 
-function addLanguageToPre(AST, preElements) {
-	const languageClassRegEx = new RegExp(regEx.classLanguage, 'i');
-
+function addLanguageToPre(preElements) {
 	preElements.forEach(preElement => {
-		const preHasClassAttribute = preElement.attrs && preElement.attrs.class;
-		const preHasLanguageClass = preHasClassAttribute && languageClassRegEx.test(preElement.attrs.class);
+		if(preElement.content) {
+			let codeClasses = new Set();
 
-		AST.match.call(preElement, {tag: 'code'}, codeElement => {
-			const codeHasClassAttribute = codeElement.attrs && codeElement.attrs.class;
-			const codeHasLanguageClass = codeHasClassAttribute && languageClassRegEx.test(codeElement.attrs.class);
-
-			if(codeHasLanguageClass) {
-				if(preHasLanguageClass) {
-					// Mimic Prism removing existing language class(es)
-					// Regex = language class + optional whitespace
-					const languageClassRegexGlobal = new RegExp(`${regEx.classLanguage}(?: )?`, 'gi');
-					preElement.attrs.class = preElement.attrs.class.replace(languageClassRegexGlobal, '');
+			// Add any language classes from Code direct children to the set
+			preElement.content.forEach(node => {
+				if(node.tag === 'code' && node.attrs && node.attrs.class) {
+					const nodeClasses = node.attrs.class.match(new RegExp(regEx.classLanguage, 'gi'));
+					if(nodeClasses) {
+						nodeClasses.forEach(nodeClass => {
+							codeClasses.add(nodeClass);
+						})
+					}
 				}
+			})
 
-				addClass(preElement, codeElement.attrs.class.match(languageClassRegEx)[0]);
+			if(codeClasses.size > 0) {
+				normaliseClass(preElement);
+				preElement.attrs = preElement.attrs || {};
+				let preClasses = preElement.attrs.class && preElement.attrs.class.split(' ') || [];
+
+				// Remove language classes not in any Code children
+				preClasses.forEach((preClass, index) => {
+					const isLanguageClass = new RegExp(regEx.classLanguage, 'i').test(preClass);
+
+					if(isLanguageClass && !codeClasses.has(preClass)) {
+						preClasses.splice(index, 1);
+					}
+				})
+
+				// Add language classes from Code children if not already there
+				codeClasses.forEach(codeClass => {
+					if(!preClasses.includes(codeClass)) {
+						preClasses.push(codeClass);
+					}
+				});
+
+				preElement.attrs.class = preClasses.join(' ');
 			}
-
-			return codeElement;
-		});
+		}
 	})
 }
