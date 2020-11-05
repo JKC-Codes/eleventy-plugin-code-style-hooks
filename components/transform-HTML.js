@@ -5,11 +5,12 @@ const addCSS = require('./add-CSS.js');
 module.exports = function(options) {
 	// AST = Abstract Syntax Tree from HTML Parser
 	return function(AST) {
-		const codeElements = getNodes(AST, {tag: 'code'});
-		const preElements = getNodes(AST, {tag: 'pre'});
+		const preAndCodeElements = getNodes(AST, [{tag: 'code'}, {tag: 'pre'}]);
+		const codeElements = preAndCodeElements.filter(element => element.tag === 'code');
+		const preElements = preAndCodeElements.filter(element => element.tag === 'pre');
 
 		addClasses(AST, codeElements, preElements);
-		highlightCode(AST, codeElements);
+		highlightCode(codeElements);
 		addCSS(AST, codeElements);
 
 		return AST;
