@@ -37,6 +37,7 @@
 	},
 	"dependencies": {
 		"posthtml": "^0.13.4",
+		"posthtml-render": "^1.2.3",
 		"prismjs": "^1.22.0"
 	},
 	"devDependencies": {
