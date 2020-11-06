@@ -19,5 +19,8 @@ module.exports = function(eleventyConfig, options) {
 				return transformedAbstractSyntaxTree.html
 			})
 		}
+		else {
+			return HTMLString;
+		}
 	});
 }
