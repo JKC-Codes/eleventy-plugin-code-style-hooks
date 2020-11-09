@@ -2,7 +2,9 @@ const pluginSyntaxHighlighter = require('./index.js');
 
 module.exports = function(eleventyConfig) {
 
-	eleventyConfig.addPlugin(pluginSyntaxHighlighter, {});
+	eleventyConfig.addPlugin(pluginSyntaxHighlighter, {
+		allowHTML: false,
+	});
 
 	return {
 		dir: {

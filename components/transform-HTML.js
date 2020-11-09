@@ -10,7 +10,7 @@ module.exports = function(options) {
 		const preElements = preAndCodeElements.filter(element => element.tag === 'pre');
 
 		addClasses(AST, codeElements, preElements);
-		highlightCode(codeElements);
+		highlightCode(codeElements, options);
 		addCSS(AST, codeElements);
 
 		return AST;
@@ -24,5 +24,6 @@ function getNodes(tree, selector) {
 		nodes.push(matchingNode);
 		return matchingNode;
 	});
+
 	return nodes;
 }
