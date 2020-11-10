@@ -17,7 +17,7 @@ module.exports = function(codeElements, options) {
 
 			// Skip highlighting unrecognised languages, including 'language-none'
 			if(Prism.languages[language]) {
-				highlightNode(codeElement, language, options.allowHTML);
+				highlightNode(codeElement, language, options.allowMarkup);
 			}
 		}
 	})
@@ -31,13 +31,13 @@ function getLanguage(element) {
 	}
 }
 
-function highlightNode(node, language, allowHTML) {
+function highlightNode(node, language, allowMarkup) {
 	node.content.forEach((contentItem, index) => {
-		if(typeof contentItem === 'string' || !allowHTML) {
+		if(typeof contentItem === 'string' || !allowMarkup) {
 			node.content[index] = Prism.highlight(parseHTML(contentItem), Prism.languages[language], language);
 		}
 		else {
-			highlightNode(contentItem, language, allowHTML);
+			highlightNode(contentItem, language, allowMarkup);
 		}
 	})
 }

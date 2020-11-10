@@ -1,3 +1,4 @@
 module.exports = {
-	allowHTML: true
+	allowMarkup: true,
+	css: null
 }
