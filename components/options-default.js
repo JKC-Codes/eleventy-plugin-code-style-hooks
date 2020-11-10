@@ -1,3 +1,3 @@
 module.exports = {
-	allowHTML: false
+	allowHTML: true
 }
