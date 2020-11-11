@@ -3,7 +3,10 @@ const Prism = require('prismjs');
 const loadLanguage = require('prismjs/components/');
 const regEx = require('./regular-expressions.js');
 
-module.exports = function(codeElements, options) {
+module.exports = async function(codeElements, options) {
+
+	let highlightedSomething = false;
+
 	codeElements.forEach(codeElement => {
 		const language = getLanguage(codeElement);
 
@@ -18,9 +21,14 @@ module.exports = function(codeElements, options) {
 			// Skip highlighting unrecognised languages, including 'language-none'
 			if(Prism.languages[language]) {
 				highlightNode(codeElement, language, options.allowMarkup);
+				if(!highlightedSomething) {
+					highlightedSomething = true;
+				};
 			}
 		}
 	})
+
+	return highlightedSomething;
 }
 
 function getLanguage(element) {

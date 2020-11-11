@@ -10,8 +10,12 @@ module.exports = function(options) {
 		const preElements = preAndCodeElements.filter(element => element.tag === 'pre');
 
 		addClasses(AST, codeElements, preElements);
-		highlightCode(codeElements, options);
-		addCSS(AST, codeElements, options);
+		highlightCode(codeElements, options)
+		.then(needsCSS => {
+			if(needsCSS) {
+				addCSS(AST, options);
+			}
+		});
 
 		return AST;
 	}
