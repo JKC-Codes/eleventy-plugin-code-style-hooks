@@ -11,7 +11,7 @@ module.exports = function(options) {
 
 		addClasses(AST, codeElements, preElements);
 		highlightCode(codeElements, options);
-		addCSS(AST, codeElements);
+		addCSS(AST, codeElements, options);
 
 		return AST;
 	}

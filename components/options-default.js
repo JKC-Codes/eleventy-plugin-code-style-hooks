@@ -1,4 +1,4 @@
 module.exports = {
 	allowMarkup: true,
-	css: null
+	styles: null
 }
