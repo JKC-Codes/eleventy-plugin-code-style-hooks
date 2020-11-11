@@ -8,8 +8,6 @@ module.exports = function(AST, codeElements, preElements) {
 
 	// Inherit language class from direct children Code elements
 	addLanguageToPre(preElements);
-
-	return AST;
 }
 
 
