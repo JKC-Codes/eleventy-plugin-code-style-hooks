@@ -7,7 +7,6 @@ module.exports = function(AST, codeElements, options) {
 	});
 
 	if(options.styles && needsCSS) {
-		const styles = parseStyles(options.styles);
 		// TODO there's no need to traverse the entire tree here, the only options are:
 		// 1. html followed by head
 		// 2. html with no head
@@ -30,44 +29,11 @@ module.exports = function(AST, codeElements, options) {
 				head.content = [];
 			}
 
-			styles.forEach(style => {
+			options.styles.forEach(style => {
 				head.content.push(style);
 			});
 
 			return head;
 		});
 	}
-}
-
-function parseStyles(styles) {
-	let linkElements = [];
-
-	function addLinkElement(style) {
-		const linkElement = {
-			tag: 'link',
-			attrs: {
-				rel: 'stylesheet'
-			}
-		};
-
-		if(typeof style === 'string') {
-			linkElement.attrs.href = style;
-		}
-		else {
-			linkElement.attrs = Object.assign(linkElement.attrs, style);
-		}
-
-		linkElements.push(linkElement);
-	}
-
-	if(Array.isArray(styles)) {
-		styles.forEach(style => {
-			addLinkElement(style)
-		});
-	}
-	else {
-		addLinkElement(styles)
-	}
-
-	return linkElements;
 }

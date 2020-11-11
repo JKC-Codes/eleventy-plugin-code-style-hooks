@@ -7,12 +7,13 @@ auto detect language?
 */
 
 const posthtml = require('posthtml');
+const parseOptions = require('./components/options-parser.js');
 const defaultOptions = require('./components/options-default.js');
 const transformHTML = require('./components/transform-HTML.js');
 
 module.exports = function(eleventyConfig, options) {
 
-	options = Object.assign({}, defaultOptions, options);
+	options = Object.assign({}, defaultOptions, parseOptions(options));
 
 	eleventyConfig.addTransform('syntaxHighlighter', function(HTMLString, outputPath) {
 
