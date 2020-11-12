@@ -63,16 +63,18 @@ function inheritClass(fullTree, subject) {
 
 function normaliseClass(node) {
 	if(node.attrs && node.attrs.class) {
-		let classes = node.attrs.class.split(' ');
-
-		classes.forEach(function(className, index) {
-			if(new RegExp(regEx.classLanguage, 'i').test(className)) {
-				classes[index] = classes[index].toLowerCase().replace('lang-', 'language-');
+		node.attrs.class = node.attrs.class
+		.split(' ')
+		.reduce((acc, cur) => {
+			if(new RegExp(regEx.classLanguage, 'i').test(cur)) {
+				const normalisedClass = cur.toLowerCase().replace('lang-', 'language-');
+				return acc.includes(normalisedClass) ? acc : acc.concat(normalisedClass);
 			}
-		});
-
-		// Set removes duplicates before updating the classes
-		node.attrs.class = [...new Set(classes)].join(' ');
+			else {
+				return acc.concat(cur);
+			}
+		}, [])
+		.join(' ');
 	}
 }
 
@@ -96,7 +98,7 @@ function addLanguageToPre(preElements) {
 			if(codeClasses.size > 0) {
 				normaliseClass(preElement);
 				preElement.attrs = preElement.attrs || {};
-				let preClasses = preElement.attrs.class && preElement.attrs.class.split(' ') || [];
+				let preClasses = preElement.attrs.class ? preElement.attrs.class.split(' ') : [];
 
 				// Remove language classes not in any Code children
 				preClasses.forEach((preClass, index) => {
