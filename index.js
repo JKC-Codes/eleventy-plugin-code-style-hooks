@@ -7,8 +7,8 @@ auto detect language?
 */
 
 const posthtml = require('posthtml');
-const parseOptions = require('./components/options-parser.js');
 const defaultOptions = require('./components/options-default.js');
+const parseOptions = require('./components/options-parser.js');
 const transformHTML = require('./components/transform-HTML.js');
 
 module.exports = function(eleventyConfig, options) {
@@ -20,8 +20,8 @@ module.exports = function(eleventyConfig, options) {
 		if(outputPath && outputPath.endsWith('.html')) {
 			return posthtml([transformHTML(options)])
 			.process(HTMLString)
-			.then(transformedAbstractSyntaxTree => {
-				return transformedAbstractSyntaxTree.html
+			.then(abstractSyntaxTree => {
+				return abstractSyntaxTree.html
 			})
 		}
 		else {
