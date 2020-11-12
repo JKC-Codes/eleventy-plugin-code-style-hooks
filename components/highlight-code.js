@@ -3,40 +3,27 @@ const Prism = require('prismjs');
 const loadLanguage = require('prismjs/components/');
 const regEx = require('./regular-expressions.js');
 
-module.exports = async function(codeElements, options) {
-
-	let highlightedSomething = false;
+module.exports = function(codeElements, options) {
+	let codeWithSyntax = [];
 
 	codeElements.forEach(codeElement => {
-		const language = getLanguage(codeElement);
+		// Array index 1 is the language capture group
+		const language = codeElement.attrs.class.match(new RegExp(regEx.classLanguage))[1];
 
-		// Only highlight code blocks with a language class
-		if(language) {
-			if(!Prism.languages[language]) {
-				// Prism only loads markup, css, clike and javascript by default
-				loadLanguage.silent = true;
-				loadLanguage([language]);
-			}
+		// Prism only loads markup, css, clike and javascript by default
+		if(!Prism.languages[language]) {
+			loadLanguage.silent = true;
+			loadLanguage([language]);
+		}
 
-			// Skip highlighting unrecognised languages, including 'language-none'
-			if(Prism.languages[language]) {
-				highlightNode(codeElement, language, options.allowMarkup);
-				if(!highlightedSomething) {
-					highlightedSomething = true;
-				};
-			}
+		// Skip highlighting unrecognised languages including 'language-none'
+		if(Prism.languages[language]) {
+			highlightNode(codeElement, language, options.allowMarkup);
+			codeWithSyntax.push(codeElement);
 		}
 	})
 
-	return highlightedSomething;
-}
-
-function getLanguage(element) {
-	if(element.attrs && element.attrs.class) {
-		const classMatch = element.attrs.class.match(new RegExp(regEx.classLanguage));
-		// Array index 1 is the language capture group
-		return classMatch ? classMatch[1] : undefined;
-	}
+	return codeWithSyntax;
 }
 
 function highlightNode(node, language, allowMarkup) {
