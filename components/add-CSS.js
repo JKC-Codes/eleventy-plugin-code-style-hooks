@@ -1,33 +1,38 @@
 module.exports = function(AST, options) {
+	// AST = Abstract Syntax Tree from HTML Parser
+	let [head, HTMLNode, index] = getHead(AST);
 
-		// TODO there's no need to traverse the entire tree here, the only options are:
-		// 1. html followed by head
-		// 2. html with no head
-		// 3. head with no html
-		// 4. no html or head
-		/*
-		Elements that can be used inside <head>:
+	options.styles.forEach(style => {
+		if(head) {
+			head.content ? head.content.push(style) : head.content = [style];
+		}
+		else {
+			const content = HTMLNode ? HTMLNode.content : AST;
+			content.splice(index, 0, style);
+			index++
+		}
+	});
+}
 
-    <title>
-    <base>
-    <link>
-    <style>
-    <meta>
-    <script>
-    <noscript>
-    <template>
-		*/
+function getHead(tree, HTMLNode) {
+	const validHeadTags = ['title', 'link', 'meta', 'style', 'script', 'noscript', 'base'];
 
-		// AST = Abstract Syntax Tree from HTML Parser
-		AST.match({tag: 'head'}, head => {
-			if(!head.content) {
-				head.content = [];
-			}
-
-			options.styles.forEach(style => {
-				head.content.push(style);
-			});
-
-			return head;
-		});
+	for(let i = 0; i < tree.length; i++) {
+		// Has head tag
+		if(tree[i].tag === 'head') {
+			return [tree[i], null, null];
+		}
+		// Head tag must be a child of HTML
+		else if(tree[i].tag === 'html') {
+			return getHead(tree[i].content, tree[i]);
+		}
+		// <!doctype html>, spacing character, or no head tag but is valid inside head
+		else if(!tree[i].tag || validHeadTags.includes(tree[i].tag)) {
+			continue;
+		}
+		// No head tag and not an element that is valid inside head
+		else {
+			return [null, HTMLNode, i];
+		}
+	}
 }
