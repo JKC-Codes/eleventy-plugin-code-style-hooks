@@ -7,20 +7,25 @@ module.exports = function(options) {
 	return function(AST) {
 		const [codeElements, preElements] = getNodes(AST, [{tag: 'code'}, {tag: 'pre'}]);
 
-		if(codeElements.length === 0) { return AST; }
-
-		return Promise.resolve(addClasses(AST, codeElements, preElements))
-		.then(codeWithLang => {
-			if(codeWithLang && codeWithLang.length > 0) {
-				return highlightCode(codeWithLang, options);
-			}
-		})
-		.then(codeWithSyntax => {
-			if(codeWithSyntax && codeWithSyntax.length > 0) {
-				addCSS(AST, options);
-			}
+		if(codeElements.length === 0) {
 			return AST;
-		})
+		}
+		else {
+			return Promise.resolve(
+				addClasses(AST, codeElements, preElements, options))
+				.then(codeWithLang => {
+					if(codeWithLang && codeWithLang.length > 0) {
+						return highlightCode(codeWithLang, options);
+					}
+				})
+				.then(codeWithSyntax => {
+					if(codeWithSyntax && codeWithSyntax.length > 0) {
+						addCSS(AST, options);
+					}
+					return AST;
+				}
+			)
+		}
 	}
 }
 

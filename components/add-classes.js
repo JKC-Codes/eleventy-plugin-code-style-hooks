@@ -1,13 +1,13 @@
 const regEx = require('./regular-expressions.js');
 
-module.exports = function(AST, codeElements, preElements) {
+module.exports = function(AST, codeElements, preElements, options) {
 	// AST = Abstract Syntax Tree from HTML Parser
 
 	// If no language class, inherit one from closest ancestor
-	addLanguageToCode(AST, codeElements);
+	addLanguageToCode(AST, codeElements, options.removeRedundancy);
 
 	// Inherit language class from direct children Code elements
-	addLanguageToPre(preElements);
+	addLanguageToPre(preElements, options.removeRedundancy);
 
 	return codeElements.filter(element => {
 		return element.attrs && new RegExp(regEx.classLanguage, 'i').test(element.attrs.class);
@@ -15,7 +15,7 @@ module.exports = function(AST, codeElements, preElements) {
 }
 
 
-function addLanguageToCode(AST, codeElements) {
+function addLanguageToCode(AST, codeElements, removeRedundancy) {
 	codeElements.forEach(codeElement => {
 		const hasClass = codeElement.attrs && codeElement.attrs.class;
 		const hasClassLanguage = hasClass && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
@@ -25,7 +25,7 @@ function addLanguageToCode(AST, codeElements) {
 			inheritClass(AST, codeElement);
 		}
 
-		normaliseClass(codeElement);
+		normaliseClass(codeElement, removeRedundancy);
 	});
 }
 
@@ -65,14 +65,19 @@ function inheritClass(fullTree, subject) {
 	}
 }
 
-function normaliseClass(node) {
+function normaliseClass(node, removeRedundancy) {
 	if(node.attrs && node.attrs.class) {
 		node.attrs.class = node.attrs.class
 		.split(' ')
 		.reduce((acc, cur) => {
 			if(new RegExp(regEx.classLanguage, 'i').test(cur)) {
 				const normalisedClass = cur.toLowerCase().replace('lang-', 'language-');
-				return acc.includes(normalisedClass) ? acc : acc.concat(normalisedClass);
+				if(removeRedundancy) {
+					return acc.includes(normalisedClass) ? acc : acc.concat(normalisedClass);
+				}
+				else {
+					return acc.concat(normalisedClass);
+				}
 			}
 			else {
 				return acc.concat(cur);
@@ -82,7 +87,7 @@ function normaliseClass(node) {
 	}
 }
 
-function addLanguageToPre(preElements) {
+function addLanguageToPre(preElements, removeRedundancy) {
 	preElements.forEach(preElement => {
 		if(preElement.content) {
 			let codeClasses = new Set();
@@ -100,18 +105,20 @@ function addLanguageToPre(preElements) {
 			})
 
 			if(codeClasses.size > 0) {
-				normaliseClass(preElement);
+				normaliseClass(preElement, removeRedundancy);
 				preElement.attrs = preElement.attrs || {};
 				let preClasses = preElement.attrs.class ? preElement.attrs.class.split(' ') : [];
 
-				// Remove language classes not in any Code children
-				preClasses.forEach((preClass, index) => {
-					const isLanguageClass = new RegExp(regEx.classLanguage, 'i').test(preClass);
+				if(removeRedundancy) {
+					// Remove language classes not in any Code children
+					preClasses.forEach((preClass, index) => {
+						const isLanguageClass = new RegExp(regEx.classLanguage, 'i').test(preClass);
 
-					if(isLanguageClass && !codeClasses.has(preClass)) {
-						preClasses.splice(index, 1);
-					}
-				})
+						if(isLanguageClass && !codeClasses.has(preClass)) {
+							preClasses.splice(index, 1);
+						}
+					})
+				}
 
 				// Add language classes from Code children if not already there
 				codeClasses.forEach(codeClass => {
