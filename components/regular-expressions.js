@@ -14,6 +14,4 @@ const languageName = String.raw`([\w-]+)`;
 module.exports = {
 	// 'lang-xxxx' or 'language-xxxx'
 	classLanguage: String.raw`${classStart}${languageStart}-${languageName}${classEnd}`,
-	// 'no-lang', 'no-language', 'no-lang-xxxx' or 'no-language-xxxx'
-	classExclude: String.raw`${classStart}no-${languageStart}(?:-${languageName})?${classEnd}`
 }

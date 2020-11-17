@@ -15,9 +15,9 @@ function addLanguageToCode(AST, codeElements, removeRedundancy) {
 	codeElements.forEach(codeElement => {
 		const hasClass = codeElement.attrs && codeElement.attrs.class;
 		const hasClassLanguage = hasClass && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
-		const hasClassNoLanguage = hasClass && new RegExp(regEx.classExclude, 'i').test(codeElement.attrs.class);
+		const hasAttributePrismIgnore = codeElement.attrs && codeElement.attrs['data-prism'] === 'ignore';
 
-		if(!hasClassLanguage && !hasClassNoLanguage) {
+		if(!hasClassLanguage && !hasAttributePrismIgnore) {
 			inheritClass(AST, codeElement);
 		}
 
@@ -27,26 +27,25 @@ function addLanguageToCode(AST, codeElements, removeRedundancy) {
 
 function inheritClass(fullTree, subject) {
 	const classLanguage = {attrs: {class: new RegExp(regEx.classLanguage, 'i')}};
-	const classNoLanguage = {attrs: {class: new RegExp(regEx.classExclude, 'i')}};
+	const attributeIgnore = {attrs: {'data-prism': 'ignore'}};
 	let lastMatchingNode;
 
-	// Get all nodes with a language/no-language class
-	fullTree.match([classLanguage, classNoLanguage], nodeWithLanguage => {
-		// Find the closest ancestor with a language/no-language class
-		fullTree.match.call(nodeWithLanguage, subject, match => {
+	// Get all nodes with a language class or data-prism="ignore" attribute
+	fullTree.match([classLanguage, attributeIgnore], matchingNode => {
+		// Find the closest ancestor with a language class or data-prism="ignore" attribute
+		fullTree.match.call(matchingNode, subject, match => {
 			if(match === subject) {
-				lastMatchingNode = nodeWithLanguage;
+				lastMatchingNode = matchingNode;
 			}
 			return match;
 		});
-		return nodeWithLanguage;
+		return matchingNode;
 	})
 
 	if(lastMatchingNode) {
-		const ancestorClass = lastMatchingNode.attrs.class;
-		const languageClasses = ancestorClass.match(new RegExp(regEx.classLanguage, 'gi'));
+		const languageClasses = (lastMatchingNode.attrs.class || '').match(new RegExp(regEx.classLanguage, 'gi'));
 
-		// If it has a language class use it, otherwise it must be no-language so ignore
+		// If it has a language class use it, otherwise it must be data-prism="ignore"
 		if(languageClasses) {
 			languageClasses.forEach(languageClass => {
 				if(!subject.attrs || !subject.attrs.class) {
