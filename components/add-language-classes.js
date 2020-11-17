@@ -8,10 +8,6 @@ module.exports = function(AST, codeElements, preElements, options) {
 
 	// Inherit language class from direct children Code elements
 	addLanguageToPre(preElements, options.removeRedundancy);
-
-	return codeElements.filter(element => {
-		return element.attrs && new RegExp(regEx.classLanguage, 'i').test(element.attrs.class);
-	});
 }
 
 

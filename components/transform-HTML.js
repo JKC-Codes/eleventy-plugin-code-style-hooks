@@ -1,5 +1,6 @@
-const highlightCode = require('./highlight-code.js');
-const addClasses = require('./add-classes.js');
+const regEx = require('./regular-expressions.js');
+const addLanguageClasses = require('./add-language-classes.js');
+const addStyleHooks = require('./add-style-hooks.js');
 const addCSS = require('./add-CSS.js');
 
 module.exports = function(options) {
@@ -7,25 +8,19 @@ module.exports = function(options) {
 	return function(AST) {
 		const [codeElements, preElements] = getNodes(AST, [{tag: 'code'}, {tag: 'pre'}]);
 
-		if(codeElements.length === 0) {
-			return AST;
+		if(codeElements.length > 0) {
+			addLanguageClasses(AST, codeElements, preElements, options);
+
+			const codeWithLang = codeElements.filter(element => {
+				return element.attrs && new RegExp(regEx.classLanguage, 'i').test(element.attrs.class);
+			});
+
+			if(codeWithLang.length > 0) {
+				addStyleHooks(codeWithLang, options);
+				addCSS(AST, options);
+			}
 		}
-		else {
-			return Promise.resolve(
-				addClasses(AST, codeElements, preElements, options))
-				.then(codeWithLang => {
-					if(codeWithLang && codeWithLang.length > 0) {
-						return highlightCode(codeWithLang, options);
-					}
-				})
-				.then(codeWithSyntax => {
-					if(codeWithSyntax && codeWithSyntax.length > 0) {
-						addCSS(AST, options);
-					}
-					return AST;
-				}
-			)
-		}
+		return AST;
 	}
 }
 

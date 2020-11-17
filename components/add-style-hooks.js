@@ -4,7 +4,6 @@ const loadLanguage = require('prismjs/components/');
 const regEx = require('./regular-expressions.js');
 
 module.exports = function(codeElements, options) {
-	let codeWithSyntax = [];
 
 	codeElements.forEach(codeElement => {
 		// Array index 1 is the language capture group
@@ -19,11 +18,8 @@ module.exports = function(codeElements, options) {
 		// Skip highlighting unrecognised languages including 'language-none'
 		if(Prism.languages[language]) {
 			highlightNode(codeElement, language, options.allowMarkup);
-			codeWithSyntax.push(codeElement);
 		}
 	})
-
-	return codeWithSyntax;
 }
 
 function highlightNode(node, language, allowMarkup) {
