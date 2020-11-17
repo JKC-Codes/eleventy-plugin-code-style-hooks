@@ -13,9 +13,10 @@ module.exports = function(AST, codeElements, preElements, options) {
 
 function addLanguageToCode(AST, codeElements, removeRedundancy) {
 	codeElements.forEach(codeElement => {
-		const hasClass = codeElement.attrs && codeElement.attrs.class;
-		const hasClassLanguage = hasClass && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
-		const hasAttributePrismIgnore = codeElement.attrs && codeElement.attrs['data-prism'] === 'ignore';
+		const hasClassLanguage = codeElement.attrs && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
+		const hasAttributePrismIgnore = codeElement.attrs && Object.entries(codeElement.attrs).some(([key, value]) => {
+			return key.toLowerCase() === 'data-prism' && /\bignore\b/i.test(value);
+		});
 
 		if(!hasClassLanguage && !hasAttributePrismIgnore) {
 			inheritClass(AST, codeElement);
@@ -26,20 +27,25 @@ function addLanguageToCode(AST, codeElements, removeRedundancy) {
 }
 
 function inheritClass(fullTree, subject) {
-	const classLanguage = {attrs: {class: new RegExp(regEx.classLanguage, 'i')}};
-	const attributeIgnore = {attrs: {'data-prism': 'ignore'}};
 	let lastMatchingNode;
 
 	// Get all nodes with a language class or data-prism="ignore" attribute
-	fullTree.match([classLanguage, attributeIgnore], matchingNode => {
-		// Find the closest ancestor with a language class or data-prism="ignore" attribute
-		fullTree.match.call(matchingNode, subject, match => {
-			if(match === subject) {
-				lastMatchingNode = matchingNode;
-			}
-			return match;
+	fullTree.walk(node => {
+		const hasClassLanguage = node.attrs && new RegExp(regEx.classLanguage, 'i').test(node.attrs.class);
+		const hasAttributePrismIgnore = node.attrs && Object.entries(node.attrs).some(([key, value]) => {
+			return key.toLowerCase() === 'data-prism' && /\bignore\b/i.test(value);
 		});
-		return matchingNode;
+
+		if(hasClassLanguage || hasAttributePrismIgnore) {
+			// Find the current code element
+			fullTree.match.call(node, subject, match => {
+				if(match === subject) {
+					lastMatchingNode = node;
+				}
+				return match;
+			});
+		}
+		return node;
 	})
 
 	if(lastMatchingNode) {
