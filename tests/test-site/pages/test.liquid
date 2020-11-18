@@ -1,0 +1,279 @@
+---
+title: 'test'
+permalink: '/test/'
+---
+
+<p>testing</p>
+
+<div class="language-js">
+
+	<pre><code class="lang-js">
+		function test() {
+			return 'should be js';
+		}
+	</code></pre>
+
+	<div>
+
+		<pre><code class="language-css">
+			.should {
+				be: css;
+			}
+		</code></pre>
+
+		<pre><code class="language-javascript">
+			function test() {
+				return 'should be javascript';
+			}
+		</code></pre>
+
+	</div>
+
+	<div data-prism="ignore">
+
+		<pre><code>
+			function test() {
+				return 'should not inherit a language class';
+			}
+		</code></pre>
+
+	</div>
+
+	<div data-prism="ignore">
+
+		<pre><code>
+			function test() {
+				return 'should not inherit a language class';
+			}
+
+		</code></pre>
+	</div>
+
+	<pre><code>
+		function test() {
+			return 'should be js';
+		}
+	</code></pre>
+
+	<pre><code class="lang-js" data-prism="ignore">
+		function test() {
+			return 'should be js';
+		}
+	</code></pre>
+
+	<pre><code class="lang-javascript" data-prism="ignore">
+		function test() {
+			return 'should be javascript';
+		}
+	</code></pre>
+
+	<pre><code data-prism="ignore">
+		function test() {
+			return 'should not inherit a language class';
+		}
+	</code></pre>
+
+	<pre><span><code>
+		function test() {
+			return 'span wrapped in pre should be js';
+		}
+	</code></span></pre>
+
+</div>
+
+<pre><code>
+	function test() {
+		return 'should not inherit a language class';
+	}
+</code></pre>
+
+<pre class="lang-js"><code class="foo">
+	function test() {
+		return 'should keep existing foo class';
+	}
+</code></pre>
+
+<pre><code class="language-foo test language-bar test language-baz">
+	function test() {
+		return 'should not have double spaces';
+	}
+</code></pre>
+
+<pre><code class=" language-foo  language-bar       language-baz ">
+	function test() {
+		return 'should keep extra spaces at start and end';
+	}
+</code></pre>
+
+<pre class="LANG-js"><code>
+	function test() {
+		return 'lang should be lower case';
+	}
+</code></pre>
+
+<pre><code class="lang-JS">
+	function test() {
+		return 'JS should be lower case';
+	}
+</code></pre>
+
+<pre class="lang-JS"><code data-stay>
+	function test() {
+		return 'data attribute should stay';
+	}
+</code></pre>
+
+<pre class="lang-JS"><code class="">
+	function test() {
+		return 'empty class should be replaced';
+	}
+</code></pre>
+
+<div class="language-foo">
+
+	<div class="language-bar">
+		<p>should inherit language-bar</p>
+		<pre><code>
+			function test() {
+				return 'identical';
+			}
+		</code></pre>
+
+	</div>
+
+	<div>
+		<p>should inherit language-foo</p>
+		<pre><code>
+			function test() {
+				return 'identical';
+			}
+		</code></pre>
+
+	</div>
+
+</div>
+
+<div class="language-foo">
+
+	<div>
+		<p>should inherit language-foo</p>
+		<pre><code>
+			function test() {
+				return 'identical';
+			}
+		</code></pre>
+
+	</div>
+
+	<div class="language-bar">
+		<p>should inherit language-bar</p>
+		<pre><code>
+			function test() {
+				return 'identical';
+			}
+		</code></pre>
+
+	</div>
+
+</div>
+
+<pre class="language-html foo language-css bar language-js baz"><code>
+	function test() {
+		return 'code should inherit all language classes - html css js';
+	}
+</code></pre>
+
+<pre class="foo language-html bar"><code class="language-css language-js">
+	function test() {
+		return 'pre should have language-html removed';
+	}
+</code></pre>
+
+<div class="lang-js">
+	this should keep lang-js
+</div>
+
+<pre></pre>
+
+<pre>a</pre>
+
+<pre class="lang-test1 lang-bar">
+	<code class="language-foo language-bar language-baz lang-foo lang-test2 lang-bar lang-baz">
+		function test() {
+			return 'pre should have lang-test1 removed and foo bar baz added';
+		}
+	</code>
+	<code class="language-foo language-bar language-baz lang-foo lang-bar lang-baz">
+		function test() {
+			return 'pre should have lang-test1 removed and foo bar baz added';
+		}
+	</code>
+</pre>
+
+<pre class="language-js"><code data-prism="ignore">
+	function test() {
+		return 'should not be highlighted';
+	}
+</code></pre>
+
+<pre class="language-js"><code Data-prism="ignore">
+	function test() {
+		return 'should not be highlighted';
+	}
+</code></pre>
+
+<pre class="language-js"><code data-Prism="ignore">
+	function test() {
+		return 'should not be highlighted';
+	}
+</code></pre>
+
+<pre class="language-js"><code data-Prism="Ignore">
+	function test() {
+		return 'should not be highlighted';
+	}
+</code></pre>
+
+<pre class="lang-js">
+	<code data-prism="ignore">
+		function test() {
+			return 'should not be highlighted';
+		}
+	</code>
+	<code class="language-html">
+		function test() {
+			return 'should have html';
+		}
+	</code>
+	<code class="">
+		function test() {
+			return 'should have js';
+		}
+	</code>
+</pre>
+
+<code class="language-html">
+	&lt;p>should be html&lt;/p>
+</code>
+
+<code class="language-css">
+	.should {
+		be: css;
+	}
+</code>
+
+<code class="language-js">
+	function test() {
+		return 'should be js';
+	}
+</code>
+
+<code>&lt;p&gt;escaped&lt;/p&gt;<p>not escaped</p></code>
+
+<code class="lang-html">&lt;p&gt;escaped&lt;/p&gt;<p>not escaped</p></code>
+
+<pre class="foo foo language-js bar"><code class="foo language-javascript bar bar">
+	function test() {
+		return 'should keep duplicated classes - foo foo on pre and bar bar on code';
+	}
+</code></pre>

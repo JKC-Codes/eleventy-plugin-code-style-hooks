@@ -1,0 +1,49 @@
+---
+title: 'line numbers'
+permalink: '/line-numbers/'
+---
+
+<style>
+pre {
+	counter-reset: line;
+	width: 150px;
+}
+
+.new-line {
+	counter-increment: line;
+	display: inline-grid;
+	grid-template-columns: auto auto;
+}
+
+.new-line > .line-number {
+	grid-row: 1 / 9999;
+}
+
+.new-line > .line-number::before {
+	content: counter(line);
+	display: inline-block;
+	height: 100%;
+	border-right: 1px solid #999;
+	padding-right: 0.75em;
+	margin-right: 0.75em;
+	color: #999;
+}
+</style>
+
+<pre><code class="lang-js">
+function foo(bar) {
+	return baz;
+}
+</code></pre>
+
+<pre><code class="lang-js">
+<span class="new-line"><span class="line-number" aria-hidden="true"></span><span class="code-content">function foo(bar) {</span></span>
+<span class="new-line"><span class="line-number" aria-hidden="true"></span><span class="code">	return baz;</span></span>
+<span class="new-line"><span class="line-number" aria-hidden="true"></span><span class="code">}</span></span>
+</code></pre>
+
+<pre><code class="lang-js">
+<span class="new-line"><span class="line-number" aria-hidden="true"></span>function foo(bar) {</span>
+<span class="new-line"><span class="line-number" aria-hidden="true"></span>	return baz;</span>
+<span class="new-line"><span class="line-number" aria-hidden="true"></span>}</span>
+</code></pre>
