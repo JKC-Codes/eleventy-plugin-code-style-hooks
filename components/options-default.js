@@ -1,5 +1,5 @@
 module.exports = {
-	allowMarkup: true,
+	lineNumbers: false,
 	removeRedundancy: true,
 	styles: null
 }

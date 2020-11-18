@@ -3,7 +3,8 @@ const pluginSyntaxHighlighter = require('./index.js');
 module.exports = function(eleventyConfig) {
 
 	eleventyConfig.addPlugin(pluginSyntaxHighlighter, {
-		allowMarkup: false,
+		highlightMarkup: true,
+		lineNumbers: true,
 		removeRedundancy: true,
 		styles: [
 			'https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/themes/prism.min.css',
