@@ -25,12 +25,14 @@ function highlightSyntax(node, options) {
 }
 
 function highlightNode(node, language, allowMarkup) {
-	node.content.forEach((contentItem, index) => {
-		if(typeof contentItem === 'string') {
-			node.content[index] = Prism.highlight(contentItem, Prism.languages[language], language);
-		}
-		else {
-			highlightNode(contentItem, language, allowMarkup);
-		}
-	})
+	if(node.content) {
+		node.content.forEach((contentItem, index) => {
+			if(typeof contentItem === 'string') {
+				node.content[index] = Prism.highlight(contentItem, Prism.languages[language], language);
+			}
+			else {
+				highlightNode(contentItem, language, allowMarkup);
+			}
+		})
+	}
 }
