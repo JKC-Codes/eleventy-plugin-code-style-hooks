@@ -20,7 +20,7 @@ function highlightSyntax(node, options) {
 
 	// Skip highlighting unrecognised languages including 'language-none'
 	if(Prism.languages[language]) {
-		highlightNode(node, language, options.highlightMarkup);
+		highlightNode(node, language);
 	}
 }
 
