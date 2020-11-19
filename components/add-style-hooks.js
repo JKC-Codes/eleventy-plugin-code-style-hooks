@@ -30,6 +30,10 @@ function highlightNode(node, language) {
 			if(typeof contentItem === 'string') {
 				node.content[index] = Prism.highlight(contentItem, Prism.languages[language], language);
 			}
+			// Prevent Code within Code highlighting tokens
+			else if(contentItem.tag === 'code') {
+				return;
+			}
 			else {
 				highlightNode(contentItem, language);
 			}
