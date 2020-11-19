@@ -15,7 +15,7 @@ function addLanguageToCode(AST, codeElements, removeRedundancy) {
 	codeElements.forEach(codeElement => {
 		const hasClassLanguage = codeElement.attrs && new RegExp(regEx.classLanguage, 'i').test(codeElement.attrs.class);
 		const hasAttributePrismIgnore = codeElement.attrs && Object.entries(codeElement.attrs).some(([key, value]) => {
-			return key.toLowerCase() === 'data-prism' && /\bignore\b/i.test(value);
+			return /^data-prism$/i.test(key) && /\bignore\b/i.test(value);
 		});
 
 		if(!hasClassLanguage && !hasAttributePrismIgnore) {
@@ -33,7 +33,7 @@ function inheritClass(fullTree, subject) {
 	fullTree.walk(node => {
 		const hasClassLanguage = node.attrs && new RegExp(regEx.classLanguage, 'i').test(node.attrs.class);
 		const hasAttributePrismIgnore = node.attrs && Object.entries(node.attrs).some(([key, value]) => {
-			return key.toLowerCase() === 'data-prism' && /\bignore\b/i.test(value);
+			return /^data-prism$/i.test(key) && /\bignore\b/i.test(value);
 		});
 
 		if(hasClassLanguage || hasAttributePrismIgnore) {
