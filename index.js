@@ -1,11 +1,3 @@
-/*
-TODO:
-show line numbers
-highlight specific line numbers
-add plugins manually?
-auto detect language?
-*/
-
 const posthtml = require('posthtml');
 const defaultOptions = require('./components/options-default.js');
 const parseOptions = require('./components/options-parser.js');
