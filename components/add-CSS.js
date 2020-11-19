@@ -18,7 +18,6 @@ function getHead(tree, HTMLNode) {
 	const validHeadTags = ['title', 'link', 'meta', 'style', 'script', 'noscript', 'base'];
 
 	for(let i = 0; i < tree.length; i++) {
-		// Has head tag
 		if(tree[i].tag === 'head') {
 			return [tree[i], null, null];
 		}
@@ -26,11 +25,11 @@ function getHead(tree, HTMLNode) {
 		else if(tree[i].tag === 'html') {
 			return getHead(tree[i].content, tree[i]);
 		}
-		// <!doctype html>, spacing character, or no head tag but is valid inside head
+		// Either Head exists or this is valid before/in a Head element
 		else if(!tree[i].tag || validHeadTags.includes(tree[i].tag)) {
 			continue;
 		}
-		// No head tag and not an element that is valid inside head
+		// Head doesn't exist as this isn't permitted head content
 		else {
 			return [null, HTMLNode, i];
 		}
