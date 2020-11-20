@@ -7,13 +7,16 @@ module.exports = function(eleventyConfig) {
 		lineNumbers: true,
 		removeRedundancy: true,
 		styles: [
-			'https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/themes/prism.min.css',
+			'/styles/prism.css',
 			{
-				href: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/themes/prism-dark.min.css',
+				href: '/styles/prism-dark.css',
 				media: '(prefers-color-scheme: dark)'
-			}
+			},
+			'/styles/line-numbers.css'
 		]
 	});
+
+	eleventyConfig.addPassthroughCopy("./tests/test-site/styles/");
 
 	return {
 		dir: {
