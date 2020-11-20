@@ -16,7 +16,7 @@ module.exports = function(options) {
 			});
 
 			if(codeWithLang.length > 0) {
-				addStyleHooks(codeWithLang, options);
+				addStyleHooks(codeWithLang);
 				addCSS(AST, options);
 			}
 		}
