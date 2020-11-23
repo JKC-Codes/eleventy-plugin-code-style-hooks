@@ -7,8 +7,9 @@ class page {
 
 	render({tests}) {
 		return tests.reduce((acc, cur) => {
+			const code = cur.code.replace(/</gi, '&lt;');
 			return acc +
-`<pre><code class="language-${cur.language}">${cur.code}
+`<pre><code class="language-${cur.language}">${code}
 </code></pre>
 `;
 		}, '');

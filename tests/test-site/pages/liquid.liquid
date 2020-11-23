@@ -2,6 +2,6 @@
 title: 'Liquid'
 ---
 {%- for test in tests -%}
-<pre><code class="language-{{ test.language }}">{{ test.code }}
+<pre><code class="language-{{ test.language }}">{{ test.code | escape }}
 </code></pre>
 {% endfor -%}
