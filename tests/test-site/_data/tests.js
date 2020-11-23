@@ -26,4 +26,22 @@ module.exports = [
 		code:
 `$ echo '#! /foo/bar/baz'`
 	},
+
+	{
+		language: 'none',
+		code:
+`language none`
+	},
+
+	{
+		language: '',
+		code:
+`no class name`
+	},
+
+	{
+		language: 'hTmL',
+		code:
+`<p>hTmL</p>`
+	},
 ]
