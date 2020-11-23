@@ -7,7 +7,60 @@ eleventyExcludeFromCollections: true
 	{%- for page in collections.all %}
 		<li class="test">
 			<a href="{{ page.url }}" class="title">{{ page.data.title }}</a> &mdash; <span class="status">checking status&hellip;</span>
-			{{ page.templateContent }}
+			<div class="code">{{ page.templateContent }}</div>
 		</li>
 	{%- endfor %}
 </ul>
+
+
+<script>
+	const list = document.querySelector('#list');
+	const tests = Array.from(list.querySelectorAll('.test'));
+
+	// Sort list into alphabetical order
+	tests.sort((a, b) => {
+		const titleA = a.querySelector('.title').innerText;
+		const titleB = b.querySelector('.title').innerText;
+		return titleA > titleB;
+	});
+	list.innerHTML = '';
+	tests.forEach(test => {
+		list.appendChild(test);
+	});
+
+	// Display status
+	const control = document.createElement('div')
+	control.innerHTML = `<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>foo <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>em</span><span class="token punctuation">></span></span>bar<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>em</span><span class="token punctuation">></span></span> baz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+</code></pre>
+<pre class="language-css"><code class="language-css"><span class="token selector">.foo</span> <span class="token punctuation">{</span>
+	<span class="token property">bar</span><span class="token punctuation">:</span> baz<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token parameter">bar</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> baz<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class="language-shell"><code class="language-shell">$ <span class="token builtin class-name">echo</span> <span class="token string">'#! /foo/bar/baz'</span>
+</code></pre>
+<pre class="language-none"><code class="language-none">language none
+</code></pre>
+<pre><code>no class name
+</code></pre>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>hTmL<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+</code></pre>`;
+
+	tests.forEach(test => {
+		const matchesControl = test.querySelector('.code').innerHTML.trim() === control.innerHTML;
+		const status = test.querySelector('.status');
+
+		if(matchesControl) {
+			status.textContent = 'Passing';
+			status.style.color = 'green';
+			test.removeChild(test.querySelector('.code'));
+		}
+		else {
+			status.textContent = 'Failing';
+			status.style.color = 'red';
+		}
+	});
+</script>
