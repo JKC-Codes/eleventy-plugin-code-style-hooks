@@ -1,16 +1,29 @@
 module.exports = [
 	{
-		language: 'js',
+		language: 'html',
 		code:
-`function bar() {
-	return baz;
+`<p>foo <em>bar</em> baz</p>`
+	},
+
+	{
+		language: 'css',
+		code:
+`.foo {
+	bar: baz;
 }`
 	},
+
 	{
 		language: 'javascript',
 		code:
-`function bar() {
+`function foo(bar) {
 	return baz;
 }`
+	},
+
+	{
+		language: 'shell',
+		code:
+`$ echo '#! /foo/bar/baz'`
 	},
 ]
