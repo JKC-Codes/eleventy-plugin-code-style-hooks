@@ -1,8 +1,9 @@
 module.exports = [
 	{
 		language: 'js',
-		code: `function bar(){
-			return baz;
-		}`
+		code:
+`function bar() {
+	return baz;
+}`
 	},
 ]

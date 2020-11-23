@@ -2,8 +2,8 @@
 title: Markdown
 ---
 
-- ```js
-	function bar(){
+-	```js
+	function bar() {
 		return baz;
 	}
 	```
