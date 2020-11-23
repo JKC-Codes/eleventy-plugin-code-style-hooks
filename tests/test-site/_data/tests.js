@@ -6,4 +6,11 @@ module.exports = [
 	return baz;
 }`
 	},
+	{
+		language: 'javascript',
+		code:
+`function bar() {
+	return baz;
+}`
+	},
 ]

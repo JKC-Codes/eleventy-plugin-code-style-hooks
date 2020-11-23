@@ -1,9 +1,8 @@
 ---
 title: Markdown
 ---
-
--	```js
-	function bar() {
-		return baz;
-	}
-	```
+{% for test in tests %}
+```{{ test.language }}
+{{ test.code }}
+```
+{% endfor %}

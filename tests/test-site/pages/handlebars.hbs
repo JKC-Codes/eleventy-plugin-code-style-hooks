@@ -1,5 +1,6 @@
 ---
 title: 'Handlebars'
 ---
-
-<ul>{{#each tests}}<li><pre><code class="language-{{this.language}}">{{this.code}}</code></pre></li>{{/each}}</ul>
+{{#each tests}}<pre><code class="language-{{this.language}}">{{this.code}}
+</code></pre>
+{{/each}}
