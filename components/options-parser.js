@@ -1,8 +1,22 @@
 module.exports = function(options) {
-	if(options.styles) {
+	if(options.hasOwnProperty('removeRedundancy')) {
+		parseRedundancy(options);
+	}
+
+	if(options.hasOwnProperty('styles')) {
 		options.styles = parseStyles(options.styles);
 	}
+
 	return options;
+}
+
+function parseRedundancy(options) {
+	if(typeof options.removeRedundancy !== 'boolean') {
+		if(options.removeRedundancy !== undefined && options.removeRedundancy !== null) {
+			console.warn(`Code Styling Hooks plugin ignored removeRedundancy option: ${options.removeRedundancy}`);
+		}
+		delete options.removeRedundancy;
+	}
 }
 
 function parseStyles(styles) {
