@@ -36,7 +36,7 @@
 		"prepublishOnly": "npm run test"
 	},
 	"dependencies": {
-		"posthtml": "^0.13.4",
+		"posthtml": "^0.15.0",
 		"prismjs": "^1.22.0"
 	},
 	"devDependencies": {
