@@ -6,7 +6,9 @@ const defaultOptions = {
 	styles: []
 }
 
-function addClasses(HTMLString, options = defaultOptions) {
+function addClasses(HTMLString, options) {
+	options = Object.assign({}, defaultOptions, options);
+
 	return posthtml([transformHTML(options)])
 	.process(HTMLString)
 	.then(abstractSyntaxTree => {
@@ -63,6 +65,14 @@ test('removes unused language classes from pre', async t => {
 	t.is(test1, '<pre class="language-foo"><code class="language-foo"></code></pre>');
 	t.is(test2, '<pre class="leave language-foo"><code class="language-foo"></code></pre>');
 	t.is(test3, '<div class="language-bar"><code class="language-foo"></code></div>');
+});
+
+test('respects removeRedundancy option', async t => {
+	const test1 = await addClasses('<pre class="language-bar"><code class="language-foo"></code></pre>', {removeRedundancy: false});
+	const test2 = await addClasses('<pre class="language-bar leave"><code class="language-foo"></code></pre>', {removeRedundancy: false});
+
+	t.is(test1, '<pre class="language-bar language-foo"><code class="language-foo"></code></pre>');
+	t.is(test2, '<pre class="language-bar leave language-foo"><code class="language-foo"></code></pre>');
 });
 
 test('ignores inheritance if prism-ignore found', async t => {
