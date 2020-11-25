@@ -1,5 +1,7 @@
 const Prism = require('prismjs');
 const loadLanguage = require('prismjs/components/');
+const parseHTML = require('posthtml-parser');
+const renderHTML = require('posthtml-render');
 const regEx = require('./regular-expressions.js');
 
 module.exports = function(codeElements) {
@@ -24,7 +26,12 @@ function highlightNode(node, language) {
 	if(node.content) {
 		node.content.forEach((contentItem, index) => {
 			if(typeof contentItem === 'string') {
-				node.content[index] = Prism.highlight(contentItem, Prism.languages[language], language);
+				// Make sure Prism doesn't highlight escaped characters
+				const renderedHTML = renderHTML(parseHTML(contentItem, {decodeEntities: true}));
+				const highlightedHTML = Prism.highlight(renderedHTML, Prism.languages[language], language);
+
+				// Escape characters again so nothing is modified
+				node.content[index] = parseHTML(highlightedHTML, {decodeEntities: false});
 			}
 			// Prevent Code within Code highlighting tokens
 			else if(contentItem.tag === 'code') {
