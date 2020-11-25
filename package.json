@@ -1,19 +1,21 @@
 {
-	"name": "eleventy-plugin-syntax-highlighter",
+	"name": "eleventy-plugin-code-style-hooks",
 	"private": true,
 	"version": "0.0.1",
-	"description": "11ty plugin for adding syntax highlighting to all of your HTML pages.",
+	"description": "11ty plugin for adding code styling hooks to all of your HTML pages.",
 	"keywords": [
 		"11ty",
 		"eleventy",
 		"eleventy-plugin",
 		"syntax",
 		"highlight",
-		"prism"
+		"prism",
+		"style",
+		"hook"
 	],
-	"homepage": "https://github.com/JKC-Codes/eleventy-plugin-syntax-highlighter#readme",
+	"homepage": "https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks#readme",
 	"bugs": {
-		"url": "https://github.com/JKC-Codes/eleventy-plugin-syntax-highlighter/issues"
+		"url": "https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/issues"
 	},
 	"license": "GPL-3.0-or-later",
 	"author": {
@@ -27,7 +29,7 @@
 	"main": "index.js",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/JKC-Codes/eleventy-plugin-syntax-highlighter.git"
+		"url": "https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks.git"
 	},
 	"scripts": {
 		"eleventy": "npx @11ty/eleventy --dryrun --quiet",

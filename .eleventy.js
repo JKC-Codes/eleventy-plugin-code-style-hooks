@@ -1,8 +1,8 @@
-const pluginSyntaxHighlighter = require('./index.js');
+const pluginStyleHooks = require('./index.js');
 
 module.exports = function(eleventyConfig) {
 
-	eleventyConfig.addPlugin(pluginSyntaxHighlighter, {
+	eleventyConfig.addPlugin(pluginStyleHooks, {
 		removeRedundancy: true,
 		styles: [
 			'/styles/prism.css',

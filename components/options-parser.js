@@ -8,7 +8,7 @@ module.exports = function(options) {
 			parseStyles(options);
 		}
 		catch(error) {
-			throw new Error(`Code Styling Hooks plugin requires the styles option to be a single String or Object, or an array of Strings or Objects. Received ${error.type}: ${error.text}`);
+			throw new Error(`Code Style Hooks plugin requires the styles option to be a single String or Object, or an array of Strings or Objects. Received ${error.type}: ${error.text}`);
 		}
 	}
 
@@ -18,7 +18,7 @@ module.exports = function(options) {
 function validateRedundancy(options) {
 	if(typeof options.removeRedundancy !== 'boolean') {
 		if(options.removeRedundancy !== undefined && options.removeRedundancy !== null) {
-			console.warn(`Code Styling Hooks plugin requires the removeRedundancy option to be a Boolean. Received ${typeof options.removeRedundancy}: ${options.removeRedundancy}`);
+			console.warn(`Code Style Hooks plugin requires the removeRedundancy option to be a Boolean. Received ${typeof options.removeRedundancy}: ${options.removeRedundancy}`);
 		}
 		delete options.removeRedundancy;
 	}
