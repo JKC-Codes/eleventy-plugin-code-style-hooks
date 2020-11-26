@@ -10,8 +10,13 @@ const languageStart = String.raw`lang(?:uage)?`;
 // Regex = 1 or more letters, numbers, underscores or dashes in a capture group
 const languageName = String.raw`([\w-]+)`;
 
+// Regex = optional return + new line
+const newLine = String.raw`((?:\r)?\n)`;
+
 
 module.exports = {
 	// 'lang-xxxx' or 'language-xxxx'
 	classLanguage: String.raw`${classStart}${languageStart}-${languageName}${classEnd}`,
+	// New line
+	lineNew: newLine
 }

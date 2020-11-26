@@ -28,7 +28,10 @@ function highlightNode(node, language) {
 			if(typeof contentItem === 'string') {
 				// Make sure Prism doesn't highlight escaped characters
 				const renderedHTML = renderHTML(parseHTML(contentItem, {decodeEntities: true}));
-				const highlightedHTML = Prism.highlight(renderedHTML, Prism.languages[language], language);
+
+				const highlightedHTML = Prism.highlight(renderedHTML, Prism.languages[language], language)
+				// Add line break tokens for line numbers
+				.replace(new RegExp(regEx.lineNew, 'g'), '<span class="token line-break" aria-hidden="true">$&</span>');
 
 				// Escape characters again so nothing is modified
 				node.content[index] = parseHTML(highlightedHTML, {decodeEntities: false});

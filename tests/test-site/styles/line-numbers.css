@@ -1,0 +1,15 @@
+pre[class*="language-"] {
+	counter-reset: line-count;
+}
+
+pre[class*="language-"] .token.line-break::after {
+	counter-increment: line-count;
+	content: counter(line-count);
+	display: inline-block;
+	border-right: 1px solid #999;
+	padding-right: 0.75em;
+	margin-right: 0.75em;
+	min-width: 3ch;
+	text-align: right;
+	color: #999;
+}
