@@ -1,7 +1,7 @@
 const test = require('ava');
 const parseHTML = require('posthtml-parser');
 const renderHTML = require('posthtml-render');
-const addStyleHooks = require('../components/add-style-hooks.js');
+const addStyleHooks = require('../components/add-syntax-hooks.js');
 
 function addHooks(HTMLString) {
 	const codeElements = parseHTML(HTMLString);

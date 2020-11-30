@@ -1,6 +1,7 @@
 const regEx = require('./regular-expressions.js');
 const addLanguageClasses = require('./add-language-classes.js');
-const addStyleHooks = require('./add-style-hooks.js');
+const addLineHooks = require('./add-line-hooks.js');
+const addSyntaxHooks = require('./add-syntax-hooks.js');
 const addCSS = require('./add-CSS.js');
 
 module.exports = function(options) {
@@ -16,7 +17,8 @@ module.exports = function(options) {
 			});
 
 			if(codeWithLang.length > 0) {
-				addStyleHooks(codeWithLang);
+				addLineHooks(preElements);
+				addSyntaxHooks(codeWithLang);
 				addCSS(AST, options);
 			}
 		}
