@@ -5,8 +5,8 @@ module.exports = function(preElements) {
 	preElements.forEach(preElement => {
 		if(preElement.content) {
 			preElement.content.forEach(contentItem => {
-				if(contentItem.tag === 'code') {
-					// TODO check for language class
+				const hasClassLanguage = contentItem.attrs && new RegExp(regEx.classLanguage, 'i').test(contentItem.attrs.class);
+				if(contentItem.tag === 'code' && hasClassLanguage) {
 					addLineNumbers(contentItem);
 				}
 			})
@@ -18,10 +18,10 @@ function addLineNumbers(node) {
 	if(node.content) {
 		for(let i = 0; i < node.content.length; i++) {
 			if(typeof node.content[i] === 'string') {
-				// Replace new lines with span
+				// Wrap new lines in span
 				const replacedString = node.content[i].replace(new RegExp(regEx.lineNew, 'g'), '<span class="token line-break" aria-hidden="true">$&</span>');
 
-				// Abstract syntax tree prevents Prism converting HTML tags
+				// Converting the string into an Abstract syntax tree prevents Prism highlighting HTML tags
 				const parsedString = parseHTML(replacedString);
 
 				// Replace existing string with new array
