@@ -4,14 +4,45 @@ const parseHTML = require('posthtml-parser');
 module.exports = function(preElements) {
 	preElements.forEach(preElement => {
 		if(preElement.content) {
-			preElement.content.forEach(contentItem => {
-				const hasClassLanguage = contentItem.attrs && new RegExp(regEx.classLanguage, 'i').test(contentItem.attrs.class);
-				if(contentItem.tag === 'code' && hasClassLanguage) {
-					addLineNumbers(contentItem);
-				}
-			})
+			let lastNewLine;
+			walkPreElement(preElement, preElement, lastNewLine);
 		}
 	})
+}
+
+function walkPreElement(preElement, node, lastNewLine) {
+	for(let i = 0; i < node.content.length; i++) {
+		const hasClassLanguage = node.content[i].attrs && new RegExp(regEx.classLanguage, 'i').test(node.content[i].attrs.class);
+
+		if(node.content[i].tag === 'code' && hasClassLanguage) {
+			if(lastNewLine === undefined) {
+				const lineBreak = {
+					tag: 'span',
+					attrs: {
+						class: 'token line-break',
+						'aria-hidden': 'true'
+					}
+				};
+				preElement.content = [lineBreak].concat(preElement.content);
+				i++;
+			}
+			else if(lastNewLine !== 'code') {
+				// Regex = positive lookahead for any non-line-break characters from end of string
+				const newLine = new RegExp(`${regEx.lineNew}(?=.*$)`);
+				const span = '<span class="token line-break" aria-hidden="true">$&</span>';
+				lastNewLine.content[lastNewLine.index] = lastNewLine.content[lastNewLine.index].replace(newLine, span);
+			}
+
+			lastNewLine = 'code';
+			addLineNumbers(node.content[i]);
+		}
+		else if(new RegExp(regEx.lineNew).test(node.content[i])) {
+			lastNewLine = {
+				content: node.content,
+				index: i
+			};
+		}
+	}
 }
 
 function addLineNumbers(node) {
@@ -36,17 +67,3 @@ function addLineNumbers(node) {
 		}
 	}
 }
-
-
-
-/*
-
-if preElement has a code element at any depth with a language class add line numbers
-
-note last pre or new line
-if code add line number to last
-	enter code and replace new lines with span recursively
-else if tag enter node and call itself
-else return
-
-*/
