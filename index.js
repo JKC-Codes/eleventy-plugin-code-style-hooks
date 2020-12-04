@@ -3,9 +3,9 @@ const defaultOptions = require('./components/options-default.js');
 const parseOptions = require('./components/options-parser.js');
 const transformHTML = require('./components/transform-HTML.js');
 
-module.exports = function(eleventyConfig, options) {
+module.exports = function(eleventyConfig, userOptions) {
 
-	options = Object.assign({}, defaultOptions, parseOptions(options));
+	const options = Object.assign({}, defaultOptions, parseOptions(userOptions));
 
 	eleventyConfig.addTransform('codeStyleHooks', function(HTMLString, outputPath) {
 
