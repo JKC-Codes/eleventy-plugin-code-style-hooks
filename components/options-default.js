@@ -1,8 +1,9 @@
 module.exports = {
-	removeRedundancy: true,
 	highlightSyntax: true,
-	showLanguages: true,
+	removeRedundancy: true,
 	showColors: true,
-	styles: [],
-	scripts: []
+	showLanguages: true,
+	showLineNumbers: true,
+	scripts: [],
+	styles: []
 }
