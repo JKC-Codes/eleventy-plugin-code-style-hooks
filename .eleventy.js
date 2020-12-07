@@ -3,7 +3,18 @@ const pluginStyleHooks = require('./index.js');
 module.exports = function(eleventyConfig) {
 
 	eleventyConfig.addPlugin(pluginStyleHooks, {
+		highlightSyntax: true,
 		removeRedundancy: true,
+		showColors: true,
+		showLanguages: true,
+		showLineNumbers: true,
+		scripts: [
+			'/scripts/toggleLineNumbers.js',
+			{
+				src: '/scripts/foo.js',
+				defer: ''
+			}
+		],
 		styles: [
 			'/styles/prism.css',
 			{
