@@ -1,70 +1,114 @@
-module.exports = function(options) {
-	if(options.hasOwnProperty('removeRedundancy')) {
-		validateRedundancy(options);
+module.exports = function(userOptions) {
+	const parsedOptions= {};
+
+	for(const key in userOptions) {
+		switch(key) {
+			case 'defaultLanguage': Object.assign(parsedOptions, validateLanguage(key, userOptions[key]));
+			break;
+
+			case 'highlightSyntax':
+			case 'removeRedundancy':
+			case 'showColors':
+			case 'showLanguages':
+			case 'showLineNumbers':
+				Object.assign(parsedOptions, validateBoolean(key, userOptions[key]));
+			break;
+
+			case 'scripts':
+			case 'styles':
+				try {
+					Object.assign(parsedOptions, validateScriptOrStyle(key, userOptions[key]));
+				}
+				catch(error) {
+					throw new Error(`Code Style Hooks plugin requires the ${key} option to be a single String or Object, or an array of Strings or Objects. Received ${error.type}: ${error.text}`);
+				}
+			break;
+
+			default: throw new Error(`Code Style Hooks plugin received an unrecognised option: ${key}`);
+		}
 	}
 
-	if(options.hasOwnProperty('styles')) {
-		try {
-			parseStyles(options);
-		}
-		catch(error) {
-			throw new Error(`Code Style Hooks plugin requires the styles option to be a single String or Object, or an array of Strings or Objects. Received ${error.type}: ${error.text}`);
-		}
-	}
-
-	return options;
+	return parsedOptions;
 }
 
-function validateRedundancy(options) {
-	if(typeof options.removeRedundancy !== 'boolean') {
-		if(options.removeRedundancy !== undefined && options.removeRedundancy !== null) {
-			console.warn(`Code Style Hooks plugin requires the removeRedundancy option to be a Boolean. Received ${typeof options.removeRedundancy}: ${options.removeRedundancy}`);
-		}
-		delete options.removeRedundancy;
+function validateLanguage(key, value) {
+	if(value === undefined || value === null) {
+		return {};
+	}
+	else if(typeof value !== 'string') {
+		throw new Error(`Code Style Hooks plugin requires the ${key} option to be a String. Received ${typeof value}: ${JSON.stringify(value)}`);
+	}
+	else {
+		const parsedLanguage = {};
+		parsedLanguage[key] = value.toLowerCase();
+
+		return parsedLanguage;
 	}
 }
 
-function parseStyles(options) {
-	if(options.styles === undefined || options.styles === null) {
-		delete options.styles;
-		return;
+function validateBoolean(key, value) {
+	if(value === undefined || value === null) {
+		return {};
 	}
+	else if(typeof value !== 'boolean') {
+		throw new Error(`Code Style Hooks plugin requires the ${key} option to be a Boolean. Received ${typeof value}: ${JSON.stringify(value)}`);
+	}
+	else {
+		const parsedBoolean = {};
+		parsedBoolean[key] = value;
 
-	const styles = options.styles;
-	let linkElements = [];
+		return parsedBoolean;
+	}
+}
 
-	function addLinkElement(style) {
-		const linkElement = {
-			tag: 'link',
-			attrs: {
-				rel: 'stylesheet'
-			}
+function validateScriptOrStyle(key, value) {
+	let elements = [];
+
+	function addElement(headItem) {
+		const element = {
+			tag: key === 'scripts' ? 'script' : 'link',
+			attrs: {}
 		};
 
-		if(typeof style === 'string') {
-			linkElement.attrs.href = style;
+		if(key === 'styles') {
+			element.attrs.rel = 'stylesheet';
 		}
-		else if(typeof style === 'object' && !Array.isArray(style)) {
-			linkElement.attrs = Object.assign(linkElement.attrs, style);
+
+		if(typeof headItem === 'string') {
+			if(key === 'scripts') {
+				element.attrs.src = headItem;
+			}
+			else if(key === 'styles') {
+				element.attrs.href = headItem;
+			}
+		}
+		else if(typeof headItem === 'object' && !Array.isArray(headItem)) {
+			element.attrs = Object.assign(element.attrs, headItem);
 		}
 		else {
 			throw {
-				type: typeof style,
-				text: style
+				type: typeof headItem,
+				text: JSON.stringify(headItem)
 			};
 		}
 
-		linkElements.push(linkElement);
+		elements.push(element);
 	}
 
-	if(Array.isArray(styles)) {
-		styles.forEach(style => {
-			addLinkElement(style)
+	if(value === undefined || value === null) {
+		return {};
+	}
+	else if(Array.isArray(value)) {
+		value.forEach(valueItem => {
+			addElement(valueItem)
 		});
 	}
 	else {
-		addLinkElement(styles)
+		addElement(value)
 	}
 
-	options.styles = linkElements;
+	const parsedScriptOrStyle = {};
+	parsedScriptOrStyle[key] = elements;
+
+	return parsedScriptOrStyle;
 }
