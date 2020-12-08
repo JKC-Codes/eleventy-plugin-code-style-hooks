@@ -17,6 +17,7 @@
 ### Features
 - changes lang-xxx class to language-xxx
 - add code elements' language class to ancestor pre elements
+- global language default
 - inherit language class from ancestors for defacto defaults
 - toggle highlighting with data-highlight-syntax="true/false"
 - remove data-highlight-syntax attributes

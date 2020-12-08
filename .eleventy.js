@@ -3,6 +3,7 @@ const pluginStyleHooks = require('./index.js');
 module.exports = function(eleventyConfig) {
 
 	eleventyConfig.addPlugin(pluginStyleHooks, {
+		defaultLanguage: null,
 		highlightSyntax: true,
 		removeRedundancy: true,
 		showColors: true,

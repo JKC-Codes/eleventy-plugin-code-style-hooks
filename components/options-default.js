@@ -1,4 +1,5 @@
 module.exports = {
+	defaultLanguage: null,
 	highlightSyntax: true,
 	removeRedundancy: true,
 	showColors: true,
