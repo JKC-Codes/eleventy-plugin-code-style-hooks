@@ -1,7 +1,7 @@
 const posthtml = require('posthtml');
 const defaultOptions = require('./components/options-default.js');
 const parseOptions = require('./components/options-parser.js');
-const transformHTML = require('./components/transform-HTML.js');
+const addCodeStyleHooks = require('./components/add-code-style-hooks.js');
 
 module.exports = function(eleventyConfig, userOptions) {
 
@@ -10,7 +10,7 @@ module.exports = function(eleventyConfig, userOptions) {
 	eleventyConfig.addTransform('codeStyleHooks', function(HTMLString, outputPath) {
 
 		if(outputPath && outputPath.endsWith('.html')) {
-			return posthtml([transformHTML(options)])
+			return posthtml([addCodeStyleHooks(options)])
 			.process(HTMLString)
 			.then(abstractSyntaxTree => {
 				return abstractSyntaxTree.html
