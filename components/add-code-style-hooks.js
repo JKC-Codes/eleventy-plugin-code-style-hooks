@@ -7,17 +7,17 @@ module.exports = function(options) {
 	// AST = Abstract Syntax Tree from HTML Parser
 	return function(AST) {
 		const state = {
-			isChildOfPre: false,
 			isChildOfCode: false,
+			isChildOfPre: false,
 			language: options.defaultLanguage,
 			highlightSyntax: options.highlightSyntax,
 			showColors: options.showColors,
 			showLanguages: options.showLanguages,
-			showLineNumbers: options.showLineNumbers,
+			showLineNumbers: options.showLineNumbers
 		}
 
 		AST.forEach(node => {
-			walkTree(node, state);
+			walkTree(node, state, options.removeRedundancy);
 		})
 
 		if(pageContainsCode) {
@@ -28,80 +28,46 @@ module.exports = function(options) {
 	}
 }
 
-function walkTree(node, oldState) {
+function walkTree(node, oldState, removeRedundancy) {
 	if(typeof node === 'string') {
+		if(oldState.isChildOfCode) {
+		/* TODO:
+			if inside code:
+				add syntax
+				add colour preview classes and style attribute
+				add line numbers
+		*/
+		}
+
 		return;
 	}
 
-	const newState = Object.assign(oldState, getInlineOptions(node, options.removeRedundancy));
+	const newState = Object.assign(oldState, getInlineOptions(node, oldState.isChildOfPre, removeRedundancy));
 
-	if(node.tag === 'pre') {
-		newState.isChildOfPre = node;
-	}
-	else if(node.tag === 'code') {
+	if(node.tag === 'code') {
+		/* TODO:
+			add language class to pre
+			add language class
+			add line-numbers class
+			add data-language attribute
+		*/
 		pageContainsCode = true;
 		newState.isChildOfCode = true;
+	}
+	else if(node.tag === 'pre') {
+		/* TODO:
+			add language classes from code children
+			add line-numbers class (if code child)
+			add data-language attribute
+			add first line number
+			remove language classes if no code child with language
+		*/
+		newState.isChildOfPre = node;
 	}
 
 	if(node.hasOwnProperty('content')) {
 		node.content.forEach(item => {
-			walkTree(item, newState);
+			walkTree(item, newState, removeRedundancy);
 		})
 	}
 }
-
-
-/*
-
-Get:
-	element code
-	element pre with code child(ren)
-	element head (or equivalent)
-
-	class lang/language-xxx
-	class line-numbers
-
-	attribute data-line-numbers
-	attribute data-show-language
-
-	attribute data-highlight-syntax
-	attribute data-show-color
-
-Usage:
-	element code:
-		syntax
-		line numbers
-		show language
-		colour preview
-		add css
-		add js
-
-	element pre with code child(ren)
-		syntax
-		line numbers
-		show language
-
-	element head (or equivalent)
-		add css
-		add js
-
-	class language-xxx:
-		syntax
-		show language
-
-	class line-numbers:
-		line numbers
-
-	attribute data-highlight-syntax
-		syntax
-
-	attribute data-line-numbers
-		line numbers
-
-	attribute data-show-language
-		show language
-
-	attribute data-show-color
-		colour preview
-
-*/

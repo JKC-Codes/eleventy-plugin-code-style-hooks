@@ -17,6 +17,10 @@ const newLine = String.raw`((?:\r)?\n)`;
 module.exports = {
 	// 'lang-xxxx' or 'language-xxxx'
 	classLanguage: String.raw`${classStart}${languageStart}-${languageName}${classEnd}`,
-	// New line
+	// 'line-numbers'
+	classLineNumbers: String.raw`${classStart}line-numbers${classEnd}`,
+	// 'data-line-numbers' or 'data-show-language' or 'data-highlight-syntax' or 'data-show-color'
+	attributeData: String.raw`^data-(line-numbers|show-language|highlight-syntax|show-color)$`,
+	// new line
 	lineNew: newLine
 }
