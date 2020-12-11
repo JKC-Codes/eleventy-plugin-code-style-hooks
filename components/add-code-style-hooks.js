@@ -1,5 +1,7 @@
 const getInlineOptions = require('./get-inline-options.js');
-const addCSSAndJS = require('./add-CSS-and-JS.js');
+const addHeadElements = require('./add-head-elements.js');
+const addClass = require('./add-class.js');
+const addAttribute = require('./add-attribute.js');
 
 let pageContainsCode = false;
 
@@ -21,7 +23,7 @@ module.exports = function(options) {
 		})
 
 		if(pageContainsCode) {
-			addCSSAndJS(AST, options.styles, options.scripts);
+			addHeadElements(AST, options.styles, options.scripts);
 		}
 
 		return AST;
@@ -42,32 +44,48 @@ function walkTree(node, oldState, removeRedundancy) {
 		return;
 	}
 
-	const newState = Object.assign(oldState, getInlineOptions(node, oldState.isChildOfPre, removeRedundancy));
+	// Update state and remove redundant classes/attributes
+	const newState = Object.assign({}, oldState, getInlineOptions(node, oldState.isChildOfPre, removeRedundancy));
 
 	if(node.tag === 'code') {
-		/* TODO:
-			add language class to pre
-			add language class
-			add line-numbers class
-			add data-language attribute
-		*/
 		pageContainsCode = true;
 		newState.isChildOfCode = true;
 	}
 	else if(node.tag === 'pre') {
-		/* TODO:
-			add language classes from code children
-			add line-numbers class (if code child)
-			add data-language attribute
-			add first line number
-			remove language classes if no code child with language
-		*/
 		newState.isChildOfPre = node;
 	}
 
+	// Walk children before updating node so Pre can inherit correct Code classes/attributes
 	if(node.hasOwnProperty('content')) {
 		node.content.forEach(item => {
 			walkTree(item, newState, removeRedundancy);
 		})
+	}
+
+	if(node.tag === 'code') {
+		if(newState.highlightSyntax && newState.language) {
+			addClass(node, `language-${newState.language.toLowerCase()}`);
+
+			if(newState.isChildOfPre) {
+				addClass(newState.isChildOfPre, `language-${newState.language.toLowerCase()}`);
+			}
+
+			if(newState.showLanguages) {
+				addAttribute(node, 'data-language', newState.language);
+				if(newState.isChildOfPre) {
+					addAttribute(newState.isChildOfPre, 'data-language', newState.language);
+				}
+			}
+		}
+
+		if(newState.isChildOfPre && newState.showLineNumbers) {
+			addClass(node, 'line-numbers')
+			addClass(newState.isChildOfPre, 'line-numbers')
+		}
+	}
+	else if(node.tag === 'pre') {
+		/* TODO:
+			add first line number
+		*/
 	}
 }
