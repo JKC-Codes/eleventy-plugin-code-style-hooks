@@ -2,6 +2,8 @@ const getInlineOptions = require('./get-inline-options.js');
 const addHeadElements = require('./add-head-elements.js');
 const addClass = require('./add-class.js');
 const addAttribute = require('./add-attribute.js');
+const addLineHooks = require('./add-line-hooks.js');
+const regEx = require('./regular-expressions.js');
 
 let pageContainsCode = false;
 
@@ -19,7 +21,7 @@ module.exports = function(options) {
 		}
 
 		AST.forEach(node => {
-			walkTree(node, state, options.removeRedundancy);
+			walkTree(node, AST, state, options.removeRedundancy);
 		})
 
 		if(pageContainsCode) {
@@ -30,62 +32,101 @@ module.exports = function(options) {
 	}
 }
 
-function walkTree(node, oldState, removeRedundancy) {
-	if(typeof node === 'string') {
-		if(oldState.isChildOfCode) {
-		/* TODO:
-			if inside code:
-				add syntax
-				add colour preview classes and style attribute
-				add line numbers
-		*/
-		}
-
-		return;
-	}
-
+function walkTree(node, parentNode, parentState, removeRedundancy) {
 	// Update state and remove redundant classes/attributes
-	const newState = Object.assign({}, oldState, getInlineOptions(node, oldState.isChildOfPre, removeRedundancy));
+	const state = Object.assign(
+		{},
+		parentState,
+		getInlineOptions(node, parentState.isChildOfPre, removeRedundancy)
+	);
 
-	if(node.tag === 'code') {
+	if(node.tag === 'pre') {
+		state.isChildOfPre = node;
+	}
+	else if(node.tag === 'code') {
 		pageContainsCode = true;
-		newState.isChildOfCode = true;
-	}
-	else if(node.tag === 'pre') {
-		newState.isChildOfPre = node;
+		state.isChildOfCode = true;
 	}
 
-	// Walk children before updating node so Pre can inherit correct Code classes/attributes
-	if(node.hasOwnProperty('content')) {
-		node.content.forEach(item => {
-			walkTree(item, newState, removeRedundancy);
-		})
+
+	/*
+		Add Classes
+	*/
+	// language-xxx class
+	if(node.tag === 'code' && state.highlightSyntax && state.language) {
+		addClass(node, `language-${state.language.toLowerCase()}`);
+
+		if(state.isChildOfPre) {
+			addClass(state.isChildOfPre, `language-${state.language.toLowerCase()}`);
+		}
 	}
 
-	if(node.tag === 'code') {
-		if(newState.highlightSyntax && newState.language) {
-			addClass(node, `language-${newState.language.toLowerCase()}`);
+	// line-numbers class
+	if(node.tag === 'code' && state.isChildOfPre && state.showLineNumbers) {
+		addClass(node, 'line-numbers')
+		addClass(state.isChildOfPre, 'line-numbers')
+	}
 
-			if(newState.isChildOfPre) {
-				addClass(newState.isChildOfPre, `language-${newState.language.toLowerCase()}`);
+	/*
+		Add Attributes
+	*/
+	// data-language="xxx" attribute
+	if(node.tag === 'code' && state.showLanguages && state.language) {
+		addAttribute(node, 'data-language', state.language);
+
+		if(state.isChildOfPre) {
+			addAttribute(state.isChildOfPre, 'data-language', state.language);
+		}
+	}
+
+	/*
+		Add Line Hooks
+	*/
+	if(state.showLineNumbers) {
+		if(node.tag === 'pre') {
+			state.lastNewLine = {
+				content: node.content,
+				stringIndex: null,
+				state: state
+			};
+		}
+		else if(state.isChildOfPre) {
+			if(node.tag === 'code' && !parentState.isChildOfCode && state.lastNewLine.stringIndex !== 'code') {
+				// replace last new line with span
+				addLineHooks(state.lastNewLine.content, state.lastNewLine.stringIndex, false, state.lastNewLine.state);
+				state.lastNewLine.stringIndex = 'code';
 			}
-
-			if(newState.showLanguages) {
-				addAttribute(node, 'data-language', newState.language);
-				if(newState.isChildOfPre) {
-					addAttribute(newState.isChildOfPre, 'data-language', newState.language);
+			else if(new RegExp(regEx.lineNew).test(node)) {
+				if(state.isChildOfCode) {
+					// replace each new line with span
+					addLineHooks(parentNode.content, parentState.currentIndex, true, parentState);
+				}
+				else {
+					// note each new line outside of code
+					state.lastNewLine.content = parentNode.content;
+					state.lastNewLine.stringIndex = state.currentIndex;
+					state.lastNewLine.state = parentState;
 				}
 			}
 		}
-
-		if(newState.isChildOfPre && newState.showLineNumbers) {
-			addClass(node, 'line-numbers')
-			addClass(newState.isChildOfPre, 'line-numbers')
-		}
 	}
-	else if(node.tag === 'pre') {
-		/* TODO:
-			add first line number
-		*/
+
+	/*
+		Add Colour Preview Classes and Style Attribute
+	*/
+	// TODO
+
+	/*
+		Add Syntax
+	*/
+	// TODO
+
+
+	if(node.hasOwnProperty('content')) {
+		state.currentIndex = 0;
+		while(state.currentIndex < node.content.length) {
+			walkTree(node.content[state.currentIndex], node, state, removeRedundancy);
+			state.currentIndex++;
+		}
 	}
 }

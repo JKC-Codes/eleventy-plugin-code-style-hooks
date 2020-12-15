@@ -1,69 +1,33 @@
 const regEx = require('./regular-expressions.js');
 const parseHTML = require('posthtml-parser');
 
-module.exports = function(preElements) {
-	preElements.forEach(preElement => {
-		if(preElement.content) {
-			let lastNewLine;
-			walkPreElement(preElement, preElement, lastNewLine);
-		}
-	})
-}
-
-function walkPreElement(preElement, node, lastNewLine) {
-	for(let i = 0; i < node.content.length; i++) {
-		const hasClassLanguage = node.content[i].attrs && new RegExp(regEx.classLanguage, 'i').test(node.content[i].attrs.class);
-
-		if(node.content[i].tag === 'code' && hasClassLanguage) {
-			if(lastNewLine === undefined) {
-				const lineBreak = {
-					tag: 'span',
-					attrs: {
-						class: 'token line-break',
-						'aria-hidden': 'true'
-					}
-				};
-				preElement.content = [lineBreak].concat(preElement.content);
-				i++;
+module.exports = function(content, index, insideCode, state) {
+	if(index === null) {
+		const lineBreak = {
+			tag: 'span',
+			attrs: {
+				class: 'token line-break',
+				'aria-hidden': 'true'
 			}
-			else if(lastNewLine !== 'code') {
-				// Regex = positive lookahead for any non-line-break characters from end of string
-				const newLine = new RegExp(`${regEx.lineNew}(?=.*$)`);
-				const span = '<span class="token line-break" aria-hidden="true">$&</span>';
-				lastNewLine.content[lastNewLine.index] = lastNewLine.content[lastNewLine.index].replace(newLine, span);
-			}
+		};
 
-			lastNewLine = 'code';
-			addLineNumbers(node.content[i]);
-		}
-		else if(new RegExp(regEx.lineNew).test(node.content[i])) {
-			lastNewLine = {
-				content: node.content,
-				index: i
-			};
-		}
+		content.unshift(lineBreak);
+		state.currentIndex++;
 	}
-}
+	else {
+		// Regex = positive lookahead for any non-line-break characters from end of string
+		const lastNewLine = new RegExp(`${regEx.lineNew}(?=.*$)`);
+		const allNewLines = new RegExp(regEx.lineNew, 'g');
+		const newLineRegEx = insideCode ? allNewLines : lastNewLine;
+		// $& = regex capture group which in this case is the new line character(s)
+		const span = '<span class="token line-break" aria-hidden="true">$&</span>';
+		// Converting the string into an Abstract syntax tree prevents Prism highlighting HTML tags
+		const parsedReplacementString = parseHTML(content[index].replace(newLineRegEx, span));
 
-function addLineNumbers(node) {
-	if(node.content) {
-		for(let i = 0; i < node.content.length; i++) {
-			if(typeof node.content[i] === 'string') {
-				// Wrap new lines in span
-				const replacedString = node.content[i].replace(new RegExp(regEx.lineNew, 'g'), '<span class="token line-break" aria-hidden="true">$&</span>');
+		// Replace existing string with new syntax tree array
+		content.splice(index, 1, ...parsedReplacementString);
 
-				// Converting the string into an Abstract syntax tree prevents Prism highlighting HTML tags
-				const parsedString = parseHTML(replacedString);
-
-				// Replace existing string with new array
-				node.content.splice(i, 1, ...parsedString);
-
-				// Add array length to index to prevent infinite loops
-				i += parsedString.length - 1;
-			}
-			else {
-				addLineNumbers(node.content[i]);
-			}
-		}
+		// Add array length to index to prevent infinite loops
+		state.currentIndex += parsedReplacementString.length - 1;
 	}
 }
