@@ -11,10 +11,12 @@ const languageStart = String.raw`lang(?:uage)?`;
 const languageName = String.raw`([\w-]+)`;
 
 // Regex = optional return + new line
-const newLine = String.raw`((?:\r)?\n)`;
+const lineNew = String.raw`((?:\r)?\n)`;
 
 
 module.exports = {
+	classStart,
+	classEnd,
 	// 'lang-xxxx' or 'language-xxxx'
 	classLanguage: String.raw`${classStart}${languageStart}-${languageName}${classEnd}`,
 	// 'line-numbers'
@@ -22,5 +24,5 @@ module.exports = {
 	// 'data-line-numbers' or 'data-show-language' or 'data-highlight-syntax' or 'data-show-color'
 	attributeData: String.raw`^data-(line-numbers|show-language|highlight-syntax|show-color)$`,
 	// new line
-	lineNew: newLine
+	lineNew
 }
