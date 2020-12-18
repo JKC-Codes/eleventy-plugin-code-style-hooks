@@ -47,6 +47,7 @@ function getClasses(classesString) {
 	if(languageClass) {
 		// [1] = capture group with the language name
 		state.language = languageClass[1];
+		state.highlightSyntax = true;
 	}
 
 	if(new RegExp(regEx.classLineNumbers, 'i').test(classesString)) {
