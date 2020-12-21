@@ -1,8 +1,8 @@
 // Regex = look behind to check for start of line or whitespace in a non-capture group
-const classStart = String.raw`(?<=^|\s)`;
+const wordStart = String.raw`(?<=^|\s)`;
 
 // Regex = look ahead to check for end of line or whitespace in a non-capture group
-const classEnd = String.raw`(?=$|\s)`;
+const wordEnd = String.raw`(?=$|\s)`;
 
 // Regex = 'lang' + optional 'uage' in a non-capture group
 const languageStart = String.raw`lang(?:uage)?`;
@@ -15,12 +15,12 @@ const lineNew = String.raw`((?:\r)?\n)`;
 
 
 module.exports = {
-	classStart,
-	classEnd,
+	wordStart,
+	wordEnd,
 	// 'lang-xxxx' or 'language-xxxx'
-	classLanguage: String.raw`${classStart}${languageStart}-${languageName}${classEnd}`,
+	classLanguage: String.raw`${wordStart}${languageStart}-${languageName}${wordEnd}`,
 	// 'line-numbers'
-	classLineNumbers: String.raw`${classStart}line-numbers${classEnd}`,
+	classLineNumbers: String.raw`${wordStart}line-numbers${wordEnd}`,
 	// 'data-line-numbers' or 'data-show-language' or 'data-highlight-syntax' or 'data-show-color'
 	attributeData: String.raw`^data-(line-numbers|show-language|highlight-syntax|show-color)$`,
 	// new line
