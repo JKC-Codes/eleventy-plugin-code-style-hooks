@@ -33,7 +33,7 @@
 ## Line numbers
 
 ### Hooks
-- new lines wrapped in "token line-number" class
+- new lines wrapped in "token line-break" class
 - "line-numbers" class on code
 - "line-numbers" class on pre
 
@@ -68,7 +68,7 @@
 ## Inline colour preview
 
 ### Hooks
-- colours wrapped in "token css-color" class and style="--css-color: 'value'" property
+- colours wrapped in "token color-value" class and style="--color-value: 'value'" property
 
 ### Features
 - CSS code with RGB, HSL and Hex colour values are automatically selected
