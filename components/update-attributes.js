@@ -9,23 +9,22 @@ module.exports = function(node, state, removeRedundancy) {
 		removeInlineOptions(attributes);
 
 		if(!isPre && !isCode && attributes.class) {
-			removeClass(attributes, new RegExp(regEx.classLanguage, 'i'));
-			removeClass(attributes, new RegExp(regEx.classLineNumbers, 'i'));
+			removeClass(attributes, `${regEx.classLanguage}|${regEx.classLineNumbers}`);
 		}
 	}
 
 	if(isCode) {
 		normaliseClasses(attributes);
 
-		// Class="language-xxx"
+		// Add class="language-xxx"
 		if(state.highlightSyntax && state.language) {
-			updateLanguageClasses(attributes, state, removeRedundancy);
+			updateCodeLanguageClasses(attributes, state, removeRedundancy);
 		}
 		else if(removeRedundancy) {
-			removeClass(attributes, new RegExp(regEx.classLanguage, 'i'))
+			removeClass(attributes, regEx.classLanguage);
 		}
 
-		// Class="line-numbers"
+		// Add class="line-numbers"
 		if(state.showLineNumbers && state.isChildOfPre) {
 			addAttribute(attributes, 'class', 'line-numbers');
 
@@ -36,10 +35,10 @@ module.exports = function(node, state, removeRedundancy) {
 			addAttribute(state.isChildOfPre.attrs, 'class', 'line-numbers');
 		}
 		else if(removeRedundancy) {
-			removeClass(attributes, new RegExp(regEx.classLineNumbers, 'i'))
+			removeClass(attributes, regEx.classLineNumbers);
 		}
 
-		// Data-language="xxx"
+		// Add data-language="xxx"
 		if(state.showLanguages && state.language) {
 			addAttribute(attributes, 'data-language', state.language);
 
@@ -55,29 +54,12 @@ module.exports = function(node, state, removeRedundancy) {
 	else if(isPre) {
 		normaliseClasses(attributes);
 
-		// Class="language-xxx line-numbers"
+		// Add class="language-xxx line-numbers"
 		if(attributes.codeChildrenClasses) {
-			const codeClasses = attributes.codeChildrenClasses.split(' ');
-
-			if(removeRedundancy && attributes.class) {
-				const preClasses = attributes.class.split(' ');
-
-				preClasses.forEach(className => {
-					const isLanguageClass = new RegExp(regEx.classLanguage).test(className);
-					if(isLanguageClass && !codeClasses.includes(className)) {
-						removeClass(attributes, new RegExp(`${regEx.classStart}${className}${regEx.classEnd}`));
-					}
-				})
-			}
-
-			codeClasses.forEach(className => {
-				addAttribute(attributes, 'class', className);
-			})
-
-			delete attributes.codeChildrenClasses;
+			updatePreClasses(attributes, removeRedundancy);
 		}
 
-		// Data-language="xxx"
+		// Add data-language="xxx"
 		if(attributes.codeChildrenDataAttributes) {
 			addAttribute(attributes, 'data-language', attributes.codeChildrenDataAttributes);
 			delete attributes.codeChildrenDataAttributes;
@@ -87,20 +69,7 @@ module.exports = function(node, state, removeRedundancy) {
 	if(removeRedundancy && (isCode || isPre)) {
 		// Remove duplicate language and line-numbers classes
 		if(attributes.class) {
-			attributes.class = attributes.class
-			.split(' ')
-			.reduce((acc, cur) => {
-				const isLanguageOrLineNumbers = new RegExp(`${regEx.classLanguage}|${regEx.classLineNumbers}`).test(cur);
-				const isDuplicate = acc.includes(cur);
-
-				if(isLanguageOrLineNumbers && isDuplicate) {
-					return acc;
-				}
-				else {
-					return acc.concat(cur);
-				}
-			}, [])
-			.join(' ');
+			attributes.class = removeDuplicates(attributes.class, `${regEx.classLanguage}|${regEx.classLineNumbers}`);
 		}
 
 		// Remove duplicate data-language attributes
@@ -118,28 +87,62 @@ module.exports = function(node, state, removeRedundancy) {
 }
 
 
+function updateCodeLanguageClasses(attributes, state, removeRedundancy) {
+	const validLanguageClass = `language-${state.language.toLowerCase()}`;
+	const validLanguageRegEx = new RegExp(`${regEx.wordStart}${validLanguageClass}${regEx.wordEnd}`);
+
+	// If no matching language class, add it
+	if(!validLanguageRegEx.test(attributes.class)) {
+		addAttribute(attributes, 'class', validLanguageClass);
+	}
+
+	if(removeRedundancy) {
+		const languageClasses = attributes.class.match(new RegExp(regEx.classLanguage, 'g'));
+
+		languageClasses.forEach(languageClass => {
+			if(!validLanguageRegEx.test(languageClass)) {
+				removeClass(attributes, languageClass);
+			}
+		});
+	}
+
+	if(state.isChildOfPre) {
+		// Add a temporary attribute to Pre parent so language classes can be added later
+		if(!state.isChildOfPre.attrs) {
+			state.isChildOfPre.attrs = {};
+		}
+		addAttribute(state.isChildOfPre.attrs, 'codeChildrenClasses', validLanguageClass);
+	}
+}
+
+function updatePreClasses(attributes, removeRedundancy) {
+	const codeClasses = attributes.codeChildrenClasses.split(' ');
+
+	if(removeRedundancy && attributes.class) {
+		const preClasses = attributes.class.split(' ');
+
+		preClasses.forEach(className => {
+			const isLanguageClass = new RegExp(regEx.classLanguage).test(className);
+
+			if(isLanguageClass && !codeClasses.includes(className)) {
+				removeClass(attributes, className);
+			}
+		})
+	}
+
+	codeClasses.forEach(className => {
+		addAttribute(attributes, 'class', className);
+	})
+
+	delete attributes.codeChildrenClasses;
+}
+
 function removeInlineOptions(attributes) {
 	Object.keys(attributes).forEach(key => {
 		if(new RegExp(regEx.attributeData, 'i').test(key)) {
 			delete attributes[key];
 		}
 	})
-}
-
-function removeClass(attributes, classRegEx) {
-	if(attributes.class) {
-		attributes.class = attributes.class
-		.split(' ')
-		.filter(className => {
-			return !classRegEx.test(className);
-		})
-		.join(' ');
-
-		// Prevent creating class="" attributes
-		if(attributes.class === '') {
-			delete attributes.class;
-		}
-	}
 }
 
 function normaliseClasses(attributes) {
@@ -163,40 +166,44 @@ function addAttribute(attributes, attributeName, attributeValue) {
 	if(!key) {
 		attributes[attributeName] = attributeValue;
 	}
-	else {
-		const values = attributes[key].split(' ');
+	else if(!new RegExp(`${regEx.wordStart}${attributeValue}${regEx.wordEnd}`).test(attributes[key])) {
+		// Only add space before value if a value already exists
+		if(attributes[key] !== '' && !attributes[key].endsWith(' ')) {
+			attributeValue = ' ' + attributeValue;
+		}
+		attributes[key] += attributeValue;
+	}
+}
 
-		if(!values.includes(attributeValue)) {
-			values.push(attributeValue);
-			attributes[key] = values.join(' ');
+function removeClass(attributes, regExString) {
+	if(attributes.class) {
+		// Regex = end of line or whitespace in a non-capture group
+		attributes.class = attributes.class.replace(new RegExp(String.raw`${regEx.wordStart}${regExString}(?:$|\s)`, 'g'), '');
+
+		// Prevent creating class="" attributes
+		if(attributes.class === '') {
+			delete attributes.class;
 		}
 	}
 }
 
-function updateLanguageClasses(attributes, state, removeRedundancy) {
-	const validLanguageClass = `language-${state.language.toLowerCase()}`;
-	const validLanguageRegEx = new RegExp(`${regEx.classStart}${validLanguageClass}${regEx.classEnd}`);
+function removeDuplicates(string, regExString) {
+	const subject = new RegExp(String.raw`${regEx.wordStart}${regExString}${regEx.wordEnd}`);
 
-	// If no matching language class, add it
-	if(!validLanguageRegEx.test(attributes.class)) {
-		addAttribute(attributes, 'class', validLanguageClass);
-	}
-
-	if(removeRedundancy) {
-		const languageClasses = attributes.class.match(new RegExp(regEx.classLanguage, 'g'));
-
-		languageClasses.forEach(languageClass => {
-			if(!validLanguageRegEx.test(languageClass)) {
-				removeClass(attributes, new RegExp(`${regEx.classStart}${languageClass}${regEx.classEnd}`));
-			}
+	// Regex keeps double spaces. Regex = single space preceeded by a non-space character
+	return string.split(/(?<=\S)\s/)
+	.reduce((acc, cur) => {
+		const isSubject = subject.test(cur);
+		const isDuplicate = acc.some(word => {
+			return word.trim() === cur.trim();
 		});
-	}
 
-	if(state.isChildOfPre) {
-		// Add a temporary attribute to Pre parent so language classes can be added later
-		if(!state.isChildOfPre.attrs) {
-			state.isChildOfPre.attrs = {};
+		if(!isSubject || !isDuplicate) {
+			return acc.concat(cur);
 		}
-		addAttribute(state.isChildOfPre.attrs, 'codeChildrenClasses', validLanguageClass);
-	}
+		else {
+			return acc;
+		}
+	}, [])
+	.join(' ')
 }
