@@ -6,6 +6,10 @@ eleventyExcludeFromCollections: true
 
 <p>testing</p>
 
+<pre><code>function test() {
+	return 'has no attributes';
+}</code></pre>
+
 <div class="language-js">
 
 	<pre><code class="lang-js">
@@ -30,21 +34,21 @@ eleventyExcludeFromCollections: true
 
 	</div>
 
-	<div data-prism="ignore">
+	<div data-highlight-syntax="false">
 
 		<pre><code>
 			function test() {
-				return 'should not inherit a language class';
+				return 'should not highlight syntax';
 			}
 		</code></pre>
 
 	</div>
 
-	<div data-prism="ignore">
+	<div data-highlight-syntax="false">
 
 		<pre><code>
 			function test() {
-				return 'should not inherit a language class';
+				return 'should not highlight syntax';
 			}
 
 		</code></pre>
@@ -56,21 +60,21 @@ eleventyExcludeFromCollections: true
 		}
 	</code></pre>
 
-	<pre><code class="lang-js" data-prism="ignore">
+	<pre><code class="lang-js" data-highlight-syntax="false">
 		function test() {
 			return 'should be js';
 		}
 	</code></pre>
 
-	<pre><code class="lang-javascript" data-prism="ignore">
+	<pre><code class="lang-javascript" data-highlight-syntax="false">
 		function test() {
 			return 'should be javascript';
 		}
 	</code></pre>
 
-	<pre><code data-prism="ignore">
+	<pre><code data-highlight-syntax="false">
 		function test() {
-			return 'should not inherit a language class';
+			return 'should not highlight syntax';
 		}
 	</code></pre>
 
@@ -90,43 +94,55 @@ eleventyExcludeFromCollections: true
 
 <pre class="lang-js"><code class="foo">
 	function test() {
-		return 'should keep existing foo class';
+		return 'code should keep existing foo class';
 	}
 </code></pre>
 
 <pre><code class="language-foo test language-bar test language-baz">
 	function test() {
-		return 'should not have double spaces';
+		return 'code should not have double spaces';
 	}
 </code></pre>
 
-<pre><code class=" language-foo  language-bar       language-baz ">
+<pre><code class=" language-foo  language-bar   language-baz    ">
 	function test() {
-		return 'should keep extra spaces at start and end';
+		return 'code should keep an extra space at start and 7 before line-numbers';
+	}
+</code></pre>
+
+<pre class="FOO Lang-JS"><code>
+	function test() {
+		return 'pre FOO class should be uppercase and language-js should be lower case';
 	}
 </code></pre>
 
 <pre class="LANG-js"><code>
 	function test() {
-		return 'lang should be lower case';
+		return 'lang class should be lower case';
 	}
 </code></pre>
 
 <pre><code class="lang-JS">
 	function test() {
-		return 'JS should be lower case';
+		return 'JS class should be lower case';
 	}
 </code></pre>
 
 <pre class="lang-JS"><code data-stay>
 	function test() {
-		return 'data attribute should stay';
+		return 'data-stay attribute on code should stay';
+	}
+</code></pre>
+
+<pre data-line-numbers="false"><code class="">
+	function test() {
+		return 'empty class on code should stay';
 	}
 </code></pre>
 
 <pre class="lang-JS"><code class="">
 	function test() {
-		return 'empty class should be replaced';
+		return 'empty class on code should be replaced';
 	}
 </code></pre>
 
@@ -180,7 +196,7 @@ eleventyExcludeFromCollections: true
 
 <pre class="language-html foo language-css bar language-js baz"><code>
 	function test() {
-		return 'code should inherit all language classes - html css js';
+		return 'code should only inherit html';
 	}
 </code></pre>
 
@@ -191,7 +207,7 @@ eleventyExcludeFromCollections: true
 </code></pre>
 
 <div class="lang-js">
-	this should keep lang-js
+	should not have an empty class
 </div>
 
 <pre></pre>
@@ -201,42 +217,30 @@ eleventyExcludeFromCollections: true
 <pre class="lang-test1 lang-bar">
 	<code class="language-foo language-bar language-baz lang-foo lang-test2 lang-bar lang-baz">
 		function test() {
-			return 'pre should have lang-test1 removed and foo bar baz added';
+			return 'pre should have lang-test1 removed and language-foo added with language-bar staying';
 		}
 	</code>
-	<code class="language-foo language-bar language-baz lang-foo lang-bar lang-baz">
+	<code class="language-bar language-baz lang-foo lang-bar lang-baz">
 		function test() {
-			return 'pre should have lang-test1 removed and foo bar baz added';
+			return 'pre should have lang-test1 removed and language-foo added with language-bar staying';
 		}
 	</code>
 </pre>
 
-<pre class="language-js"><code data-prism="ignore">
+<pre class="language-js"><code data-highlight-syntax="false">
 	function test() {
 		return 'should not be highlighted';
 	}
 </code></pre>
 
-<pre class="language-js"><code Data-prism="ignore">
-	function test() {
-		return 'should not be highlighted';
-	}
-</code></pre>
-
-<pre class="language-js"><code data-Prism="ignore">
-	function test() {
-		return 'should not be highlighted';
-	}
-</code></pre>
-
-<pre class="language-js"><code data-Prism="Ignore">
+<pre class="language-js"><code data-highlight-syntax="false">
 	function test() {
 		return 'should not be highlighted';
 	}
 </code></pre>
 
 <pre class="lang-js">
-	<code data-prism="ignore">
+	<code data-highlight-syntax="false">
 		function test() {
 			return 'should not be highlighted';
 		}
@@ -247,7 +251,7 @@ eleventyExcludeFromCollections: true
 		}
 	</code><code class="">
 		function test() {
-			return 'should have js';
+			return 'should replace empty class with language-js';
 		}
 	</code>
 </pre>
@@ -283,8 +287,137 @@ eleventyExcludeFromCollections: true
 		<code class="lang-css">.css {
 			within: js;
 		}</code>
-		return 'should be js';
+		return 'js contains css';
 	}</code></pre>
+
+<pre><code class="language-javascript line-numbers">
+	function test() {
+		return 'pre and code should have line-numbers class';
+	}
+</code></pre>
+
+<pre class="line-numbers"><code class="language-javascript">
+	function test() {
+		return 'pre and code should have line-numbers class';
+	}
+</code></pre>
+
+<div class="line-numbers">
+<pre><code class="language-javascript">
+	function test() {
+		return 'pre and code should have line-numbers class';
+	}
+</code></pre>
+</div>
+
+<div class="lang-js" data-highlight-syntax="false">
+<pre><code data-highlight-syntax="true" data-highlight-syntax="false">
+	function test() {
+		return 'should highlight syntax and remove data-highlight-syntax from div and code';
+	}
+</code></pre>
+</div>
+
+<div class="lang-js">
+<pre><code data-highlight-syntax="false">
+	function test() {
+		return 'should not highlight syntax but still remove data-highlight-syntax from code';
+	}
+</code></pre>
+</div>
+
+<pre><code data-show-color="true" class="lang-css">
+	.foo {
+		color: #f00;
+		/* should show colour and remove data-show-color attribute */
+	}
+</code></pre>
+
+<pre><code data-show-color="false" class="lang-css">
+	.foo {
+		color: #f00;
+		/* should not show colour but still remove data-show-color attribute */
+	}
+</code></pre>
+
+<pre class="lang-JavaScript"><code data-show-language="true">
+	function test() {
+		return 'pre and code should have data-language="JavaScript" attribute and remove data-show-language attribute';
+	}
+</code></pre>
+
+<pre class="lang-JavaScript"><code data-show-language="false">
+	function test() {
+		return 'pre and code should not have data-language="JavaScript" attribute;
+	}
+</code></pre>
+
+<pre class="lang-js"><code data-highlight-syntax="true" data-highlight-syntax="true" data-show-color="true" data-show-color="true" data-show-language="true" data-show-language="true" data-line-numbers="true" data-line-numbers="true">
+	function test() {
+		return 'multiple duplicate attributes should be removed';
+	}
+</code></pre>
+
+<pre>
+<code class="lang-HTML">
+	&lt;p>data-language value on pre should be HTML CSS JavaScript&lt;/p>
+	}
+</code>
+<code class="language-CSS">
+	.pre-data-language {
+		shouldbe: 'HTML CSS JavaScript';
+	}
+</code>
+<code class="lang-JavaScript">
+	function test() {
+		return 'data-language value on pre should be HTML CSS JavaScript';
+	}
+</code>
+</pre>
+
+<pre>
+<code class="lang-HTML">
+	&lt;p>data-language value on pre should be HTML html&lt;/p>
+	}
+</code>
+<code class="lang-html">
+	&lt;p>data-language value on pre should be HTML html&lt;/p>
+	}
+</code>
+<code class="lang-HTML">
+	&lt;p>data-language value on pre should be HTML html&lt;/p>
+	}
+</code>
+</pre>
+
+
+<pre class="lang-js">
+<code class="line-numbers">
+	function test() {
+		return 'duplicate line-numbers class on code should be removed';
+	}
+</code>
+</pre>
+
+<pre class="line-numbers">
+<code class="lang-js">
+	function test() {
+		return 'duplicate line-numbers class on pre should be removed';
+	}
+</code>
+</pre>
+
+<pre class="lang-html lang-html">
+<code>
+	&lt;p>duplicate lang-html classes on pre should be removed&lt;/p>
+	}
+</code>
+<code class="lang-js lang-js lang-js">
+	function test() {
+		return 'duplicate lang-js classes on code should be removed';
+	}
+</code>
+</pre>
 
 <pre><code class="language-js">
 	function test() {
@@ -315,6 +448,61 @@ new line<code class="language-js">function test() {
 }</code></pre>
 
 <pre><span>foo
+</span>
+<code class="language-js">function test() {
+	return 'foo + new line wrapped in span on line before code';
+}</code></pre>
+
+<pre><span>foo
 </span><code class="language-js">function test() {
-	return 'is wrapped in span should not have spaces on top and bottom';
+	return 'foo + new line wrapped in span on same line as code';
+}</code></pre>
+
+<pre><span>
+foo
+bar
+baz</span><code class="language-js">function test() {
+	return 'foo bar baz all on new lines in span baz on same line as code';
+}</code></pre>
+
+<pre><span>
+foo
+bar
+baz
+</span><code class="language-js">function test() {
+	return 'foo bar baz all on new lines in span on same line as code';
+}</code></pre>
+
+<pre class="lang-js"><code data-line-numbers="true">
+	function test() {
+		return 'should have line numbers and remove data-line-numbers attribute';
+	}
+</code></pre>
+
+<pre class="lang-js"><code data-line-numbers="false">
+	function test() {
+		return 'should not have line numbers but still remove data-line-numbers attribute';
+	}
+</code></pre>
+
+<pre class="lang-js">
+this line shouldn't be numbered
+<code>let line1;</code><code>let stillLine1;</code><code>let lastOfLine1;
+let line2;</code>
+<code>let line3;</code>
+this line shouldn't be numbered
+</pre>
+
+<pre class="lang-js">
+this line shouldn't be numbered
+<code>let line1;</code><code>let stillLine1;</code><code>let lastOfLine1;
+let line2;</code>
+this line shouldn't be numbered
+<code>let line3;</code>
+this line shouldn't be numbered
+</pre>
+
+<pre><code>
+function test() {
+	return 'has no attributes';
 }</code></pre>
