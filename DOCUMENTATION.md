@@ -33,7 +33,7 @@
 ## Line numbers
 
 ### Hooks
-- new lines wrapped in "token line-break" class
+- new lines have span after them with "token line-number" class
 - "line-numbers" class on code
 - "line-numbers" class on pre
 

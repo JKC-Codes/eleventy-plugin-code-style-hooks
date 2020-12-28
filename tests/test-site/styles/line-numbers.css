@@ -1,15 +1,23 @@
-pre[class*="language-"] {
+pre[class*="language-"].line-numbers {
 	counter-reset: line-count;
+	padding-left: calc(3ch + 1.5em + 1px);
 }
 
-pre[class*="language-"] .token.line-break::after {
+pre[class*="language-"] .token.line-number {
+	display: inline-block;
+	min-width: calc(3ch + 1.5em + 1px);
+	margin-left: calc(-3ch - 1.5em - 1px);
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	color: #999;
+}
+
+pre[class*="language-"] .token.line-number::before {
 	counter-increment: line-count;
 	content: counter(line-count);
 	display: inline-block;
-	border-right: 1px solid #999;
+	user-select: none;
 	padding-right: 0.75em;
 	margin-right: 0.75em;
-	min-width: 3ch;
-	text-align: right;
-	color: #999;
+	border-right: 1px solid;
 }
