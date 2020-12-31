@@ -3,7 +3,7 @@ const updateAttributes = require('./update-attributes.js');
 const addFirstLineNumbers = require('./add-first-line-numbers.js');
 const addLineHooks = require('./add-line-hooks.js');
 // const addColorHooks = require('./add-color-hooks.js');
-// const addSyntaxHooks = require('./add-syntax-hooks.js');
+const addSyntaxHooks = require('./add-syntax-hooks.js');
 const addHeadElements = require('./add-head-elements.js');
 const regEx = require('./regular-expressions.js');
 
@@ -51,9 +51,9 @@ function walkTree(node, parentNode, parentState) {
 		}
 
 		if(state.isChildOfCode) {
-			// if(state.highlightSyntax && state.language) {
-			// 	addSyntaxHooks(parentNode.content, parentState.index, state.language.toLowerCase());
-			// }
+			if(state.highlightSyntax && state.language) {
+				addSyntaxHooks(parentNode.content, parentState.index, state.language.toLowerCase());
+			}
 
 			if(state.showLineNumbers) {
 				addLineHooks(parentNode.content, parentState.index);
