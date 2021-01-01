@@ -1,0 +1,6 @@
+code .token.color-value {
+	display: inline-block;
+	width: 1.5ex;
+	height: 1.5ex;
+	background: var(--color-value);
+}

@@ -22,7 +22,8 @@ module.exports = function(eleventyConfig) {
 				href: '/styles/prism-dark.css',
 				media: '(prefers-color-scheme: dark)'
 			},
-			'/styles/line-numbers.css'
+			'/styles/line-numbers.css',
+			'/styles/colour-previews.css'
 		]
 	});
 

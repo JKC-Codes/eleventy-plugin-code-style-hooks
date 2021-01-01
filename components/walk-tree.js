@@ -2,7 +2,7 @@ const updateState = require('./update-state.js');
 const updateAttributes = require('./update-attributes.js');
 const addFirstLineNumbers = require('./add-first-line-numbers.js');
 const addLineHooks = require('./add-line-hooks.js');
-// const addColorHooks = require('./add-color-hooks.js');
+const addColorHooks = require('./add-color-hooks.js');
 const addSyntaxHooks = require('./add-syntax-hooks.js');
 const addHeadElements = require('./add-head-elements.js');
 const regEx = require('./regular-expressions.js');
@@ -59,9 +59,9 @@ function walkTree(node, parentNode, parentState) {
 				addLineHooks(parentNode.content, parentState.index);
 			}
 
-			// if(state.showColors) {
-			// 	addColorHooks(parentNode.content, parentState.index);
-			// }
+			if(state.showColors) {
+				addColorHooks(parentNode.content, parentState.index);
+			}
 
 			// TODO: convert string to AST and offset index
 		}
