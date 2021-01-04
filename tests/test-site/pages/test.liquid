@@ -201,8 +201,8 @@ eleventyExcludeFromCollections: true
 </code></pre>
 
 <pre class="foo language-html bar"><code class="language-css language-js">
-	function test() {
-		return 'pre should have language-html removed';
+	.test {
+		content: 'pre should have language-html removed';
 	}
 </code></pre>
 
@@ -361,7 +361,6 @@ eleventyExcludeFromCollections: true
 <pre>
 <code class="lang-HTML">
 	&lt;p>data-language value on pre should be HTML CSS JavaScript&lt;/p>
-	}
 </code>
 <code class="language-CSS">
 	.pre-data-language {
@@ -378,15 +377,12 @@ eleventyExcludeFromCollections: true
 <pre>
 <code class="lang-HTML">
 	&lt;p>data-language value on pre should be HTML html&lt;/p>
-	}
 </code>
 <code class="lang-html">
 	&lt;p>data-language value on pre should be HTML html&lt;/p>
-	}
 </code>
 <code class="lang-HTML">
 	&lt;p>data-language value on pre should be HTML html&lt;/p>
-	}
 </code>
 </pre>
 
@@ -410,7 +406,6 @@ eleventyExcludeFromCollections: true
 <pre class="lang-html lang-html">
 <code>
 	&lt;p>duplicate lang-html classes on pre should be removed&lt;/p>
-	}
 </code>
 <code class="lang-js lang-js lang-js">
 	function test() {
@@ -501,6 +496,208 @@ this line shouldn't be numbered
 <code>let line3;</code>
 this line shouldn't be numbered
 </pre>
+
+<pre><code class="lang-css">
+.red {
+	color: #f00;
+}
+
+.green {
+	color: #0f0;
+}
+
+.blue {
+	color: #00f;
+}
+
+.red {
+	color: #f009;
+}
+
+.green {
+	color: #0f09;
+}
+
+.blue {
+	color: #00f9;
+}
+
+.red {
+	color: #ff0000;
+}
+
+.green {
+	color: #00ff00;
+}
+
+.blue {
+	color: #0000ff;
+}
+
+.red {
+	color: #ff000099;
+}
+
+.green {
+	color: #00ff0099;
+}
+
+.blue {
+	color: #0000ff99;
+}
+
+.red {
+	color: rgb(255, 0, 0);
+}
+
+.green {
+	color: rgb(0, 255, 0);
+}
+
+.blue {
+	color: rgb(0, 0, 255);
+}
+
+.red {
+	color: rgb(255, 0, 0, 0.5);
+}
+
+.green {
+	color: rgb(0, 255, 0, 0.5);
+}
+
+.blue {
+	color: rgb(0, 0, 255, 0.5);
+}
+
+.red {
+	color: rgba(255, 0, 0, 0.5);
+}
+
+.green {
+	color: rgba(0, 255, 0, 0.5);
+}
+
+.blue {
+	color: rgba(0, 0, 255, 0.5);
+}
+
+.red {
+	color: rgb(255 0 0);
+}
+
+.green {
+	color: rgb(0 255 0);
+}
+
+.blue {
+	color: rgb(0 0 255);
+}
+
+.red {
+	color: rgb(255 0 0 / 0.5);
+}
+
+.green {
+	color: rgb(0 255 0 / 0.5);
+}
+
+.blue {
+	color: rgb(0 0 255 / 0.5);
+}
+
+.red {
+	color: rgba(255 0 0 / 0.5);
+}
+
+.green {
+	color: rgba(0 255 0 / 0.5);
+}
+
+.blue {
+	color: rgba(0 0 255 / 0.5);
+}
+
+.red {
+	color: hsl(0, 100%, 50%);
+}
+
+.green {
+	color: hsl(120, 100%, 50%);
+}
+
+.blue {
+	color: hsl(240, 100%, 50%);
+}
+
+.red {
+	color: hsl(0, 100%, 50%, 0.5);
+}
+
+.green {
+	color: hsl(120, 100%, 50%, 0.5);
+}
+
+.blue {
+	color: hsl(240, 100%, 50%, 0.5);
+}
+
+.red {
+	color: hsla(0, 100%, 50%, 0.5);
+}
+
+.green {
+	color: hsla(120, 100%, 50%, 0.5);
+}
+
+.blue {
+	color: hsla(240, 100%, 50%, 0.5);
+}
+
+.red {
+	color: hsl(0 100% 50%);
+}
+
+.green {
+	color: hsl(120 100% 50%);
+}
+
+.blue {
+	color: hsl(240 100% 50%);
+}
+
+.red {
+	color: hsl(0 100% 50% / 0.5);
+}
+
+.green {
+	color: hsl(120 100% 50% / 0.5);
+}
+
+.blue {
+	color: hsl(240 100% 50% / 0.5);
+}
+
+.red {
+	color: hsla(0 100% 50% / 0.5);
+}
+
+.green {
+	color: hsla(120 100% 50% / 0.5);
+}
+
+.blue {
+	color: hsla(240 100% 50% / 0.5);
+}
+
+.lab {
+	color: lab(52.2345% 72.2 56.2);
+}
+
+.lch {
+	color: lch(54.29% 106.839 0.5turn);
+}
+</code></pre>
 
 <pre><code>
 function test() {
