@@ -1,3 +1,4 @@
+const parseHTML = require('posthtml-parser');
 const updateState = require('./update-state.js');
 const updateAttributes = require('./update-attributes.js');
 const addFirstLineNumbers = require('./add-first-line-numbers.js');
@@ -7,10 +8,12 @@ const addSyntaxHooks = require('./add-syntax-hooks.js');
 const addHeadElements = require('./add-head-elements.js');
 const regEx = require('./regular-expressions.js');
 
+let usingPostHTML;
 let removeRedundancy;
 let pageContainsCode = false;
 
 module.exports = function(options) {
+	usingPostHTML = options.usingPostHTML;
 	removeRedundancy = options.removeRedundancy;
 	// AST = Abstract Syntax Tree from HTML Parser
 	return function(AST) {
@@ -51,10 +54,6 @@ function walkTree(node, parentNode, parentState) {
 		}
 
 		if(state.isChildOfCode) {
-			if(state.highlightSyntax && state.language) {
-				addSyntaxHooks(parentNode.content, parentState.index, state.language.toLowerCase());
-			}
-
 			if(state.showLineNumbers) {
 				addLineHooks(parentNode.content, parentState.index);
 			}
@@ -63,7 +62,19 @@ function walkTree(node, parentNode, parentState) {
 				addColorHooks(parentNode.content, parentState.index);
 			}
 
-			// TODO: convert string to AST and offset index
+			if(state.highlightSyntax && state.language) {
+				addSyntaxHooks(parentNode.content, parentState, state.language.toLowerCase(), usingPostHTML);
+			}
+
+			// Convert strings with HTML to an AST so other PostHTML plugins can work
+			let newNode = parentNode.content[parentState.index]
+
+			if(usingPostHTML && typeof newNode === 'string') {
+				newNode = parseHTML(newNode);
+				parentNode.content.splice(parentState.index, 1, ...newNode);
+				// Update index to prevent infinite loops
+				parentState.index += newNode.length - 1;
+			};
 		}
 	}
 	else {

@@ -6,7 +6,7 @@ const walkTree = require('./components/walk-tree.js');
 
 module.exports = function(eleventyConfig, userOptions) {
 
-	const options = Object.assign({}, defaultOptions, parseOptions(userOptions));
+	const options = Object.assign({}, defaultOptions, parseOptions(userOptions), {usingPostHTML: false});
 
 	eleventyConfig.addTransform('codeStyleHooks', function(HTMLString, outputPath) {
 		if(outputPath && outputPath.endsWith('.html')) {

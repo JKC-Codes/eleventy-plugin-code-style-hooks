@@ -5,6 +5,7 @@ module.exports = {
 	showColors: true,
 	showLanguages: true,
 	showLineNumbers: true,
+	usingPostHTML: true,
 	scripts: [],
 	styles: []
 }
