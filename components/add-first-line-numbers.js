@@ -1,4 +1,3 @@
-const parseHTML = require('posthtml-parser');
 const regEx = require('./regular-expressions.js');
 
 module.exports = function addFirstLineNumber(lastNewLineObject) {
@@ -22,14 +21,9 @@ module.exports = function addFirstLineNumber(lastNewLineObject) {
 		// Regex = positive lookahead for any non-line-break characters from end of string
 		const lastNewLine = new RegExp(`${regEx.lineNew}(?=.*$)`);
 		const lineNumber = '<span class="token line-number" aria-hidden="true"></span>';
-		// Converting the string into an abstract syntax tree prevents PostHTML plugin errors
-		const parsedReplacementString = parseHTML(content[index].replace(lastNewLine, `$&${lineNumber}`));
+		const replacementString = content[index].replace(lastNewLine, `$&${lineNumber}`);
 
-		// Replace existing string with new syntax tree array
-		content.splice(index, 1, ...parsedReplacementString);
-
-		// Add array length to index to prevent infinite loops
-		lastNewLineObject.state.index += parsedReplacementString.length - 1;
+		content.splice(index, 1, replacementString);
 	}
 
 	lastNewLineObject.node = {tag: 'code'}
