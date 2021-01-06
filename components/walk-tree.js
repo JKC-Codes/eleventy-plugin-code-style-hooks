@@ -47,6 +47,7 @@ function walkTree(node, parentNode, parentState) {
 	if(typeof node === 'string') {
 		const hasNewLine = new RegExp(regEx.lineNew).test(node);
 
+		// Note each new line within pre but outside of code so the first line number can be added
 		if(state.isChildOfPre && !state.isChildOfCode && state.showLineNumbers && hasNewLine) {
 			state.lastNewLine.node = parentNode;
 			state.lastNewLine.index = state.index;
