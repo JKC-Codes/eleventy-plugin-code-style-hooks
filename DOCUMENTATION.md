@@ -10,7 +10,7 @@
 ## Syntax highlighting
 
 ### Hooks
-- syntax wrapped in token classes
+- syntax wrapped in spans with token classes
 - language class on code
 - language class on pre
 
@@ -38,10 +38,10 @@
 - "line-numbers" class on pre
 
 ### Features
-- add line numbers class to all code elements
+- add line numbers class to all code elements within pre
 - add line numbers class to all pre elements with children code elements
-- inherit line numbers class from ancestors for defacto defaults
-- toggle line numbers with data-line-numbers="true/false" attribute
+- inherit data-line-numbers="true/false" from ancestors for defacto defaults
+- toggle line numbers with data-line-numbers="true/false" attribute on pre or higher
 - remove data-line-numbers attributes
 
 ### Global options
@@ -68,7 +68,7 @@
 ## Inline colour preview
 
 ### Hooks
-- colours wrapped in "token color-value" class and style="--color-value: 'value'" property
+- colours have span before them with "token color-value" class and style="--color-value: 'value'" property
 
 ### Features
 - CSS code with RGB, HSL and Hex colour values are automatically selected

@@ -50,9 +50,5 @@ function getClasses(classesString) {
 		state.highlightSyntax = true;
 	}
 
-	if(new RegExp(regEx.classLineNumbers, 'i').test(classesString)) {
-		state.showLineNumbers = true;
-	}
-
 	return state;
 }
