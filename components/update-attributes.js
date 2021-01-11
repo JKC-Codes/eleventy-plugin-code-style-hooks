@@ -9,7 +9,7 @@ module.exports = function(node, state, removeRedundancy) {
 		removeInlineOptions(attributes);
 
 		if(!isPre && !isCode && attributes.class) {
-			removeClass(attributes, `${regEx.classLanguage}|${regEx.classLineNumbers}`);
+			removeClass(attributes, regEx.classLanguage);
 		}
 	}
 
@@ -28,11 +28,11 @@ module.exports = function(node, state, removeRedundancy) {
 		if(state.showLineNumbers && state.isChildOfPre) {
 			addAttribute(attributes, 'class', 'line-numbers');
 
-			// Add line-numbers class to Pre parent
+			// Add a temporary attribute to Pre parent so line-numbers class can be added later
 			if(!state.isChildOfPre.attrs) {
 				state.isChildOfPre.attrs = {};
 			}
-			addAttribute(state.isChildOfPre.attrs, 'class', 'line-numbers');
+			addAttribute(state.isChildOfPre.attrs, 'codeChildrenClasses', 'line-numbers');
 		}
 		else if(removeRedundancy) {
 			removeClass(attributes, regEx.classLineNumbers);
@@ -58,6 +58,9 @@ module.exports = function(node, state, removeRedundancy) {
 		if(attributes.codeChildrenClasses) {
 			updatePreClasses(attributes, removeRedundancy);
 		}
+		else if(removeRedundancy && attributes.class) {
+			removeClass(attributes, `${regEx.classLanguage}|${regEx.classLineNumbers}`);
+		}
 
 		// Add data-language="xxx"
 		if(attributes.codeChildrenDataAttributes) {
@@ -66,8 +69,8 @@ module.exports = function(node, state, removeRedundancy) {
 		}
 	}
 
+	// Remove duplicate language and line-numbers classes
 	if(removeRedundancy && (isCode || isPre)) {
-		// Remove duplicate language and line-numbers classes
 		if(attributes.class) {
 			attributes.class = removeDuplicates(attributes.class, `${regEx.classLanguage}|${regEx.classLineNumbers}`);
 		}
@@ -101,7 +104,7 @@ function updateCodeLanguageClasses(attributes, state, removeRedundancy) {
 
 		languageClasses.forEach(languageClass => {
 			if(!validLanguageRegEx.test(languageClass)) {
-				removeClass(attributes, languageClass);
+				removeClass(attributes, String.raw`${regEx.wordStart}${languageClass}${regEx.wordEnd}`);
 			}
 		});
 	}
@@ -122,10 +125,11 @@ function updatePreClasses(attributes, removeRedundancy) {
 		const preClasses = attributes.class.split(' ');
 
 		preClasses.forEach(className => {
-			const isLanguageClass = new RegExp(regEx.classLanguage).test(className);
+			const languageOrLineNumberRegEx = new RegExp(`${regEx.classLanguage}|${regEx.classLineNumbers}`);
+			const isLanguageOrLineNumberClass = new RegExp(languageOrLineNumberRegEx).test(className);
 
-			if(isLanguageClass && !codeClasses.includes(className)) {
-				removeClass(attributes, className);
+			if(isLanguageOrLineNumberClass && !codeClasses.includes(className)) {
+				removeClass(attributes, String.raw`${regEx.wordStart}${className}${regEx.wordEnd}`);
 			}
 		})
 	}
@@ -177,10 +181,9 @@ function addAttribute(attributes, attributeName, attributeValue) {
 
 function removeClass(attributes, regExString) {
 	if(attributes.class) {
-		// Regex = end of line or whitespace in a non-capture group
-		attributes.class = attributes.class.replace(new RegExp(String.raw`${regEx.wordStart}${regExString}(?:$|\s)`, 'g'), '');
+		attributes.class = removeWord(attributes.class, regExString);
 
-		// Prevent creating class="" attributes
+		// Don't create class="" attributes
 		if(attributes.class === '') {
 			delete attributes.class;
 		}
@@ -188,22 +191,46 @@ function removeClass(attributes, regExString) {
 }
 
 function removeDuplicates(string, regExString) {
-	const subject = new RegExp(String.raw`${regEx.wordStart}${regExString}${regEx.wordEnd}`);
+	const matchRegEx = new RegExp(String.raw`${regExString}`, 'g');
+	let match;
+	let newString = '';
+	let oldString = string;
 
-	// Regex keeps double spaces. Regex = single space preceeded by a non-space character
-	return string.split(/(?<=\S)\s/)
-	.reduce((acc, cur) => {
-		const isSubject = subject.test(cur);
-		const isDuplicate = acc.some(word => {
-			return word.trim() === cur.trim();
-		});
+	while((match = matchRegEx.exec(oldString)) !== null) {
+		const subject = String.raw`${regEx.wordStart}${match[0]}${regEx.wordEnd}`;
 
-		if(!isSubject || !isDuplicate) {
-			return acc.concat(cur);
+		newString = oldString.slice(0, matchRegEx.lastIndex);
+		oldString = removeWord(oldString.slice(matchRegEx.lastIndex), subject);
+	}
+
+	return newString + oldString;
+}
+
+function removeWord(string, regExString) {
+	const matchRegEx = new RegExp(String.raw`${regExString}`, 'g');
+	let lastIndex = 0;
+	let match;
+	let newString = '';
+
+	while((match = matchRegEx.exec(string)) !== null) {
+		let start = lastIndex;
+		// -1 removes whitespace from start of word
+		let end = match.index - 1;
+
+		// Prevent leaving double spaces
+		if(match.index === 0) {
+			// Word is at the start of the string so whitespace after it needs to be removed
+			matchRegEx.lastIndex++;
 		}
-		else {
-			return acc;
+
+		// Prevent slice starting at end when index is negative
+		if(end < 0) {
+			end = 0;
 		}
-	}, [])
-	.join(' ')
+
+		newString += string.slice(start, end);
+		lastIndex = matchRegEx.lastIndex;
+	}
+
+	return newString + string.slice(lastIndex);
 }
