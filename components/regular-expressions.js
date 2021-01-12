@@ -46,6 +46,9 @@ const colorRGB = String.raw`rgba?\(\s*(?:(?:${colorNumber}${colorSeparator}${col
 // Regex = 'hsl' with optional 'a' + '(' + optional whitespace + hue regex + whitespace with optional comma + percentage regex + whitespace with optional comma + percentage regex + optional whitespace followed by ',' or '/' and alpha regex + optional whitespace + ')'
 const colorHSL = String.raw`hsla?\(\s*${colorHue}${colorSeparator}${colorPercentage}${colorSeparator}${colorPercentage}(?:\s*(?:,|\/)\s*${colorAlpha})?\s*\)`;
 
+// Regex = 'hwb(' + optional whitespace + hue regex + one or more whitespace + percentage regex + one or more whitespace + percentage regex + optional whitespace followed by '/' + optional whitespace + alpha regex + optional whitespace + ')'
+const colorHWB = String.raw`hwb\(\s*${colorHue}\s+${colorPercentage}\s+${colorPercentage}(?:\s*\/\s*${colorAlpha})?\s*\)`;
+
 // Regex = 'lab(' + optional whitespace + precentage regex + one or more whitespace + number regex + one or more whitespace + number regex + optional whitespace followed by '/' + optional whitespace + alpha regex + optional whitespace + ')'
 const colorLab = String.raw`lab\(\s*${colorPercentage}\s+${colorNumber}\s+${colorNumber}(?:\s*\/\s*${colorAlpha})?\s*\)`;
 
@@ -65,5 +68,5 @@ module.exports = {
 	// new line
 	lineNew,
 	// hex, RGB, HSL, Lab or LCH colour in a capture group
-	color: String.raw`${colorStart}((?:${colorHex})|(?:${colorRGB})|(?:${colorHSL})|(?:${colorLab})|(?:${colorLCH}))${colorEnd}`
+	color: String.raw`${colorStart}((?:${colorHex})|(?:${colorRGB})|(?:${colorHSL})|(?:${colorHWB})|(?:${colorLab})|(?:${colorLCH}))${colorEnd}`
 }
