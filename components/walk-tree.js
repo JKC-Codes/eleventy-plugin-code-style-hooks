@@ -82,7 +82,7 @@ function walkTree(node, parentNode, parentState) {
 		if(node.tag === 'code') {
 			pageContainsCode = true;
 
-			if(state.isChildOfPre && !state.isChildOfCode && state.showLineNumbers) {
+			if(state.isChildOfPre && !state.isChildOfCode && state.showLineNumbers && state.lastNewLine) {
 				addFirstLineNumbers(state.lastNewLine);
 			}
 		}
