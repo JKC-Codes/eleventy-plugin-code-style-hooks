@@ -2,9 +2,7 @@ const parseHTML = require('posthtml-parser');
 const updateState = require('./update-state.js');
 const updateAttributes = require('./update-attributes.js');
 const addFirstLineNumbers = require('./add-first-line-numbers.js');
-const addLineHooks = require('./add-line-hooks.js');
-const addColorHooks = require('./add-color-hooks.js');
-const addSyntaxHooks = require('./add-syntax-hooks.js');
+const addHooks = require('./add-hooks.js');
 const addHeadElements = require('./add-head-elements.js');
 const regEx = require('./regular-expressions.js');
 
@@ -54,28 +52,21 @@ function walkTree(node, parentNode, parentState) {
 			state.lastNewLine.state = parentState;
 		}
 
-		if(state.isChildOfCode) {
-			if(state.showLineNumbers) {
-				addLineHooks(parentNode.content, parentState.index);
-			}
+		if(state.isChildOfCode && ((state.highlightSyntax && state.language) || state.showLineNumbers)) {
+			let newNode = addHooks(node, state);
 
-			if(state.showColors) {
-				addColorHooks(parentNode.content, parentState.index);
-			}
-
-			if(state.highlightSyntax && state.language) {
-				addSyntaxHooks(parentNode.content, parentState, state.language.toLowerCase(), usingPostHTML);
-			}
-
-			// Convert strings with HTML to an AST so other PostHTML plugins can work
-			let newNode = parentNode.content[parentState.index]
-
-			if(usingPostHTML && typeof newNode === 'string') {
+			if(usingPostHTML) {
+				// Convert strings with HTML to an AST so other PostHTML plugins can work on them
 				newNode = parseHTML(newNode);
+				// Add the updated string to the syntax tree
 				parentNode.content.splice(parentState.index, 1, ...newNode);
 				// Update index to prevent infinite loops
 				parentState.index += newNode.length - 1;
-			};
+			}
+			else {
+				// Add the updated string to the syntax tree
+				parentNode.content.splice(parentState.index, 1, newNode);
+			}
 		}
 	}
 	else {
