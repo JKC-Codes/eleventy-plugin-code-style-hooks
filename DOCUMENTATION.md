@@ -68,7 +68,7 @@
 ## Inline colour preview
 
 ### Hooks
-- colours have span before them with "token color-value" class and style="--color-value: 'value'" property
+- colours have span before them with "color-preview" class and style="--color-value: 'value'" property
 
 ### Features
 - CSS code with RGB, HSL and Hex colour values are automatically selected
