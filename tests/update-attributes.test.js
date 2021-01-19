@@ -110,11 +110,15 @@ test('Show language option can be inherited and toggled from parent language cla
 
 
 test('Show colours option can be inherited and toggled from parent attributes', t => {
-	t.is(inlineOptions('<pre data-show-color="true"><code>#fff</code></pre>'), '<pre data-show-color="true"><code><span class="token color-value" style="--color-value: #fff" aria-hidden="true"></span>#fff</code></pre>');
-	t.is(inlineOptions('<pre DaTa-ShOw-CoLoR="TrUe"><code>#fff</code></pre>'), '<pre DaTa-ShOw-CoLoR="TrUe"><code><span class="token color-value" style="--color-value: #fff" aria-hidden="true"></span>#fff</code></pre>');
-	t.is(inlineOptions('<div data-show-color="true"><pre><code>#fff</code></pre>'), '<div data-show-color="true"><pre><code><span class="token color-value" style="--color-value: #fff" aria-hidden="true"></span>#fff</code></pre></div>');
-	t.is(inlineOptions('<pre data-show-color="false"><code>#fff</code></pre>'), '<pre data-show-color="false"><code>#fff</code></pre>');
-	t.is(inlineOptions('<div data-show-color="false"><pre data-show-color="true"><code>#fff</code></pre></div>'), '<div data-show-color="false"><pre data-show-color="true"><code><span class="token color-value" style="--color-value: #fff" aria-hidden="true"></span>#fff</code></pre></div>');
+	function inheritedColor(html, options) {
+		return inlineOptions(html, options).includes('<span class="token color">');
+	}
+
+	t.true(inheritedColor('<pre data-show-color="true"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.true(inheritedColor('<pre DaTa-ShOw-CoLoR="TrUe"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.true(inheritedColor('<div data-show-color="true"><pre><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.true(inheritedColor('<div data-show-color="false"><pre data-show-color="true"><code>#fff</code></pre></div>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.false(inheritedColor('<pre data-show-color="false"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
 });
 
 
