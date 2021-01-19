@@ -1,8 +1,8 @@
 // Regex = look behind to check for start of line or whitespace in a non-capture group
-const wordStart = String.raw`(?<=^|\s)`;
+const wordStart = String.raw`(?<=\s|^)`;
 
 // Regex = look ahead to check for end of line or whitespace in a non-capture group
-const wordEnd = String.raw`(?=$|\s)`;
+const wordEnd = String.raw`(?=\s|$)`;
 
 // Regex = 'lang' + optional 'uage' in a non-capture group
 const languageStart = String.raw`lang(?:uage)?`;
@@ -72,7 +72,7 @@ module.exports = {
 	lineNew: String.raw`\n`,
 	// hex, RGB, HSL, Lab or LCH colour in a capture group
 	color: String.raw`${colorStart}((?:${colorHex})|(?:${colorRGB})|(?:${colorHSL})|(?:${colorHWB})|(?:${colorLab})|(?:${colorLCH}))${colorEnd}`,
-	colorNamed,
+	colorNamed: String.raw`${colorStart}${colorNamed}${colorEnd}`,
 	number: colorNumber,
 	HTMLTag
 }
