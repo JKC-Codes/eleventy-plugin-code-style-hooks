@@ -55,7 +55,7 @@ pre[class*="language-"] {
 .token.operator,
 .token.entity,
 .token.url,
-.language-css .token.string,
+code.language-css .token.string,
 .style .token.string,
 .token.variable {
 	color: hsl(40, 90%, 60%);
