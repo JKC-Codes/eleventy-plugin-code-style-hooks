@@ -1,6 +1,17 @@
-code .token.color-value {
-	display: inline-block;
-	width: 1.5ex;
-	height: 1.5ex;
-	background: var(--color-value);
+@supports(--custom: properties) {
+	code .color-preview {
+		display: inline-block;
+		box-sizing: content-box;
+		width: 0.75em;
+		height: 0.75em;
+		margin-right: 0.25ch;
+		border: 1px solid grey;
+		outline: 1px solid white;
+		outline-offset: -2px;
+		background-color: white;
+		background-image: linear-gradient(var(--color-value), var(--color-value)), linear-gradient(grey, grey), linear-gradient(grey, grey);
+		background-position: top left, top right, bottom left;
+		background-repeat: no-repeat;
+		background-size: 100% 100%, 50% 50%, 50% 50%;
+	}
 }
