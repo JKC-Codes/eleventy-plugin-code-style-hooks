@@ -48,7 +48,7 @@ module.exports = function(string, state) {
 
 function addColorToken(Prism) {
 	if(!Prism.languages.css.color) {
-		Prism.languages.insertBefore('css', 'function', {
+		Prism.languages.insertBefore('css', 'property', {
 			'color': [
 				new RegExp(regEx.colorNamed, 'i'),
 				{
@@ -70,13 +70,17 @@ function addColorToken(Prism) {
 }
 
 
-// If Prism has a color token added, insert span with "token color-value" class and style="--color-value: 'value'" property before all colours
-Prism.hooks.add('wrap', function(env) {
-	if(env.type === 'color') {
-		// Prism only provides a string with tokens already added so they need to be removed before getting the colour
-		const plainText = env.content.replace(new RegExp(regEx.HTMLTag, 'g'), '');
-		const color = new RegExp(`${regEx.color}|${regEx.colorNamed}`, 'i').exec(plainText)[0];
+if(!Prism.codeStyleHooksColorHookAdded) {
+	// Stop Prism from loading the same hook more than once
+	Prism.codeStyleHooksColorHookAdded = true;
+	// If Prism has a color token added, insert span with "token color-value" class and style="--color-value: 'value'" property before all colours
+	Prism.hooks.add('wrap', function(env) {
+		if(env.type === 'color') {
+			// Prism only provides a string with tokens already added so they need to be removed before getting the colour
+			const plainText = env.content.replace(new RegExp(regEx.HTMLTag, 'g'), '');
+			const color = new RegExp(`${regEx.color}|${regEx.colorNamed}`, 'i').exec(plainText)[0];
 
-		env.content = `<span class="color-preview" style="--color-value: ${color}" aria-hidden="true"></span>${env.content}`;
-	}
-});
+			env.content = `<span class="color-preview" style="--color-value: ${color}" aria-hidden="true"></span>${env.content}`;
+		}
+	});
+}
