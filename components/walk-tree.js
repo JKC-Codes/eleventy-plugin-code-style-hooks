@@ -9,10 +9,12 @@ const regEx = require('./regular-expressions.js');
 let usingPostHTML;
 let removeRedundancy;
 let pageContainsCode = false;
+let prismAPI = null;
 
 module.exports = function(options) {
 	usingPostHTML = options.usingPostHTML;
 	removeRedundancy = options.removeRedundancy;
+	prismAPI = options.prism;
 	// AST = Abstract Syntax Tree from HTML Parser
 	return function(AST) {
 		const state = {
@@ -53,7 +55,7 @@ function walkTree(node, parentNode, parentState) {
 		}
 
 		if(state.isChildOfCode && ((state.highlightSyntax && state.language) || state.showLineNumbers)) {
-			let newNode = addHooks(node, state);
+			let newNode = addHooks(node, state, prismAPI);
 
 			if(usingPostHTML) {
 				// Convert strings with HTML to an AST so other PostHTML plugins can work on them

@@ -5,10 +5,15 @@ const renderHTML = require('posthtml-render');
 const regEx = require('./regular-expressions.js');
 
 
-module.exports = function(string, state) {
+module.exports = function(string, state, prismAPI) {
 	const language = state.language ? state.language.toLowerCase() : undefined;
 	let highlightSyntax = state.highlightSyntax && state.language;
 	let newString = string;
+
+	// Expose Prism to user so they can add new languages
+	if(prismAPI) {
+		prismAPI(Prism);
+	}
 
 	// Prism only loads markup, css, clike and javascript by default
 	if(highlightSyntax && !Prism.languages[language]) {

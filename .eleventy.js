@@ -24,7 +24,12 @@ module.exports = function(eleventyConfig) {
 			},
 			'/styles/line-numbers.css',
 			'/styles/colour-previews.css'
-		]
+		],
+		prism: function(Prism) {
+			Prism.languages.customlanguage = {
+				'success': /test/
+			}
+		}
 	});
 
 	eleventyConfig.addPassthroughCopy("./tests/test-site/styles/");
