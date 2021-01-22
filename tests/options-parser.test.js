@@ -163,6 +163,21 @@ test('Rejects invalid scripts options', t => {
 });
 
 
+test('Accepts valid prism options', t => {
+	t.is(typeof parser({prism: function(prism) {}}).prism, 'function');
+});
+
+
+test('Rejects invalid prism options', t => {
+	t.throws(()=> {parser({prism: true})});
+	t.throws(()=> {parser({prism: false})});
+	t.throws(()=> {parser({prism: 123})});
+	t.throws(()=> {parser({prism: 'foo'})});
+	t.throws(()=> {parser({prism: ['foo', 123]})});
+	t.throws(()=> {parser({prism: {foo: 'bar'}})});
+});
+
+
 test('Ignores null or undefined options', t => {
 	t.false(parser({defaultLanguage: null}).hasOwnProperty('defaultLanguage'));
 	t.false(parser({defaultLanguage: undefined}).hasOwnProperty('defaultLanguage'));
@@ -187,6 +202,9 @@ test('Ignores null or undefined options', t => {
 
 	t.false(parser({styles: null}).hasOwnProperty('styles'));
 	t.false(parser({styles: undefined}).hasOwnProperty('styles'));
+
+	t.false(parser({prism: null}).hasOwnProperty('prism'));
+	t.false(parser({prism: undefined}).hasOwnProperty('prism'));
 });
 
 
