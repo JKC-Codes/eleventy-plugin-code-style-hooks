@@ -24,6 +24,9 @@ module.exports = function(userOptions) {
 				}
 			break;
 
+			case 'prism': Object.assign(parsedOptions, validatePrismAPI(key, userOptions[key]));
+			break;
+
 			default: throw new Error(`Code Style Hooks plugin received an unrecognised option: ${key}`);
 		}
 	}
@@ -111,4 +114,19 @@ function validateScriptOrStyle(key, value) {
 	parsedScriptOrStyle[key] = elements;
 
 	return parsedScriptOrStyle;
+}
+
+function validatePrismAPI(key, value) {
+	if(value === undefined || value === null) {
+		return {};
+	}
+	else if(typeof value !== 'function') {
+		throw new Error(`Code Style Hooks plugin requires the ${key} option to be a Function. Received ${typeof value}: ${JSON.stringify(value)}`);
+	}
+	else {
+		const parsedPrismAPI = {};
+		parsedPrismAPI[key] = value;
+
+		return parsedPrismAPI;
+	}
 }
