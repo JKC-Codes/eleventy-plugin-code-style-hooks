@@ -30,24 +30,17 @@ eleventyExcludeFromCollections: true
 
 	// Display status
 	const control = document.createElement('div')
-	control.innerHTML = `<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>foo <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>em</span><span class="token punctuation">></span></span>bar<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>em</span><span class="token punctuation">></span></span> baz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
-</code></pre>
-<pre class="language-css"><code class="language-css"><span class="token selector">.foo</span> <span class="token punctuation">{</span>
-	<span class="token property">bar</span><span class="token punctuation">:</span> baz<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token parameter">bar</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token keyword">return</span> baz<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<pre class="language-shell"><code class="language-shell">$ <span class="token builtin class-name">echo</span> <span class="token string">'#! /foo/bar/baz'</span>
-</code></pre>
-<pre class="language-none"><code class="language-none">language none
-</code></pre>
-<pre><code>no class name
-</code></pre>
-<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>hTmL<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
-</code></pre>`;
+	control.innerHTML = `<pre class="language-html line-numbers" data-language="html"><span class="token line-number" aria-hidden="true"></span><code class="language-html line-numbers" data-language="html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>foo <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>em</span><span class="token punctuation">></span></span>bar<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>em</span><span class="token punctuation">></span></span> baz<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre>
+<pre class="language-css line-numbers" data-language="css"><span class="token line-number" aria-hidden="true"></span><code class="language-css line-numbers" data-language="css"><span class="token selector">.foo</span> <span class="token punctuation">{</span>
+<span class="token line-number" aria-hidden="true"></span>	<span class="token property">bar</span><span class="token punctuation">:</span> baz<span class="token punctuation">;</span>
+<span class="token line-number" aria-hidden="true"></span><span class="token punctuation">}</span></code></pre>
+<pre class="language-javascript line-numbers" data-language="javascript"><span class="token line-number" aria-hidden="true"></span><code class="language-javascript line-numbers" data-language="javascript"><span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token parameter">bar</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token line-number" aria-hidden="true"></span>	<span class="token keyword">return</span> baz<span class="token punctuation">;</span>
+<span class="token line-number" aria-hidden="true"></span><span class="token punctuation">}</span></code></pre>
+<pre class="language-shell line-numbers" data-language="shell"><span class="token line-number" aria-hidden="true"></span><code class="language-shell line-numbers" data-language="shell">$ <span class="token builtin class-name">echo</span> <span class="token string">'#! /foo/bar/baz'</span></code></pre>
+<pre class="language-none line-numbers" data-language="none"><span class="token line-number" aria-hidden="true"></span><code class="language-none line-numbers" data-language="none">language none</code></pre>
+<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers">no class name</code></pre>
+<pre class="language-html line-numbers" data-language="hTmL"><span class="token line-number" aria-hidden="true"></span><code class="language-html line-numbers" data-language="hTmL"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>hTmL<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre>`;
 
 	tests.forEach(test => {
 		const matchesControl = test.querySelector('.code').innerHTML.trim() === control.innerHTML;

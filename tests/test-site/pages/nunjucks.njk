@@ -2,6 +2,5 @@
 title: 'Nunjucks'
 ---
 {%- for test in tests -%}
-<pre><code{% if test.language %} class="language-{{ test.language }}"{% endif %}>{{ test.code }}
-</code></pre>
+<pre><code{% if test.language %} class="language-{{ test.language }}"{% endif %}>{{ test.code }}</code></pre>
 {% endfor -%}

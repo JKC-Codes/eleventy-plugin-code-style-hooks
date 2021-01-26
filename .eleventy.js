@@ -5,6 +5,7 @@ module.exports = function(eleventyConfig) {
 	eleventyConfig.addPlugin(pluginStyleHooks, {
 		defaultLanguage: null,
 		highlightSyntax: true,
+		markdownTrimTrailingNewline: true,
 		removeRedundancy: true,
 		showColors: true,
 		showLanguages: true,

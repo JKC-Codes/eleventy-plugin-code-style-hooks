@@ -1,30 +1,35 @@
-module.exports = function(userOptions) {
+module.exports = function(userOptions = {}) {
 	const parsedOptions= {};
 
-	for(const key in userOptions) {
+	for(const [key, value] of Object.entries(userOptions)) {
+		if(value === undefined || value === null) {
+			continue;
+		}
+
 		switch(key) {
-			case 'defaultLanguage': Object.assign(parsedOptions, validateLanguage(key, userOptions[key]));
+			case 'defaultLanguage': Object.assign(parsedOptions, validateLanguage(key, value));
 			break;
 
 			case 'highlightSyntax':
+			case 'markdownTrimTrailingNewline':
 			case 'removeRedundancy':
 			case 'showColors':
 			case 'showLanguages':
 			case 'showLineNumbers':
-				Object.assign(parsedOptions, validateBoolean(key, userOptions[key]));
+				Object.assign(parsedOptions, validateBoolean(key, value));
 			break;
 
 			case 'scripts':
 			case 'styles':
 				try {
-					Object.assign(parsedOptions, validateScriptOrStyle(key, userOptions[key]));
+					Object.assign(parsedOptions, validateScriptOrStyle(key, value));
 				}
 				catch(error) {
 					throw new Error(`Code Style Hooks plugin requires the ${key} option to be a single String or Object, or an array of Strings or Objects. Received ${error.type}: ${error.text}`);
 				}
 			break;
 
-			case 'prism': Object.assign(parsedOptions, validatePrismAPI(key, userOptions[key]));
+			case 'prism': Object.assign(parsedOptions, validatePrismAPI(key, value));
 			break;
 
 			default: throw new Error(`Code Style Hooks plugin received an unrecognised option: ${key}`);
@@ -35,32 +40,20 @@ module.exports = function(userOptions) {
 }
 
 function validateLanguage(key, value) {
-	if(value === undefined || value === null) {
-		return {};
-	}
-	else if(typeof value !== 'string') {
+	if(typeof value !== 'string') {
 		throw new Error(`Code Style Hooks plugin requires the ${key} option to be a String. Received ${typeof value}: ${JSON.stringify(value)}`);
 	}
 	else {
-		const parsedLanguage = {};
-		parsedLanguage[key] = value.toLowerCase();
-
-		return parsedLanguage;
+		return {[key]: value.trim().toLowerCase()};
 	}
 }
 
 function validateBoolean(key, value) {
-	if(value === undefined || value === null) {
-		return {};
-	}
-	else if(typeof value !== 'boolean') {
+	if(typeof value !== 'boolean') {
 		throw new Error(`Code Style Hooks plugin requires the ${key} option to be a Boolean. Received ${typeof value}: ${JSON.stringify(value)}`);
 	}
 	else {
-		const parsedBoolean = {};
-		parsedBoolean[key] = value;
-
-		return parsedBoolean;
+		return {[key]: value};
 	}
 }
 
@@ -86,7 +79,7 @@ function validateScriptOrStyle(key, value) {
 			}
 		}
 		else if(typeof headItem === 'object' && !Array.isArray(headItem)) {
-			element.attrs = Object.assign(element.attrs, headItem);
+			Object.assign(element.attrs, headItem);
 		}
 		else {
 			throw {
@@ -98,10 +91,7 @@ function validateScriptOrStyle(key, value) {
 		elements.push(element);
 	}
 
-	if(value === undefined || value === null) {
-		return {};
-	}
-	else if(Array.isArray(value)) {
+	if(Array.isArray(value)) {
 		value.forEach(valueItem => {
 			addElement(valueItem)
 		});
@@ -110,23 +100,14 @@ function validateScriptOrStyle(key, value) {
 		addElement(value)
 	}
 
-	const parsedScriptOrStyle = {};
-	parsedScriptOrStyle[key] = elements;
-
-	return parsedScriptOrStyle;
+	return {[key]: elements};
 }
 
 function validatePrismAPI(key, value) {
-	if(value === undefined || value === null) {
-		return {};
-	}
-	else if(typeof value !== 'function') {
+	if(typeof value !== 'function') {
 		throw new Error(`Code Style Hooks plugin requires the ${key} option to be a Function. Received ${typeof value}: ${JSON.stringify(value)}`);
 	}
 	else {
-		const parsedPrismAPI = {};
-		parsedPrismAPI[key] = value;
-
-		return parsedPrismAPI;
+		return {[key]: value};
 	}
 }

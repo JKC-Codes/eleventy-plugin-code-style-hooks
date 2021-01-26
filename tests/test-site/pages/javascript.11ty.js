@@ -11,8 +11,7 @@ class page {
 			const language = cur.language ? ` class="language-${cur.language}"` : '';
 
 			return acc +
-`<pre><code${language}>${code}
-</code></pre>
+`<pre><code${language}>${code}</code></pre>
 `;
 		}, '');
 	}

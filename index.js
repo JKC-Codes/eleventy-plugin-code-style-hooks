@@ -2,6 +2,7 @@ const parseHTML = require('posthtml-parser');
 const renderHTML = require('posthtml-render');
 const defaultOptions = require('./components/options-default.js');
 const parseOptions = require('./components/options-parser.js');
+const removeTrailingWhitespace = require('./components/remove-trailing-whitespace.js');
 const walkTree = require('./components/walk-tree.js');
 
 module.exports = function(eleventyConfig, userOptions) {
@@ -20,4 +21,8 @@ module.exports = function(eleventyConfig, userOptions) {
 			return HTMLString;
 		}
 	});
+
+	if(options.markdownTrimTrailingNewline) {
+		eleventyConfig.addMarkdownHighlighter(removeTrailingWhitespace);
+	}
 }

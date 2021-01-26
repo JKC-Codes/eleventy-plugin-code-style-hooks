@@ -1,6 +1,7 @@
 ## Features
 - Syntax highlighting
 - Line numbers
+- Trim trailing new line in Markdown
 - Show language
 - Inline colour preview
 - Auto add CSS
@@ -47,6 +48,15 @@
 ### Global options
 - removeRedundancy: Boolean
 - showLineNumbers: Boolean
+
+
+## Trim trailing new line in Markdown
+
+### Features
+- Removes the automatic new line added to the end of all Markdown code blocks
+
+### Global options
+- markdownTrimTrailingNewline: Boolean
 
 
 ## Show language

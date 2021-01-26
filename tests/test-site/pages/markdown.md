@@ -1,8 +1,8 @@
 ---
 title: Markdown
 ---
-{% for test in tests %}
+{%- for test in tests -%}
 ```{{ test.language }}
-{{ test.code }}
+{{ test.code | escape }}
 ```
-{% endfor %}
+{% endfor -%}
