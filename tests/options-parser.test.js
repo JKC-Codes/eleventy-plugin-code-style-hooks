@@ -3,16 +3,16 @@ const parser = require('../components/options-parser.js');
 
 
 test('Accepts valid defaultLanguage options', t => {
-	t.deepEqual(parser({defaultLanguage: 'foo'}), {defaultLanguage: 'foo'});
-	t.deepEqual(parser({defaultLanguage: 'inform7'}), {defaultLanguage: 'inform7'});
-	t.deepEqual(parser({defaultLanguage: 'nand2tetris-hdl'}), {defaultLanguage: 'nand2tetris-hdl'});
+	t.like(parser({defaultLanguage: 'foo'}), {defaultLanguage: 'foo'});
+	t.like(parser({defaultLanguage: 'inform7'}), {defaultLanguage: 'inform7'});
+	t.like(parser({defaultLanguage: 'nand2tetris-hdl'}), {defaultLanguage: 'nand2tetris-hdl'});
 });
 
 
 test('Converts defaultLanguage option to lower case', t => {
-	t.deepEqual(parser({defaultLanguage: 'HTML'}), {defaultLanguage: 'html'});
-	t.deepEqual(parser({defaultLanguage: 'CSS'}), {defaultLanguage: 'css'});
-	t.deepEqual(parser({defaultLanguage: 'javaScript'}), {defaultLanguage: 'javascript'});
+	t.like(parser({defaultLanguage: 'HTML'}), {defaultLanguage: 'html'});
+	t.like(parser({defaultLanguage: 'CSS'}), {defaultLanguage: 'css'});
+	t.like(parser({defaultLanguage: 'javaScript'}), {defaultLanguage: 'javascript'});
 });
 
 

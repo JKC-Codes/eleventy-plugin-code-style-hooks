@@ -1,5 +1,5 @@
 module.exports = function(userOptions = {}) {
-	const parsedOptions= {};
+	const parsedOptions= {parsed: true};
 
 	for(const [key, value] of Object.entries(userOptions)) {
 		if(value === undefined || value === null) {
