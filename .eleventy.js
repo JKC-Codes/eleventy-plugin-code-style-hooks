@@ -7,9 +7,9 @@ module.exports = function(eleventyConfig) {
 		highlightSyntax: true,
 		markdownTrimTrailingNewline: true,
 		removeRedundancy: true,
-		showColors: true,
-		showLanguages: true,
-		showLineNumbers: true,
+		colorPreviews: true,
+		languageLabels: true,
+		lineNumbers: true,
 		scripts: [
 			'/scripts/toggleLineNumbers.js',
 			{

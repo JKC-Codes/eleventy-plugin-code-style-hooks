@@ -10,9 +10,9 @@ function inlineOptions(HTMLString, options) {
 			defaultLanguage: 'none',
 			highlightSyntax: false,
 			removeRedundancy: false,
-			showColors: false,
-			showLanguages: false,
-			showLineNumbers: false,
+			colorPreviews: false,
+			languageLabels: false,
+			lineNumbers: false,
 			usingPostHTML: false,
 			scripts: [],
 			styles: []
@@ -67,12 +67,12 @@ test('Syntax highlighting can be toggled', t => {
 
 
 test('Adds line-numbers class to code and pre', t => {
-	t.is(inlineOptions('<code></code>', {showLineNumbers: true}), '<code></code>');
+	t.is(inlineOptions('<code></code>', {lineNumbers: true}), '<code></code>');
 	t.is(inlineOptions('<div class="line-numbers"><code></code></div>'), '<div class="line-numbers"><code></code></div>');
-	t.is(inlineOptions('<pre><code></code></pre>', {showLineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre><code></code></pre><pre></pre>', {showLineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre><pre></pre>');
-	t.is(inlineOptions('<pre><code></code><code></code></pre>', {showLineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre><code><code></code></code></pre>', {showLineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"><code class="line-numbers"></code></code></pre>');
+	t.is(inlineOptions('<pre><code></code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre><code></code></pre><pre></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre><pre></pre>');
+	t.is(inlineOptions('<pre><code></code><code></code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code><code class="line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre><code><code></code></code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"><code class="line-numbers"></code></code></pre>');
 });
 
 
@@ -80,32 +80,32 @@ test('Line numbers can be inherited and toggled from attribute', t => {
 	t.is(inlineOptions('<pre data-line-numbers="true"><code></code></pre>'), '<pre data-line-numbers="true" class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
 	t.is(inlineOptions('<pre DaTa-LiNe-NuMbErS="TrUe"><code></code></pre>'), '<pre DaTa-LiNe-NuMbErS="TrUe" class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
 	t.is(inlineOptions('<div data-line-numbers="true"><pre><code></code></pre></div>'), '<div data-line-numbers="true"><pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre></div>');
-	t.is(inlineOptions('<pre data-line-numbers="false"><code></code></pre>', {showLineNumbers: true}), '<pre data-line-numbers="false"><code></code></pre>');
+	t.is(inlineOptions('<pre data-line-numbers="false"><code></code></pre>', {lineNumbers: true}), '<pre data-line-numbers="false"><code></code></pre>');
 	t.is(inlineOptions('<div data-line-numbers="false"><pre data-line-numbers="true"><code></code></pre></div>'), '<div data-line-numbers="false"><pre data-line-numbers="true" class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre></div>');
 });
 
 
 test('Adds data-language attribute to code and pre', t => {
-	t.is(inlineOptions('<code></code>', {showLanguages: true}), '<code data-language="none"></code>');
-	t.is(inlineOptions('<pre><code></code></pre>', {showLanguages: true}), '<pre data-language="none"><code data-language="none"></code></pre>');
-	t.is(inlineOptions('<pre><code></code></pre><code></code>', {showLanguages: true}), '<pre data-language="none"><code data-language="none"></code></pre><code data-language="none"></code>');
-	t.is(inlineOptions('<code><code></code></code>', {showLanguages: true}), '<code data-language="none"><code data-language="none"></code></code>');
+	t.is(inlineOptions('<code></code>', {languageLabels: true}), '<code data-language="none"></code>');
+	t.is(inlineOptions('<pre><code></code></pre>', {languageLabels: true}), '<pre data-language="none"><code data-language="none"></code></pre>');
+	t.is(inlineOptions('<pre><code></code></pre><code></code>', {languageLabels: true}), '<pre data-language="none"><code data-language="none"></code></pre><code data-language="none"></code>');
+	t.is(inlineOptions('<code><code></code></code>', {languageLabels: true}), '<code data-language="none"><code data-language="none"></code></code>');
 });
 
 
 test('Data-language attribute uses language class', t => {
-	t.is(inlineOptions('<code class="language-foo"></code>', {showLanguages: true}), '<code class="language-foo" data-language="foo"></code>');
-	t.is(inlineOptions('<div class="language-bar"><pre><code></code></pre></div>', {showLanguages: true}), '<div class="language-bar"><pre class="language-bar" data-language="bar"><code class="language-bar" data-language="bar"></code></pre></div>');
-	t.is(inlineOptions('<code class="alanguage-test"></code>', {showLanguages: true}), '<code class="alanguage-test" data-language="none"></code>');
+	t.is(inlineOptions('<code class="language-foo"></code>', {languageLabels: true}), '<code class="language-foo" data-language="foo"></code>');
+	t.is(inlineOptions('<div class="language-bar"><pre><code></code></pre></div>', {languageLabels: true}), '<div class="language-bar"><pre class="language-bar" data-language="bar"><code class="language-bar" data-language="bar"></code></pre></div>');
+	t.is(inlineOptions('<code class="alanguage-test"></code>', {languageLabels: true}), '<code class="alanguage-test" data-language="none"></code>');
 });
 
 
 test('Show language option can be inherited and toggled from parent language classes', t => {
-	t.is(inlineOptions('<pre data-show-language="true"><code></code></pre>'), '<pre data-show-language="true" data-language="none"><code data-language="none"></code></pre>');
-	t.is(inlineOptions('<pre DaTa-ShOw-LaNgUaGe="TrUe"><code></code></pre>'), '<pre DaTa-ShOw-LaNgUaGe="TrUe" data-language="none"><code data-language="none"></code></pre>');
-	t.is(inlineOptions('<div data-show-language="true"><pre><code></code></pre>'), '<div data-show-language="true"><pre data-language="none"><code data-language="none"></code></pre></div>');
-	t.is(inlineOptions('<pre data-show-language="false"><code></code></pre>'), '<pre data-show-language="false"><code></code></pre>');
-	t.is(inlineOptions('<div data-show-language="false"><pre data-show-language="true"><code></code></pre></div>'), '<div data-show-language="false"><pre data-show-language="true" data-language="none"><code data-language="none"></code></pre></div>');
+	t.is(inlineOptions('<pre data-language-labels="true"><code></code></pre>'), '<pre data-language-labels="true" data-language="none"><code data-language="none"></code></pre>');
+	t.is(inlineOptions('<pre DaTa-LaNgUaGe-LaBeLs="TrUe"><code></code></pre>'), '<pre DaTa-LaNgUaGe-LaBeLs="TrUe" data-language="none"><code data-language="none"></code></pre>');
+	t.is(inlineOptions('<div data-language-labels="true"><pre><code></code></pre>'), '<div data-language-labels="true"><pre data-language="none"><code data-language="none"></code></pre></div>');
+	t.is(inlineOptions('<pre data-language-labels="false"><code></code></pre>'), '<pre data-language-labels="false"><code></code></pre>');
+	t.is(inlineOptions('<div data-language-labels="false"><pre data-language-labels="true"><code></code></pre></div>'), '<div data-language-labels="false"><pre data-language-labels="true" data-language="none"><code data-language="none"></code></pre></div>');
 });
 
 
@@ -114,11 +114,11 @@ test('Show colours option can be inherited and toggled from parent attributes', 
 		return inlineOptions(html, options).includes('<span class="token color">');
 	}
 
-	t.true(inheritedColor('<pre data-show-color="true"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
-	t.true(inheritedColor('<pre DaTa-ShOw-CoLoR="TrUe"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
-	t.true(inheritedColor('<div data-show-color="true"><pre><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
-	t.true(inheritedColor('<div data-show-color="false"><pre data-show-color="true"><code>#fff</code></pre></div>', {defaultLanguage: 'css', highlightSyntax: true}));
-	t.false(inheritedColor('<pre data-show-color="false"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.true(inheritedColor('<pre data-color-previews="true"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.true(inheritedColor('<pre DaTa-CoLoR-pReViEwS="TrUe"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.true(inheritedColor('<div data-color-previews="true"><pre><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.true(inheritedColor('<div data-color-previews="false"><pre data-color-previews="true"><code>#fff</code></pre></div>', {defaultLanguage: 'css', highlightSyntax: true}));
+	t.false(inheritedColor('<pre data-color-previews="false"><code>#fff</code></pre>', {defaultLanguage: 'css', highlightSyntax: true}));
 });
 
 
@@ -154,8 +154,8 @@ test('Redundant line-number classes are removed', t => {
 	t.is(inlineOptions('<pre class="line-numbers line-numbers"><code></code></pre>', {removeRedundancy: true}), '<pre><code></code></pre>');
 	t.is(inlineOptions('<pre><code class="line-numbers line-numbers"></code></pre>', {removeRedundancy: true}), '<pre><code></code></pre>');
 
-	t.is(inlineOptions('<pre class="line-numbers line-numbers"><code></code></pre>', {removeRedundancy: true, showLineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre><code class="line-numbers line-numbers"></code></pre>', {removeRedundancy: true, showLineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre class="line-numbers line-numbers"><code></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre><code class="line-numbers line-numbers"></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
 
 	t.is(inlineOptions('<pre class="foo line-numbers"></pre>', {removeRedundancy: true}), '<pre class="foo"></pre>');
 	t.is(inlineOptions('<pre class="foo line-numbers bar"></pre>', {removeRedundancy: true}), '<pre class="foo bar"></pre>');
@@ -170,18 +170,18 @@ test('Redundant attributes are removed', t => {
 	t.is(inlineOptions('<div data-highlight-syntax="false"></div>', {removeRedundancy: true}), '<div></div>');
 	t.is(inlineOptions('<div data-line-numbers="true"></div>', {removeRedundancy: true}), '<div></div>');
 	t.is(inlineOptions('<div data-line-numbers="false"></div>', {removeRedundancy: true}), '<div></div>');
-	t.is(inlineOptions('<div data-show-language="true"></div>', {removeRedundancy: true}), '<div></div>');
-	t.is(inlineOptions('<div data-show-language="false"></div>', {removeRedundancy: true}), '<div></div>');
-	t.is(inlineOptions('<div data-show-color="true"></div>', {removeRedundancy: true}), '<div></div>');
-	t.is(inlineOptions('<div data-show-color="false"></div>', {removeRedundancy: true}), '<div></div>');
+	t.is(inlineOptions('<div data-language-labels="true"></div>', {removeRedundancy: true}), '<div></div>');
+	t.is(inlineOptions('<div data-language-labels="false"></div>', {removeRedundancy: true}), '<div></div>');
+	t.is(inlineOptions('<div data-color-previews="true"></div>', {removeRedundancy: true}), '<div></div>');
+	t.is(inlineOptions('<div data-color-previews="false"></div>', {removeRedundancy: true}), '<div></div>');
 
-	t.is(inlineOptions('<div data-highlight-syntax="true" data-line-numbers="true" data-show-language="true" data-show-color="true"></div>', {removeRedundancy: true}), '<div></div>');
-	t.is(inlineOptions('<div data-highlight-syntax="false" data-line-numbers="false" data-show-language="false" data-show-color="false"></div>', {removeRedundancy: true}), '<div></div>');
+	t.is(inlineOptions('<div data-highlight-syntax="true" data-line-numbers="true" data-language-labels="true" data-color-previews="true"></div>', {removeRedundancy: true}), '<div></div>');
+	t.is(inlineOptions('<div data-highlight-syntax="false" data-line-numbers="false" data-language-labels="false" data-color-previews="false"></div>', {removeRedundancy: true}), '<div></div>');
 
-	t.is(inlineOptions('<pre data-highlight-syntax="true" data-line-numbers="true" data-show-language="true" data-show-color="true"></pre>', {removeRedundancy: true}), '<pre></pre>');
-	t.is(inlineOptions('<code data-highlight-syntax="false" data-line-numbers="false" data-show-language="false" data-show-color="false"></code>', {removeRedundancy: true}), '<code></code>');
+	t.is(inlineOptions('<pre data-highlight-syntax="true" data-line-numbers="true" data-language-labels="true" data-color-previews="true"></pre>', {removeRedundancy: true}), '<pre></pre>');
+	t.is(inlineOptions('<code data-highlight-syntax="false" data-line-numbers="false" data-language-labels="false" data-color-previews="false"></code>', {removeRedundancy: true}), '<code></code>');
 
-	t.is(inlineOptions('<div data-highlight-syntax="true" data-highlight-syntax="true" data-line-numbers="true" data-line-numbers="true" data-show-language="true" data-show-language="true" data-show-color="true" data-show-color="true"></div>', {removeRedundancy: true}), '<div></div>');
+	t.is(inlineOptions('<div data-highlight-syntax="true" data-highlight-syntax="true" data-line-numbers="true" data-line-numbers="true" data-language-labels="true" data-language-labels="true" data-color-previews="true" data-color-previews="true"></div>', {removeRedundancy: true}), '<div></div>');
 
 	t.is(inlineOptions('<div data-foo="bar" data-highlight-syntax="true"></div>', {removeRedundancy: true}), '<div data-foo="bar"></div>');
 	t.is(inlineOptions('<div data-foo="bar" data-highlight-syntax="true" data-baz="true"></div>', {removeRedundancy: true}), '<div data-foo="bar" data-baz="true"></div>');

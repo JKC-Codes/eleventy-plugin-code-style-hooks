@@ -10,9 +10,9 @@ function addLineHooks(HTMLString, options) {
 			defaultLanguage: 'none',
 			highlightSyntax: false,
 			removeRedundancy: false,
-			showColors: false,
-			showLanguages: false,
-			showLineNumbers: true,
+			colorPreviews: false,
+			languageLabels: false,
+			lineNumbers: true,
 			usingPostHTML: false,
 			scripts: [],
 			styles: []

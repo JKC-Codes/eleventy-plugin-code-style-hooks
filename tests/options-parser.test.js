@@ -56,48 +56,48 @@ test('Rejects non-boolean removeRedundancy options', t => {
 });
 
 
-test('Accepts boolean showColors option', t => {
-	t.true(parser({showColors: true}).showColors);
-	t.false(parser({showColors: false}).showColors);
+test('Accepts boolean colorPreviews option', t => {
+	t.true(parser({colorPreviews: true}).colorPreviews);
+	t.false(parser({colorPreviews: false}).colorPreviews);
 });
 
 
-test('Rejects non-boolean showColors options', t => {
-	t.throws(()=> {parser({showColors: 123})});
-	t.throws(()=> {parser({showColors: 'foo'})});
-	t.throws(()=> {parser({showColors: ['foo', 123]})});
-	t.throws(()=> {parser({showColors: {foo: 'bar'}})});
-	t.throws(()=> {parser({showColors: function(foo) {return 'bar';}})});
+test('Rejects non-boolean colorPreviews options', t => {
+	t.throws(()=> {parser({colorPreviews: 123})});
+	t.throws(()=> {parser({colorPreviews: 'foo'})});
+	t.throws(()=> {parser({colorPreviews: ['foo', 123]})});
+	t.throws(()=> {parser({colorPreviews: {foo: 'bar'}})});
+	t.throws(()=> {parser({colorPreviews: function(foo) {return 'bar';}})});
 });
 
 
-test('Accepts boolean showLanguages option', t => {
-	t.true(parser({showLanguages: true}).showLanguages);
-	t.false(parser({showLanguages: false}).showLanguages);
+test('Accepts boolean languageLabels option', t => {
+	t.true(parser({languageLabels: true}).languageLabels);
+	t.false(parser({languageLabels: false}).languageLabels);
 });
 
 
-test('Rejects non-boolean showLanguages options', t => {
-	t.throws(()=> {parser({showLanguages: 123})});
-	t.throws(()=> {parser({showLanguages: 'foo'})});
-	t.throws(()=> {parser({showLanguages: ['foo', 123]})});
-	t.throws(()=> {parser({showLanguages: {foo: 'bar'}})});
-	t.throws(()=> {parser({showLanguages: function(foo) {return 'bar';}})});
+test('Rejects non-boolean languageLabels options', t => {
+	t.throws(()=> {parser({languageLabels: 123})});
+	t.throws(()=> {parser({languageLabels: 'foo'})});
+	t.throws(()=> {parser({languageLabels: ['foo', 123]})});
+	t.throws(()=> {parser({languageLabels: {foo: 'bar'}})});
+	t.throws(()=> {parser({languageLabels: function(foo) {return 'bar';}})});
 });
 
 
-test('Accepts boolean showLineNumbers option', t => {
-	t.true(parser({showLineNumbers: true}).showLineNumbers);
-	t.false(parser({showLineNumbers: false}).showLineNumbers);
+test('Accepts boolean lineNumbers option', t => {
+	t.true(parser({lineNumbers: true}).lineNumbers);
+	t.false(parser({lineNumbers: false}).lineNumbers);
 });
 
 
-test('Rejects non-boolean showLineNumbers options', t => {
-	t.throws(()=> {parser({showLineNumbers: 123})});
-	t.throws(()=> {parser({showLineNumbers: 'foo'})});
-	t.throws(()=> {parser({showLineNumbers: ['foo', 123]})});
-	t.throws(()=> {parser({showLineNumbers: {foo: 'bar'}})});
-	t.throws(()=> {parser({showLineNumbers: function(foo) {return 'bar';}})});
+test('Rejects non-boolean lineNumbers options', t => {
+	t.throws(()=> {parser({lineNumbers: 123})});
+	t.throws(()=> {parser({lineNumbers: 'foo'})});
+	t.throws(()=> {parser({lineNumbers: ['foo', 123]})});
+	t.throws(()=> {parser({lineNumbers: {foo: 'bar'}})});
+	t.throws(()=> {parser({lineNumbers: function(foo) {return 'bar';}})});
 });
 
 
@@ -188,14 +188,14 @@ test('Ignores null or undefined options', t => {
 	t.false(parser({removeRedundancy: null}).hasOwnProperty('removeRedundancy'));
 	t.false(parser({removeRedundancy: undefined}).hasOwnProperty('removeRedundancy'));
 
-	t.false(parser({showColors: null}).hasOwnProperty('showColors'));
-	t.false(parser({showColors: undefined}).hasOwnProperty('showColors'));
+	t.false(parser({colorPreviews: null}).hasOwnProperty('colorPreviews'));
+	t.false(parser({colorPreviews: undefined}).hasOwnProperty('colorPreviews'));
 
-	t.false(parser({showLanguages: null}).hasOwnProperty('showLanguages'));
-	t.false(parser({showLanguages: undefined}).hasOwnProperty('showLanguages'));
+	t.false(parser({languageLabels: null}).hasOwnProperty('languageLabels'));
+	t.false(parser({languageLabels: undefined}).hasOwnProperty('languageLabels'));
 
-	t.false(parser({showLineNumbers: null}).hasOwnProperty('showLineNumbers'));
-	t.false(parser({showLineNumbers: undefined}).hasOwnProperty('showLineNumbers'));
+	t.false(parser({lineNumbers: null}).hasOwnProperty('lineNumbers'));
+	t.false(parser({lineNumbers: undefined}).hasOwnProperty('lineNumbers'));
 
 	t.false(parser({scripts: null}).hasOwnProperty('scripts'));
 	t.false(parser({scripts: undefined}).hasOwnProperty('scripts'));

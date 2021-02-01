@@ -2,8 +2,8 @@
 - Syntax highlighting
 - Line numbers
 - Trim trailing new line in Markdown
-- Show language
-- Inline colour preview
+- Language Labels
+- Colour previews
 - Auto add CSS
 - Auto add JS
 
@@ -47,7 +47,7 @@
 
 ### Global options
 - removeRedundancy: Boolean
-- showLineNumbers: Boolean
+- lineNumbers: Boolean
 
 
 ## Trim trailing new line in Markdown
@@ -59,7 +59,7 @@
 - markdownTrimTrailingNewline: Boolean
 
 
-## Show language
+## Language Labels
 
 ### Hooks
 - data-language="xxx" attribute on code
@@ -67,12 +67,13 @@
 
 ### Features
 - add existing language classes as attributes
-- inherit data-show-language="true/false" from ancestors for defacto defaults
-- toggle on/off with data-show-language="true/false" attribute
+- inherit data-language-labels="true/false" from ancestors for defacto defaults
+- toggle on/off with data-language-labels="true/false" attribute
+- remove data-language-labels attributes
 
 ### Global options
 - removeRedundancy: Boolean
-- showLanguages: Boolean
+- languageLabels: Boolean
 
 
 ## Inline colour preview
@@ -82,12 +83,13 @@
 
 ### Features
 - CSS code with RGB, HSL and Hex colour values are automatically selected
-- inherit data-show-color="true/false" from ancestors for defacto defaults
-- toggle on/off with data-show-color="true/false" attribute
+- inherit data-color-previews="true/false" from ancestors for defacto defaults
+- toggle on/off with data-color-previews="true/false" attribute
+- remove data-color-previews attributes
 
 ### Global options
 - removeRedundancy: Boolean
-- showColors: Boolean
+- colorPreviews: Boolean
 
 
 ## Auto add CSS

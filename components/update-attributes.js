@@ -25,7 +25,7 @@ module.exports = function(node, state, removeRedundancy) {
 		}
 
 		// Add class="line-numbers"
-		if(state.showLineNumbers && state.isChildOfPre) {
+		if(state.lineNumbers && state.isChildOfPre) {
 			addAttribute(attributes, 'class', 'line-numbers');
 
 			// Add a temporary attribute to Pre parent so line-numbers class can be added later
@@ -39,7 +39,7 @@ module.exports = function(node, state, removeRedundancy) {
 		}
 
 		// Add data-language="xxx"
-		if(state.showLanguages && state.language) {
+		if(state.languageLabels && state.language) {
 			addAttribute(attributes, 'data-language', state.language);
 
 			if(state.isChildOfPre) {

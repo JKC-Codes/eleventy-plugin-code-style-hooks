@@ -27,11 +27,11 @@ function getDataAttributes(attributes) {
 			switch(key.toLowerCase()) {
 				case 'data-highlight-syntax': state.highlightSyntax = value;
 				break;
-				case 'data-show-color': state.showColors = value;
+				case 'data-color-previews': state.colorPreviews = value;
 				break;
-				case 'data-show-language': state.showLanguages = value;
+				case 'data-language-labels': state.languageLabels = value;
 				break;
-				case 'data-line-numbers': state.showLineNumbers = value;
+				case 'data-line-numbers': state.lineNumbers = value;
 				break;
 			}
 		}

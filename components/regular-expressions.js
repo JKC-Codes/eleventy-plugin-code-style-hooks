@@ -66,8 +66,8 @@ module.exports = {
 	classLanguage: String.raw`${wordStart}${languageStart}-${languageName}${wordEnd}`,
 	// 'line-numbers'
 	classLineNumbers: String.raw`${wordStart}line-numbers${wordEnd}`,
-	// 'data-line-numbers' or 'data-show-language' or 'data-highlight-syntax' or 'data-show-color'
-	attributeData: String.raw`^data-(line-numbers|show-language|highlight-syntax|show-color)$`,
+	// 'data-line-numbers' or 'data-language-labels' or 'data-highlight-syntax' or 'data-color-previews'
+	attributeData: String.raw`^data-(line-numbers|language-labels|highlight-syntax|color-previews)$`,
 	// new line
 	lineNew: String.raw`\n`,
 	// hex, RGB, HSL, Lab or LCH colour in a capture group

@@ -10,12 +10,12 @@ module.exports = function(userOptions = {}) {
 			case 'defaultLanguage': Object.assign(parsedOptions, validateLanguage(key, value));
 			break;
 
+			case 'colorPreviews':
 			case 'highlightSyntax':
+			case 'languageLabels':
+			case 'lineNumbers':
 			case 'markdownTrimTrailingNewline':
 			case 'removeRedundancy':
-			case 'showColors':
-			case 'showLanguages':
-			case 'showLineNumbers':
 				Object.assign(parsedOptions, validateBoolean(key, value));
 			break;
 

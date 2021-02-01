@@ -6,7 +6,7 @@ const regEx = require('./regular-expressions.js');
 
 
 module.exports = function(string, state, prismAPI) {
-	const language = state.language ? state.language.toLowerCase() : undefined;
+	const language = state.language.toLowerCase();
 	let highlightSyntax = state.highlightSyntax && state.language;
 	let newString = string;
 
@@ -27,7 +27,7 @@ module.exports = function(string, state, prismAPI) {
 
 	if(highlightSyntax) {
 		// Make Prism recognise colours or not, depending on user options
-		if(state.showColors) {
+		if(state.colorPreviews) {
 			addColorToken(Prism);
 		}
 		else {
@@ -40,7 +40,7 @@ module.exports = function(string, state, prismAPI) {
 		newString = Prism.highlight(unescapedString, Prism.languages[language], language);
 	}
 
-	if(state.showLineNumbers && state.isChildOfPre) {
+	if(state.lineNumbers && state.isChildOfPre) {
 		// $& = the matched string
 		const lineNumber = '$&<span class="token line-number" aria-hidden="true"></span>';
 
@@ -78,14 +78,14 @@ function addColorToken(Prism) {
 if(!Prism.codeStyleHooksColorHookAdded) {
 	// Stop Prism from loading the same hook more than once
 	Prism.codeStyleHooksColorHookAdded = true;
-	// If Prism has a color token added, insert span with "token color-value" class and style="--color-value: 'value'" property before all colours
+	// If Prism has a color token added, insert span with "token color-preview" class and style="--color-value: 'value'" property before all colours
 	Prism.hooks.add('wrap', function(env) {
 		if(env.type === 'color') {
 			// Prism only provides a string with tokens already added so they need to be removed before getting the colour
 			const plainText = env.content.replace(new RegExp(regEx.HTMLTag, 'g'), '');
 			const color = new RegExp(`${regEx.color}|${regEx.colorNamed}`, 'i').exec(plainText)[0];
 
-			env.content = `<span class="color-preview" style="--color-value: ${color}" aria-hidden="true"></span>${env.content}`;
+			env.content = `<span class="color-preview" style="--color-value:${color}" aria-hidden="true"></span>${env.content}`;
 		}
 	});
 }

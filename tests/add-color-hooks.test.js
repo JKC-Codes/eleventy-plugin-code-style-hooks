@@ -7,7 +7,7 @@ function addColorHooks(string, options) {
 		{
 			language: 'css',
 			highlightSyntax: true,
-			showColors: true
+			colorPreviews: true
 		},
 		options
 	);
@@ -30,7 +30,7 @@ function addsHooks(string, colorFunction, numberCount = 3, alphaPunctuation = fa
 	const stringWithHooks = addColorHooks(string);
 	const punctuationCount = (stringWithHooks.match(/,/g)?.length / 2 + 2 || 2) + (alphaPunctuation ? 1 : 0);
 	const unitCount = stringWithHooks.match(/(%|deg|g?rad|turn)/gi)?.length / 2 || 0;
-	const start = new RegExp(String.raw`^<span class="token color"><span class="color-preview" style="--color-value: ${colorFunction}\([^)]*\)" aria-hidden="true"><\/span><span class="token function">${colorFunction}<\/span><span class="token punctuation">\(<\/span>`).test(stringWithHooks);
+	const start = new RegExp(String.raw`^<span class="token color"><span class="color-preview" style="--color-value:${colorFunction}\([^)]*\)" aria-hidden="true"><\/span><span class="token function">${colorFunction}<\/span><span class="token punctuation">\(<\/span>`).test(stringWithHooks);
 	const end = stringWithHooks.endsWith('</span>');
 	const numbers = stringWithHooks.match(/<span class="token number">/g).length === numberCount;
 	const punctuation = stringWithHooks.match(/<span class="token punctuation">/g).length === punctuationCount;
@@ -41,11 +41,11 @@ function addsHooks(string, colorFunction, numberCount = 3, alphaPunctuation = fa
 
 
 test('Adds hex colour hooks', t => {
-	t.is(addColorHooks('#0AF'), '<span class="token color"><span class="color-preview" style="--color-value: #0AF" aria-hidden="true"></span>#0AF</span>');
-	t.is(addColorHooks('#0af'), '<span class="token color"><span class="color-preview" style="--color-value: #0af" aria-hidden="true"></span>#0af</span>');
-	t.is(addColorHooks('#19a0'), '<span class="token color"><span class="color-preview" style="--color-value: #19a0" aria-hidden="true"></span>#19a0</span>');
-	t.is(addColorHooks('#2fa911'), '<span class="token color"><span class="color-preview" style="--color-value: #2fa911" aria-hidden="true"></span>#2fa911</span>');
-	t.is(addColorHooks('#d67326cc'), '<span class="token color"><span class="color-preview" style="--color-value: #d67326cc" aria-hidden="true"></span>#d67326cc</span>');
+	t.is(addColorHooks('#0AF'), '<span class="token color"><span class="color-preview" style="--color-value:#0AF" aria-hidden="true"></span>#0AF</span>');
+	t.is(addColorHooks('#0af'), '<span class="token color"><span class="color-preview" style="--color-value:#0af" aria-hidden="true"></span>#0af</span>');
+	t.is(addColorHooks('#19a0'), '<span class="token color"><span class="color-preview" style="--color-value:#19a0" aria-hidden="true"></span>#19a0</span>');
+	t.is(addColorHooks('#2fa911'), '<span class="token color"><span class="color-preview" style="--color-value:#2fa911" aria-hidden="true"></span>#2fa911</span>');
+	t.is(addColorHooks('#d67326cc'), '<span class="token color"><span class="color-preview" style="--color-value:#d67326cc" aria-hidden="true"></span>#d67326cc</span>');
 });
 
 
@@ -103,8 +103,8 @@ test('Adds RGB colour hooks', t => {
 	t.true(addsHooks('rgba(99% 32% 68% /0.9)', 'rgba', 4, true));
 	t.true(addsHooks('rgba(99% 32% 68%/1)', 'rgba', 4, true));
 
-	t.is(addColorHooks('rgb(255,255,255)'), '<span class="token color"><span class="color-preview" style="--color-value: rgb(255,255,255)" aria-hidden="true"></span><span class="token function">rgb</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span></span>');
-	t.is(addColorHooks('rgba(100%,100%,100%/50%)'), '<span class="token color"><span class="color-preview" style="--color-value: rgba(100%,100%,100%/50%)" aria-hidden="true"></span><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">/</span><span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('rgb(255,255,255)'), '<span class="token color"><span class="color-preview" style="--color-value:rgb(255,255,255)" aria-hidden="true"></span><span class="token function">rgb</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('rgba(100%,100%,100%/50%)'), '<span class="token color"><span class="color-preview" style="--color-value:rgba(100%,100%,100%/50%)" aria-hidden="true"></span><span class="token function">rgba</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">/</span><span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
 });
 
 
@@ -158,8 +158,8 @@ test('Adds HSL colour hooks', t => {
 	t.true(addsHooks('hsl(0.75turn,50%,100%)', 'hsl'));
 	t.true(addsHooks('hsl(.75turn,50%,100%)', 'hsl'));
 
-	t.is(addColorHooks('hsl(255,50%,100%)'), '<span class="token color"><span class="color-preview" style="--color-value: hsl(255,50%,100%)" aria-hidden="true"></span><span class="token function">hsl</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
-	t.is(addColorHooks('hsl(360deg,100%,50%)'), '<span class="token color"><span class="color-preview" style="--color-value: hsl(360deg,100%,50%)" aria-hidden="true"></span><span class="token function">hsl</span><span class="token punctuation">(</span><span class="token number">360</span><span class="token unit">deg</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('hsl(255,50%,100%)'), '<span class="token color"><span class="color-preview" style="--color-value:hsl(255,50%,100%)" aria-hidden="true"></span><span class="token function">hsl</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('hsl(360deg,100%,50%)'), '<span class="token color"><span class="color-preview" style="--color-value:hsl(360deg,100%,50%)" aria-hidden="true"></span><span class="token function">hsl</span><span class="token punctuation">(</span><span class="token number">360</span><span class="token unit">deg</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
 });
 
 
@@ -197,8 +197,8 @@ test('Adds HWB colour hooks', t => {
 	t.true(addsHooks('hwb(180 50% 100% / 0.9)', 'hwb', 4, true));
 	t.true(addsHooks('hwb(180 50% 100% / 37%)', 'hwb', 4, true));
 
-	t.is(addColorHooks('hwb(180 50% 100%)'), '<span class="token color"><span class="color-preview" style="--color-value: hwb(180 50% 100%)" aria-hidden="true"></span><span class="token function">hwb</span><span class="token punctuation">(</span><span class="token number">180</span> <span class="token number">50</span><span class="token unit">%</span> <span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
-	t.is(addColorHooks('hwb(360deg 100% 50%)'), '<span class="token color"><span class="color-preview" style="--color-value: hwb(360deg 100% 50%)" aria-hidden="true"></span><span class="token function">hwb</span><span class="token punctuation">(</span><span class="token number">360</span><span class="token unit">deg</span> <span class="token number">100</span><span class="token unit">%</span> <span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('hwb(180 50% 100%)'), '<span class="token color"><span class="color-preview" style="--color-value:hwb(180 50% 100%)" aria-hidden="true"></span><span class="token function">hwb</span><span class="token punctuation">(</span><span class="token number">180</span> <span class="token number">50</span><span class="token unit">%</span> <span class="token number">100</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('hwb(360deg 100% 50%)'), '<span class="token color"><span class="color-preview" style="--color-value:hwb(360deg 100% 50%)" aria-hidden="true"></span><span class="token function">hwb</span><span class="token punctuation">(</span><span class="token number">360</span><span class="token unit">deg</span> <span class="token number">100</span><span class="token unit">%</span> <span class="token number">50</span><span class="token unit">%</span><span class="token punctuation">)</span></span>');
 });
 
 
@@ -232,8 +232,8 @@ test('Adds Lab colour hooks', t => {
 	t.true(addsHooks('lab(50% -10 90 / 0.9)', 'lab', 4, true));
 	t.true(addsHooks('lab(50% -10 90 / 37%)', 'lab', 4, true));
 
-	t.is(addColorHooks('lab(50% 10 90)'), '<span class="token color"><span class="color-preview" style="--color-value: lab(50% 10 90)" aria-hidden="true"></span><span class="token function">lab</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token unit">%</span> <span class="token number">10</span> <span class="token number">90</span><span class="token punctuation">)</span></span>');
-	t.is(addColorHooks('lab(0% 500 0.24/.9)'), '<span class="token color"><span class="color-preview" style="--color-value: lab(0% 500 0.24/.9)" aria-hidden="true"></span><span class="token function">lab</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token unit">%</span> <span class="token number">500</span> <span class="token number">0.24</span><span class="token punctuation">/</span><span class="token number">.9</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('lab(50% 10 90)'), '<span class="token color"><span class="color-preview" style="--color-value:lab(50% 10 90)" aria-hidden="true"></span><span class="token function">lab</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token unit">%</span> <span class="token number">10</span> <span class="token number">90</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('lab(0% 500 0.24/.9)'), '<span class="token color"><span class="color-preview" style="--color-value:lab(0% 500 0.24/.9)" aria-hidden="true"></span><span class="token function">lab</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token unit">%</span> <span class="token number">500</span> <span class="token number">0.24</span><span class="token punctuation">/</span><span class="token number">.9</span><span class="token punctuation">)</span></span>');
 });
 
 
@@ -272,8 +272,8 @@ test('Adds LCH colour hooks', t => {
 	t.true(addsHooks('lch(50% -10 90 / 0.9)', 'lch', 4, true));
 	t.true(addsHooks('lch(50% -10 90 / 37%)', 'lch', 4, true));
 
-	t.is(addColorHooks('lch(50% 10 90)'), '<span class="token color"><span class="color-preview" style="--color-value: lch(50% 10 90)" aria-hidden="true"></span><span class="token function">lch</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token unit">%</span> <span class="token number">10</span> <span class="token number">90</span><span class="token punctuation">)</span></span>');
-	t.is(addColorHooks('lch(0% 500 0.24/.9)'), '<span class="token color"><span class="color-preview" style="--color-value: lch(0% 500 0.24/.9)" aria-hidden="true"></span><span class="token function">lch</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token unit">%</span> <span class="token number">500</span> <span class="token number">0.24</span><span class="token punctuation">/</span><span class="token number">.9</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('lch(50% 10 90)'), '<span class="token color"><span class="color-preview" style="--color-value:lch(50% 10 90)" aria-hidden="true"></span><span class="token function">lch</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token unit">%</span> <span class="token number">10</span> <span class="token number">90</span><span class="token punctuation">)</span></span>');
+	t.is(addColorHooks('lch(0% 500 0.24/.9)'), '<span class="token color"><span class="color-preview" style="--color-value:lch(0% 500 0.24/.9)" aria-hidden="true"></span><span class="token function">lch</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token unit">%</span> <span class="token number">500</span> <span class="token number">0.24</span><span class="token punctuation">/</span><span class="token number">.9</span><span class="token punctuation">)</span></span>');
 });
 
 

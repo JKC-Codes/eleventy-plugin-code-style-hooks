@@ -23,9 +23,9 @@ module.exports = function(options) {
 			index: 0,
 			language: options.defaultLanguage,
 			highlightSyntax: options.highlightSyntax,
-			showColors: options.showColors,
-			showLanguages: options.showLanguages,
-			showLineNumbers: options.showLineNumbers
+			colorPreviews: options.colorPreviews,
+			languageLabels: options.languageLabels,
+			lineNumbers: options.lineNumbers
 		}
 
 		AST.forEach(node => {
@@ -48,13 +48,13 @@ function walkTree(node, parentNode, parentState) {
 		const hasNewLine = new RegExp(regEx.lineNew).test(node);
 
 		// Note each new line within pre but outside of code so the first line number can be added
-		if(state.isChildOfPre && !state.isChildOfCode && state.showLineNumbers && hasNewLine) {
+		if(state.isChildOfPre && !state.isChildOfCode && state.lineNumbers && hasNewLine) {
 			state.lastNewLine.node = parentNode;
 			state.lastNewLine.index = state.index;
 			state.lastNewLine.state = parentState;
 		}
 
-		if(state.isChildOfCode && ((state.highlightSyntax && state.language) || state.showLineNumbers)) {
+		if(state.isChildOfCode && ((state.highlightSyntax && state.language) || state.lineNumbers)) {
 			let newNode = addHooks(node, state, prismAPI);
 
 			if(usingPostHTML) {
@@ -75,11 +75,11 @@ function walkTree(node, parentNode, parentState) {
 		if(node.tag === 'code') {
 			pageContainsCode = true;
 
-			if(state.isChildOfPre && !state.isChildOfCode && state.showLineNumbers && state.lastNewLine) {
+			if(state.isChildOfPre && !state.isChildOfCode && state.lineNumbers && state.lastNewLine) {
 				addFirstLineNumbers(state.lastNewLine);
 			}
 		}
-		else if(node.tag === 'pre' && state.showLineNumbers) {
+		else if(node.tag === 'pre' && state.lineNumbers) {
 			state.lastNewLine = {
 				node: node,
 				index: null,

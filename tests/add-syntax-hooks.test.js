@@ -10,9 +10,9 @@ function addSyntaxHooks(HTMLString, options) {
 			defaultLanguage: null,
 			highlightSyntax: true,
 			removeRedundancy: false,
-			showColors: false,
-			showLanguages: false,
-			showLineNumbers: false,
+			colorPreviews: false,
+			languageLabels: false,
+			lineNumbers: false,
 			usingPostHTML: false,
 			scripts: [],
 			styles: []

@@ -7,9 +7,9 @@ const defaultOptions = {
 	highlightSyntax: true,
 	markdownTrimTrailingNewline: true,
 	removeRedundancy: true,
-	showColors: true,
-	showLanguages: true,
-	showLineNumbers: true,
+	colorPreviews: true,
+	languageLabels: true,
+	lineNumbers: true,
 	scripts: [],
 	styles: []
 };
@@ -83,25 +83,25 @@ test('Can use options parser separately', t => {
 		removeRedundancy: false
 	});
 
-	t.deepEqual(parser({showColors: false}), {
+	t.deepEqual(parser({colorPreviews: false}), {
 		...defaultOptions,
 		parsed: true,
 		usingPostHTML: true,
-		showColors: false
+		colorPreviews: false
 	});
 
-	t.deepEqual(parser({showLanguages: false}), {
+	t.deepEqual(parser({languageLabels: false}), {
 		...defaultOptions,
 		parsed: true,
 		usingPostHTML: true,
-		showLanguages: false
+		languageLabels: false
 	});
 
-	t.deepEqual(parser({showLineNumbers: false}), {
+	t.deepEqual(parser({lineNumbers: false}), {
 		...defaultOptions,
 		parsed: true,
 		usingPostHTML: true,
-		showLineNumbers: false
+		lineNumbers: false
 	});
 
 	t.deepEqual(parser({scripts: 'foo.js'}), {

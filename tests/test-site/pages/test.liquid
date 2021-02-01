@@ -326,33 +326,33 @@ eleventyExcludeFromCollections: true
 </code></pre>
 </div>
 
-<pre><code data-show-color="true" class="lang-css">
+<pre><code data-color-previews="true" class="lang-css">
 	.foo {
 		color: #f00;
-		/* should show colour and remove data-show-color attribute */
+		/* should show colour and remove data-color-previews attribute */
 	}
 </code></pre>
 
-<pre><code data-show-color="false" class="lang-css">
+<pre><code data-color-previews="false" class="lang-css">
 	.foo {
 		color: #f00;
-		/* should not show colour but still remove data-show-color attribute */
+		/* should not show colour but still remove data-color-previews attribute */
 	}
 </code></pre>
 
-<pre class="lang-JavaScript"><code data-show-language="true">
+<pre class="lang-JavaScript"><code data-language-labels="true">
 	function test() {
-		return 'pre and code should have data-language="JavaScript" attribute and remove data-show-language attribute';
+		return 'pre and code should have data-language="JavaScript" attribute and remove data-language-labels attribute';
 	}
 </code></pre>
 
-<pre class="lang-JavaScript"><code data-show-language="false">
+<pre class="lang-JavaScript"><code data-language-labels="false">
 	function test() {
 		return 'pre and code should not have data-language="JavaScript" attribute;
 	}
 </code></pre>
 
-<pre class="lang-js"><code data-highlight-syntax="true" data-highlight-syntax="true" data-show-color="true" data-show-color="true" data-show-language="true" data-show-language="true" data-line-numbers="true" data-line-numbers="true">
+<pre class="lang-js"><code data-highlight-syntax="true" data-highlight-syntax="true" data-color-previews="true" data-color-previews="true" data-language-labels="true" data-language-labels="true" data-line-numbers="true" data-line-numbers="true">
 	function test() {
 		return 'multiple duplicate attributes should be removed';
 	}
