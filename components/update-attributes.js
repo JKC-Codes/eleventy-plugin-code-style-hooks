@@ -19,6 +19,19 @@ module.exports = function(node, state, removeRedundancy) {
 		// Add class="language-xxx"
 		if(state.highlightSyntax && state.language) {
 			updateCodeLanguageClasses(attributes, state, removeRedundancy);
+
+			// Add data-language="xxx"
+			if(state.languageLabels && state.language) {
+				addAttribute(attributes, 'data-language', state.language);
+
+				if(state.isChildOfPre) {
+					// Add a temporary attribute to Pre parent so a language attribute can be added later
+					if(!state.isChildOfPre.attrs) {
+						state.isChildOfPre.attrs = {};
+					}
+					addAttribute(state.isChildOfPre.attrs, 'codeChildrenDataAttributes', state.language);
+				}
+			}
 		}
 		else if(removeRedundancy) {
 			removeClass(attributes, regEx.classLanguage);
@@ -36,19 +49,6 @@ module.exports = function(node, state, removeRedundancy) {
 		}
 		else if(removeRedundancy) {
 			removeClass(attributes, regEx.classLineNumbers);
-		}
-
-		// Add data-language="xxx"
-		if(state.languageLabels && state.language) {
-			addAttribute(attributes, 'data-language', state.language);
-
-			if(state.isChildOfPre) {
-				// Add a temporary attribute to Pre parent so a language attribute can be added later
-				if(!state.isChildOfPre.attrs) {
-					state.isChildOfPre.attrs = {};
-				}
-				addAttribute(state.isChildOfPre.attrs, 'codeChildrenDataAttributes', state.language);
-			}
 		}
 	}
 	else if(isPre) {
@@ -126,7 +126,7 @@ function updatePreClasses(attributes, removeRedundancy) {
 
 		preClasses.forEach(className => {
 			const languageOrLineNumberRegEx = new RegExp(`${regEx.classLanguage}|${regEx.classLineNumbers}`);
-			const isLanguageOrLineNumberClass = new RegExp(languageOrLineNumberRegEx).test(className);
+			const isLanguageOrLineNumberClass = languageOrLineNumberRegEx.test(className);
 
 			if(isLanguageOrLineNumberClass && !codeClasses.includes(className)) {
 				removeClass(attributes, String.raw`${regEx.wordStart}${className}${regEx.wordEnd}`);
@@ -167,12 +167,15 @@ function addAttribute(attributes, attributeName, attributeValue) {
 		return new RegExp(`^${attributeName}$`, 'i').test(property);
 	});
 
+	// If attribute doesn't exist, add it with value
 	if(!key) {
 		attributes[attributeName] = attributeValue;
 	}
+	// If attribute doesn't contain value add it
 	else if(!new RegExp(`${regEx.wordStart}${attributeValue}${regEx.wordEnd}`).test(attributes[key])) {
-		// Only add space before value if a value already exists
-		if(attributes[key] !== '' && !attributes[key].endsWith(' ')) {
+		// Only add space before value if it's not an empty string and doesn't end with whitespace
+		// Regex = whitespace at end of string
+		if(attributes[key] !== '' && !/\s$/.test(attributes[key])) {
 			attributeValue = ' ' + attributeValue;
 		}
 		attributes[key] += attributeValue;
