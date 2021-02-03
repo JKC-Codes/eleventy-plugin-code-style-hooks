@@ -165,6 +165,16 @@ test('Redundant line-number classes are removed', t => {
 });
 
 
+test('Redundant language and line-number classes are removed', t => {
+	t.is(inlineOptions('<pre class="language-foo line-numbers language-bar line-numbers"></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre></pre>');
+	t.is(inlineOptions('<code class="language-foo line-numbers language-bar"></code>', {removeRedundancy: true, lineNumbers: true}), '<code class="language-foo"></code>');
+	t.is(inlineOptions('<pre><code class="language-foo line-numbers language-bar line-numbers"></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="language-foo line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="language-foo line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre class="language-foo foo language-bar bar language-baz baz"><code></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="language-foo foo bar baz line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="language-foo line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre class="line-numbers foo line-numbers bar line-numbers baz"><code></code></pre>', {removeRedundancy: true, lineNumbers: true, highlightSyntax: true}), '<pre class="line-numbers foo bar baz language-none"><span class="token line-number" aria-hidden="true"></span><code class="language-none line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre class="language-foo averyverylongclassnamegoeshere language-bar"><code></code></pre>', {removeRedundancy: true, lineNumbers: true, highlightSyntax: true}), '<pre class="language-foo averyverylongclassnamegoeshere line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="language-foo line-numbers"></code></pre>');
+});
+
+
 test('Redundant attributes are removed', t => {
 	t.is(inlineOptions('<div data-highlight-syntax="true"></div>', {removeRedundancy: true}), '<div></div>');
 	t.is(inlineOptions('<div data-highlight-syntax="false"></div>', {removeRedundancy: true}), '<div></div>');
