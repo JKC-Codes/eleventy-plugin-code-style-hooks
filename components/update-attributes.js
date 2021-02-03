@@ -194,46 +194,51 @@ function removeClass(attributes, regExString) {
 }
 
 function removeDuplicates(string, regExString) {
-	const matchRegEx = new RegExp(String.raw`${regExString}`, 'g');
+	const matchRegEx = new RegExp(String.raw`${regEx.wordStart}${regExString}${regEx.wordEnd}`, 'g');
 	let match;
-	let newString = '';
-	let oldString = string;
+	let newString = string;
 
-	while((match = matchRegEx.exec(oldString)) !== null) {
-		const subject = String.raw`${regEx.wordStart}${match[0]}${regEx.wordEnd}`;
+	while((match = matchRegEx.exec(newString)) !== null) {
+		// The lastIndex - 1 prevents the removeWord function from thinking there are no other words
+		const start = newString.slice(0, matchRegEx.lastIndex - 1);
+		// Remove duplicate matches
+		const end = removeWord(newString.slice(matchRegEx.lastIndex - 1), match[0]);
 
-		newString = oldString.slice(0, matchRegEx.lastIndex);
-		oldString = removeWord(oldString.slice(matchRegEx.lastIndex), subject);
+		newString = start + end;
 	}
 
-	return newString + oldString;
+	return newString;
 }
 
 function removeWord(string, regExString) {
-	const matchRegEx = new RegExp(String.raw`${regExString}`, 'g');
-	let lastIndex = 0;
+	const matchRegEx = new RegExp(String.raw`${regEx.wordStart}${regExString}${regEx.wordEnd}`, 'g');
 	let match;
 	let newString = '';
+	let previousLastIndex = 0;
 
 	while((match = matchRegEx.exec(string)) !== null) {
-		let start = lastIndex;
-		// -1 removes whitespace from start of word
-		let end = match.index - 1;
+		// Regex = non-whitespace character
+		const hasOtherWords = /\S/.test(string.replace(match[0], ''));
 
-		// Prevent leaving double spaces
-		if(match.index === 0) {
-			// Word is at the start of the string so whitespace after it needs to be removed
-			matchRegEx.lastIndex++;
+		// If there aren't other words then any whitespace must be deliberate
+		if(hasOtherWords) {
+			// If at start of string
+			if(match.index === 0) {
+				// Remove whitespace from end of word
+				matchRegEx.lastIndex++;
+			}
+			else {
+				// Remove whitespace from start of word
+				match.index--;
+			}
 		}
 
-		// Prevent slice starting at end when index is negative
-		if(end < 0) {
-			end = 0;
-		}
+		// Add to new string without matched word
+		newString += string.slice(previousLastIndex, match.index);
 
-		newString += string.slice(start, end);
-		lastIndex = matchRegEx.lastIndex;
+		previousLastIndex = matchRegEx.lastIndex;
 	}
 
-	return newString + string.slice(lastIndex);
+	// Add remaining non-matched characters
+	return newString += string.slice(previousLastIndex);
 }
