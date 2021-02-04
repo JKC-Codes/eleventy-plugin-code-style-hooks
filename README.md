@@ -108,7 +108,7 @@ module.exports = function(eleventyConfig) {
 ### colorPreviews
 - Default: True
 - Accepts: Boolean
-- Hooks: Colours have a span around them with `class="token color"` and an empty span before them with `class="color-preview"` and `style="--color-value:colourvalue"` property
+- Hooks: Colours have a span around them with `class="token color"` containing an empty span at the start with `class="color-preview"` and `style="--color-value:colourvalue"` properties.
 
 ```html
 <!-- #fff -->
@@ -144,7 +144,7 @@ Turn syntax highlighting from Prism on or off. See [https://prismjs.com/](https:
 ### languageLabels
 - Default: True
 - Accepts: Boolean
-- Hooks: `code` and `pre` elements have a `data-language="languagename"` attribute
+- Hooks: `code` and `pre` elements have a `data-language="languagename"` attribute.
 
 ```html
 <!-- <pre><code class="language-CSS"></code></pre> -->
