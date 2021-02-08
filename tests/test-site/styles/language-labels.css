@@ -1,0 +1,17 @@
+pre[data-language] {
+	position: relative;
+}
+
+pre[data-language]::before {
+	content: attr(data-language);
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: block;
+	font-size: 80%;
+	margin: 1em;
+	padding: 0.2em 0.6em;
+	border: 1px solid rgba(0,0,0,0.1);
+	border-radius: 0.5em;
+	background: seashell;
+}
