@@ -176,7 +176,7 @@ line 2</code></pre>
 
 Insert spans at the start of each line within a `code` block with a `pre` parent.
 
-If you're getting an empty line at the end of Markdown generated code blocks, you may need to turn on [markdownTrimTrailingNewline](#markdowntrimnrailingnewline).
+If you're getting an empty line at the end of Markdown generated code blocks, you may need to turn on [markdownTrimTrailingNewline](#markdowntrimtrailingnewline).
 
 See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/examples) of the Code Style Hooks repo for example CSS.
 
