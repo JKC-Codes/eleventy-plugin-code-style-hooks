@@ -1,0 +1,28 @@
+@supports(--custom: properties) { /* Prevent older browsers from displaying an empty white box */
+	code .color-preview {
+		display: inline-block;
+		box-sizing: content-box;
+		width: 0.6em;
+		height: 0.6em;
+		margin-right: 0.25ch;
+
+		/* Create a grey border with a white inset */
+		border: 1px solid grey;
+		outline: 1px solid white;
+		outline-offset: -2px;
+
+		/* Overlay the colour on top of a checkerboard pattern to display transparent colours against */
+		background-color: white;
+		background-image: linear-gradient(var(--color-value), var(--color-value)), linear-gradient(grey, grey), linear-gradient(grey, grey);
+		background-position: top left, top right, bottom left;
+		background-repeat: no-repeat;
+		background-size: 100% 100%, 50% 50%, 50% 50%;
+	}
+
+	/* Code style hooks optimistically supports CSS Color Module Level 4 before browsers. This prevents showing empty white boxes */
+	code .color-preview[style^="--color-value:hwb"],
+	code .color-preview[style^="--color-value:lab"],
+	code .color-preview[style^="--color-value:lch"] {
+		display: none;
+	}
+}

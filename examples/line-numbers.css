@@ -1,0 +1,23 @@
+pre.line-numbers {
+	counter-reset: line-count 0; /* Change from 0 if you want to start the line count from another number */
+	padding-left: calc(3ch + 1.5em + 1px); /* 3ch gives roughly enough space for numbers up to 1000 */
+}
+
+pre.line-numbers .token.line-number {
+	display: inline-block;
+	min-width: calc(3ch + 1.5em + 1px); /* Using min-width rather than width so if numbers do overflow, they are still visible */
+	margin-left: calc(-3ch - 1.5em - 1px); /* Pull numbers into the "gutter" left by the padding-left up top */
+	text-align: right;
+	font-variant-numeric: tabular-nums; /* Make numbers line up nicely like a monospace font */
+	color: #999;
+}
+
+pre.line-numbers .token.line-number::before {
+	counter-increment: line-count; /* Count each line */
+	content: counter(line-count); /* Show the numbers */
+	display: inline-block;
+	user-select: none; /* Make numbers unselectable so code can be copied and pasted */
+	padding-right: 0.75em;
+	margin-right: 0.75em;
+	border-right: 1px solid;
+}
