@@ -163,14 +163,14 @@ See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-styl
 ### lineNumbers
 - Default: True
 - Accepts: Boolean
-- Hooks: `code` and `pre` elements have `class="line-numbers"` and `code` elements have `<span class="token line-number" aria-hidden="true"></span>` inserted at the start of each new line and the start of the line `code` is on.
+- Hooks: `code` and `pre` elements have `class="line-numbers"` and `code` elements have `<span class="token line-number" aria-hidden="true"></span>` inserted at the start of each new line.
 
 ```html
 <!--
 <pre><code>line 1
 line 2</code></pre>
 -->
-<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers">line 1
+<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>line 1
 <span class="token line-number" aria-hidden="true"></span>line 2</code></pre>
 ```
 

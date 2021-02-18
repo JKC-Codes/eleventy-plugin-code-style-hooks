@@ -67,21 +67,21 @@ test('Syntax highlighting can be toggled', t => {
 
 
 test('Adds line-numbers class to code and pre', t => {
-	t.is(inlineOptions('<code></code>', {lineNumbers: true}), '<code></code>');
-	t.is(inlineOptions('<div class="line-numbers"><code></code></div>'), '<div class="line-numbers"><code></code></div>');
-	t.is(inlineOptions('<pre><code></code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre><code></code></pre><pre></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre><pre></pre>');
-	t.is(inlineOptions('<pre><code></code><code></code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre><code><code></code></code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"><code class="line-numbers"></code></code></pre>');
+	t.is(inlineOptions('<code>foo</code>', {lineNumbers: true}), '<code>foo</code>');
+	t.is(inlineOptions('<div class="line-numbers"><code>foo</code></div>'), '<div class="line-numbers"><code>foo</code></div>');
+	t.is(inlineOptions('<pre><code>foo</code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
+	t.is(inlineOptions('<pre><code>foo</code></pre><pre></pre>', {lineNumbers: true}), '<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre><pre></pre>');
+	t.is(inlineOptions('<pre><code>foo</code><code>bar</code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code><code class="line-numbers">bar</code></pre>');
+	t.is(inlineOptions('<pre><code>foo<code>bar</code>baz</code></pre>', {lineNumbers: true}), '<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo<code class="line-numbers">bar</code>baz</code></pre>');
 });
 
 
 test('Line numbers can be inherited and toggled from attribute', t => {
-	t.is(inlineOptions('<pre data-line-numbers="true"><code></code></pre>'), '<pre data-line-numbers="true" class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre DaTa-LiNe-NuMbErS="TrUe"><code></code></pre>'), '<pre DaTa-LiNe-NuMbErS="TrUe" class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<div data-line-numbers="true"><pre><code></code></pre></div>'), '<div data-line-numbers="true"><pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre></div>');
-	t.is(inlineOptions('<pre data-line-numbers="false"><code></code></pre>', {lineNumbers: true}), '<pre data-line-numbers="false"><code></code></pre>');
-	t.is(inlineOptions('<div data-line-numbers="false"><pre data-line-numbers="true"><code></code></pre></div>'), '<div data-line-numbers="false"><pre data-line-numbers="true" class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre></div>');
+	t.is(inlineOptions('<pre data-line-numbers="true"><code>foo</code></pre>'), '<pre data-line-numbers="true" class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
+	t.is(inlineOptions('<pre DaTa-LiNe-NuMbErS="TrUe"><code>foo</code></pre>'), '<pre DaTa-LiNe-NuMbErS="TrUe" class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
+	t.is(inlineOptions('<div data-line-numbers="true"><pre><code>foo</code></pre></div>'), '<div data-line-numbers="true"><pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre></div>');
+	t.is(inlineOptions('<pre data-line-numbers="false"><code>foo</code></pre>', {lineNumbers: true}), '<pre data-line-numbers="false"><code>foo</code></pre>');
+	t.is(inlineOptions('<div data-line-numbers="false"><pre data-line-numbers="true"><code>foo</code></pre></div>'), '<div data-line-numbers="false"><pre data-line-numbers="true" class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre></div>');
 });
 
 
@@ -154,8 +154,8 @@ test('Redundant line-number classes are removed', t => {
 	t.is(inlineOptions('<pre class="line-numbers line-numbers"><code></code></pre>', {removeRedundancy: true}), '<pre><code></code></pre>');
 	t.is(inlineOptions('<pre><code class="line-numbers line-numbers"></code></pre>', {removeRedundancy: true}), '<pre><code></code></pre>');
 
-	t.is(inlineOptions('<pre class="line-numbers line-numbers"><code></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre><code class="line-numbers line-numbers"></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre class="line-numbers line-numbers"><code>foo</code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
+	t.is(inlineOptions('<pre><code class="line-numbers line-numbers">foo</code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
 
 	t.is(inlineOptions('<pre class="foo line-numbers"></pre>', {removeRedundancy: true}), '<pre class="foo"></pre>');
 	t.is(inlineOptions('<pre class="foo line-numbers bar"></pre>', {removeRedundancy: true}), '<pre class="foo bar"></pre>');
@@ -168,10 +168,10 @@ test('Redundant line-number classes are removed', t => {
 test('Redundant language and line-number classes are removed', t => {
 	t.is(inlineOptions('<pre class="language-foo line-numbers language-bar line-numbers"></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre></pre>');
 	t.is(inlineOptions('<code class="language-foo line-numbers language-bar"></code>', {removeRedundancy: true, lineNumbers: true}), '<code class="language-foo"></code>');
-	t.is(inlineOptions('<pre><code class="language-foo line-numbers language-bar line-numbers"></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="language-foo line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="language-foo line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre class="language-foo foo language-bar bar language-baz baz"><code></code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="language-foo foo bar baz line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="language-foo line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre class="line-numbers foo line-numbers bar line-numbers baz"><code></code></pre>', {removeRedundancy: true, lineNumbers: true, highlightSyntax: true}), '<pre class="line-numbers foo bar baz language-none"><span class="token line-number" aria-hidden="true"></span><code class="language-none line-numbers"></code></pre>');
-	t.is(inlineOptions('<pre class="language-foo averyverylongclassnamegoeshere language-bar"><code></code></pre>', {removeRedundancy: true, lineNumbers: true, highlightSyntax: true}), '<pre class="language-foo averyverylongclassnamegoeshere line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="language-foo line-numbers"></code></pre>');
+	t.is(inlineOptions('<pre><code class="language-foo line-numbers language-bar line-numbers">foo</code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="language-foo line-numbers"><code class="language-foo line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
+	t.is(inlineOptions('<pre class="language-foo foo language-bar bar language-baz baz"><code>foo</code></pre>', {removeRedundancy: true, lineNumbers: true}), '<pre class="language-foo foo bar baz line-numbers"><code class="language-foo line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
+	t.is(inlineOptions('<pre class="line-numbers foo line-numbers bar line-numbers baz"><code>foo</code></pre>', {removeRedundancy: true, lineNumbers: true, highlightSyntax: true}), '<pre class="line-numbers foo bar baz language-none"><code class="language-none line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
+	t.is(inlineOptions('<pre class="language-foo averyverylongclassnamegoeshere language-bar"><code>foo</code></pre>', {removeRedundancy: true, lineNumbers: true, highlightSyntax: true}), '<pre class="language-foo averyverylongclassnamegoeshere line-numbers"><code class="language-foo line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>');
 });
 
 

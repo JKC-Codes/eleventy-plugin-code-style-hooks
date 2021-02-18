@@ -215,12 +215,12 @@ eleventyExcludeFromCollections: true
 <pre>a</pre>
 
 <pre class="lang-test1 lang-bar">
-	<code class="language-foo language-bar language-baz lang-foo lang-test2 lang-bar lang-baz">
+<code class="language-foo language-bar language-baz lang-foo lang-test2 lang-bar lang-baz">
 		function test() {
 			return 'pre should have lang-test1 removed and language-foo added with language-bar staying';
 		}
 	</code>
-	<code class="language-bar language-baz lang-foo lang-bar lang-baz">
+<code class="language-bar language-baz lang-foo lang-bar lang-baz">
 		function test() {
 			return 'pre should have lang-test1 removed and language-foo added with language-bar staying';
 		}
@@ -240,12 +240,12 @@ eleventyExcludeFromCollections: true
 </code></pre>
 
 <pre class="lang-js">
-	<code data-highlight-syntax="false">
+<code data-highlight-syntax="false">
 		function test() {
 			return 'should not be highlighted';
 		}
 	</code>
-	<code class="language-html">
+<code class="language-html">
 		function test() {
 			return 'should have html';
 		}
@@ -423,21 +423,24 @@ eleventyExcludeFromCollections: true
 		return 'should not have spaces on top and bottom';
 	}</code></pre>
 
-<pre>foo<code class="language-js">function test() {
+<pre>foo
+<code class="language-js">function test() {
 	return 'should not have spaces on top and bottom';
 }</code></pre>
 
 <pre><code class="language-js">function test() {
 	return 'should not have spaces on top and bottom';
 }</code>
-new line<code class="language-js">function test() {
+new line
+<code class="language-js">function test() {
 	return 'should not have spaces on top and bottom';
 }</code></pre>
 
 <pre><code class="language-js">function test() {
 	return 'should not have spaces on top and bottom';
 }</code>
-<span>new line in span</span><code class="language-js">function test() {
+<span>new line in span</span>
+<code class="language-js">function test() {
 	return 'should not have spaces on top and bottom';
 }</code></pre>
 
@@ -450,13 +453,6 @@ new line<code class="language-js">function test() {
 <pre><span>foo
 </span><code class="language-js">function test() {
 	return 'foo + new line wrapped in span on same line as code';
-}</code></pre>
-
-<pre><span>
-foo
-bar
-baz</span><code class="language-js">function test() {
-	return 'foo bar baz all on new lines in span baz on same line as code';
 }</code></pre>
 
 <pre><span>

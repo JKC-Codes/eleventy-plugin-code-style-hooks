@@ -25,12 +25,14 @@ function addLineHooks(HTMLString, options) {
 
 
 test('Adds line numbers', t => {
-	t.is(addLineHooks(`<pre><code>foo</code></pre>`), `<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers">foo</code></pre>`);
+	t.is(addLineHooks(`<pre><code>foo</code></pre>`), `<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo</code></pre>`);
+
+	t.is(addLineHooks(`<pre><code> </code></pre>`), `<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span> </code></pre>`);
 
 	t.is(addLineHooks(`<pre><code>foo
 bar
 baz</code></pre>`),
-`<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers">foo
+`<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>foo
 <span class="token line-number" aria-hidden="true"></span>bar
 <span class="token line-number" aria-hidden="true"></span>baz</code></pre>`);
 
@@ -39,7 +41,7 @@ foo
 bar
 baz
 </code></pre>`),
-`<pre class="line-numbers"><span class="token line-number" aria-hidden="true"></span><code class="line-numbers">
+`<pre class="line-numbers"><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>
 <span class="token line-number" aria-hidden="true"></span>foo
 <span class="token line-number" aria-hidden="true"></span>bar
 <span class="token line-number" aria-hidden="true"></span>baz
@@ -54,6 +56,11 @@ test('Line numbers ignore code not in pre', t => {
 });
 
 
+test('Line numbers are not added to empty code blocks', t => {
+	t.is(addLineHooks(`<pre><code></code></pre>`), `<pre class="line-numbers"><code class="line-numbers"></code></pre>`);
+});
+
+
 test('Line numbers ignore non-code in pre', t => {
 	t.is(addLineHooks(`<pre>
 <span>foo</span>
@@ -61,7 +68,7 @@ test('Line numbers ignore non-code in pre', t => {
 </pre>`),
 `<pre class="line-numbers">
 <span>foo</span>
-<span class="token line-number" aria-hidden="true"></span><code class="line-numbers">bar</code>
+<code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>bar</code>
 </pre>`);
 
 	t.is(addLineHooks(`<pre>
@@ -72,7 +79,7 @@ bar
 </pre>`),
 `<pre class="line-numbers">
 <span>foo</span>
-<span class="token line-number" aria-hidden="true"></span><code class="line-numbers">
+<code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>
 <span class="token line-number" aria-hidden="true"></span>bar
 <span class="token line-number" aria-hidden="true"></span></code>
 </pre>`);
@@ -83,7 +90,7 @@ bar
 </code>
 </pre>`),
 `<pre class="line-numbers">
-<span class="token line-number" aria-hidden="true"></span><span>foo</span><code class="line-numbers">
+<span>foo</span><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>
 <span class="token line-number" aria-hidden="true"></span>bar
 <span class="token line-number" aria-hidden="true"></span></code>
 </pre>`);
@@ -92,7 +99,7 @@ bar
 </span><code>bar
 </code></pre>`),
 `<pre class="line-numbers"><span>foo
-<span class="token line-number" aria-hidden="true"></span></span><code class="line-numbers">bar
+</span><code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>bar
 <span class="token line-number" aria-hidden="true"></span></code></pre>`);
 });
 
@@ -107,9 +114,9 @@ this line shouldn't be numbered
 </pre>`),
 `<pre class="line-numbers">
 this line shouldn't be numbered
-<span class="token line-number" aria-hidden="true"></span><code class="line-numbers">let line1;</code><code class="line-numbers">let stillLine1;</code><code class="line-numbers">let lastOfLine1;
+<code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>let line1;</code><code class="line-numbers">let stillLine1;</code><code class="line-numbers">let lastOfLine1;
 <span class="token line-number" aria-hidden="true"></span>let line2;</code>
-<span class="token line-number" aria-hidden="true"></span><code class="line-numbers">let line3;</code>
+<code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>let line3;</code>
 this line shouldn't be numbered
 </pre>`);
 
@@ -123,10 +130,10 @@ this line shouldn't be numbered
 </pre>`),
 `<pre class="line-numbers">
 this line shouldn't be numbered
-<span class="token line-number" aria-hidden="true"></span><code class="line-numbers">let line1;</code><code class="line-numbers">let stillLine1;</code><code class="line-numbers">let lastOfLine1;
+<code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>let line1;</code><code class="line-numbers">let stillLine1;</code><code class="line-numbers">let lastOfLine1;
 <span class="token line-number" aria-hidden="true"></span>let line2;</code>
 this line shouldn't be numbered
-<span class="token line-number" aria-hidden="true"></span><code class="line-numbers">let line3;</code>
+<code class="line-numbers"><span class="token line-number" aria-hidden="true"></span>let line3;</code>
 this line shouldn't be numbered
 </pre>`);
 });

@@ -49,9 +49,7 @@ function walkTree(node, parentNode, parentState) {
 
 		// Note each new line within pre but outside of code so the first line number can be added
 		if(state.isChildOfPre && !state.isChildOfCode && state.lineNumbers && hasNewLine) {
-			state.lastNewLine.node = parentNode;
-			state.lastNewLine.index = state.index;
-			state.lastNewLine.state = parentState;
+			state.needsFirstLine.status = true;
 		}
 
 		if(state.isChildOfCode && ((state.highlightSyntax && state.language) || state.lineNumbers)) {
@@ -75,16 +73,12 @@ function walkTree(node, parentNode, parentState) {
 		if(node.tag === 'code') {
 			pageContainsCode = true;
 
-			if(state.isChildOfPre && !state.isChildOfCode && state.lineNumbers && state.lastNewLine) {
-				addFirstLineNumbers(state.lastNewLine);
+			if(state.isChildOfPre && !state.isChildOfCode && state.lineNumbers && state.needsFirstLine.status) {
+				addFirstLineNumbers(node, state);
 			}
 		}
 		else if(node.tag === 'pre' && state.lineNumbers) {
-			state.lastNewLine = {
-				node: node,
-				index: null,
-				state: state
-			}
+			state.needsFirstLine = {status: true};
 		}
 
 		// Delay Pre so Code children languages can be added
