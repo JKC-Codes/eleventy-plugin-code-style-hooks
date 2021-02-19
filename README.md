@@ -187,6 +187,28 @@ See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-styl
 
 Remove the unavoidable new line character at the end of Markdown code blocks. Warning: turning this off while line numbers are on will result in an empty numbered line at the end of all Markdown generated code blocks.
 
+If you are using the PostHTML module, markdownTrimTrailingNewline will not work inside the options object. You must import markdownTrimTrailingNewline and add it as a separate plugin.
+
+```js
+const posthtml = require('posthtml');
+const { posthtml: codeStyleHooks, parser, markdownTrimTrailingNewline } = require('eleventy-plugin-code-style-hooks');
+
+module.exports = function(eleventyConfig) {
+	eleventyConfig.addPlugin(markdownTrimTrailingNewline);
+
+	eleventyConfig.addTransform('posthtml', function(HTMLString, outputPath) {
+		if(outputPath && outputPath.endsWith('.html')) {
+			return posthtml([codeStyleHooks()])
+				.process(HTMLString)
+				.then(result => result.html);
+		}
+		else {
+			return HTMLString;
+		}
+	});
+}
+```
+
 
 ### prism
 - Accepts: Function
