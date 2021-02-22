@@ -6,15 +6,17 @@ const addHooks = require('./add-hooks.js');
 const addHeadElements = require('./add-head-elements.js');
 const regEx = require('./regular-expressions.js');
 
-let usingPostHTML;
+let pageContainsCode;
+let prismAPI;
 let removeRedundancy;
-let pageContainsCode = false;
-let prismAPI = null;
+let usingPostHTML;
 
 module.exports = function(options) {
-	usingPostHTML = options.usingPostHTML;
-	removeRedundancy = options.removeRedundancy;
+	pageContainsCode = false;
 	prismAPI = options.prism;
+	removeRedundancy = options.removeRedundancy;
+	usingPostHTML = options.usingPostHTML;
+
 	// AST = Abstract Syntax Tree from HTML Parser
 	return function(AST) {
 		const state = {
