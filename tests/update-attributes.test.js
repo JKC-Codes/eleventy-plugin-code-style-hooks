@@ -196,3 +196,12 @@ test('Redundant attributes are removed', t => {
 	t.is(inlineOptions('<div data-foo="bar" data-highlight-syntax="true"></div>', {removeRedundancy: true}), '<div data-foo="bar"></div>');
 	t.is(inlineOptions('<div data-foo="bar" data-highlight-syntax="true" data-baz="true"></div>', {removeRedundancy: true}), '<div data-foo="bar" data-baz="true"></div>');
 });
+
+
+test('Ignores case sensitivity', t => {
+	t.is(inlineOptions('<code ClAsS="lang-foo"></code>'), '<code ClAsS="language-foo"></code>');
+	t.is(inlineOptions('<code class="lAnG-fOo"></code>'), '<code class="language-foo"></code>');
+	t.is(inlineOptions('<CoDe class="lang-foo"></CoDe>'), '<CoDe class="language-foo"></CoDe>');
+	t.is(inlineOptions('<CoDe ClAsS="lAnG-fOo"></CoDe>'), '<CoDe ClAsS="language-foo"></CoDe>');
+	t.is(inlineOptions('<PrE cLaSs="LaNg-FoO"><code></code></PrE>'), '<PrE cLaSs="language-foo"><code class="language-foo"></code></PrE>');
+});

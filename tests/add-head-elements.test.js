@@ -42,6 +42,7 @@ function addHead(AST, styles, scripts) {
 const headNoDoctype = `<head></head><code class="language-foo"></code>`;
 const headWithDoctype = `<!doctype html><head></head><code class="language-foo"></code>`;
 const noHeadNoDoctype = `<code class="language-foo"></code>`;
+const noHeadNoDoctypeCased = `<tItLe>testing</tItLe><CoDe ClAsS="language-foo"></CoDe>`;
 const noHeadWithDoctype = `<!doctype html><code class="language-foo"></code>`;
 const fullTree =
 `<!DOCTYPE html>
@@ -53,6 +54,14 @@ const fullTree =
 </head>
 <code class="language-foo"></code>
 </html>`;
+const fullTreeCased =
+`<!dOcTyPe HtMl>
+<hTmL lAnG="eN">
+<hEaD>
+	<tItLe>testing</tItLe>
+</hEaD>
+<CoDe ClAsS="lAnGuAgE-fOo"></CoDe>
+</hTmL>`;
 
 const styleString = ['styles.css'];
 const styleObject = [{
@@ -148,4 +157,15 @@ test('Adds head elements when head does not exist', t => {
 	t.is(addHead(noHeadNoDoctype, styleString, scriptString), `<link rel="stylesheet" href="styles.css"><script src="script.js"></script><code class="language-foo"></code>`);
 	t.is(addHead(noHeadNoDoctype, styleObject, scriptObject), `<link rel="stylesheet" href="styles.css" media="(prefers-color-scheme: dark)"><script src="script.js" defer=""></script><code class="language-foo"></code>`);
 	t.is(addHead(noHeadNoDoctype, ['foo.css', ...styleObject], ['bar.js', ...scriptObject]), `<link rel="stylesheet" href="foo.css"><link rel="stylesheet" href="styles.css" media="(prefers-color-scheme: dark)"><script src="bar.js"></script><script src="script.js" defer=""></script><code class="language-foo"></code>`);
+});
+
+test('Is case insensitive', t => {
+	t.is(addHead(noHeadNoDoctypeCased, styleString, []), `<tItLe>testing</tItLe><link rel="stylesheet" href="styles.css"><CoDe ClAsS="language-foo"></CoDe>`);
+	t.is(addHead(fullTreeCased, styleString, []), `<!dOcTyPe HtMl>
+<hTmL lAnG="eN">
+<hEaD>
+	<tItLe>testing</tItLe>
+<link rel="stylesheet" href="styles.css"></hEaD>
+<CoDe ClAsS="lAnGuAgE-fOo"></CoDe>
+</hTmL>`);
 });
