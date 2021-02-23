@@ -1,14 +1,14 @@
 const regEx = require('./regular-expressions.js');
 
 module.exports = function(node, state, removeRedundancy) {
-	const isCode = node.tag === 'code';
-	const isPre = node.tag === 'pre';
+	const isCode = node.tag && node.tag.toLowerCase() === 'code';
+	const isPre = node.tag && node.tag.toLowerCase() === 'pre';
 	const attributes = node.attrs || {};
 
 	if(removeRedundancy) {
 		removeInlineOptions(attributes);
 
-		if(!isPre && !isCode && attributes.class) {
+		if(!isPre && !isCode && attributes[getAttributeKey('class', attributes)]) {
 			removeClass(attributes, regEx.classLanguage);
 		}
 	}
@@ -58,7 +58,7 @@ module.exports = function(node, state, removeRedundancy) {
 		if(attributes.codeChildrenClasses) {
 			updatePreClasses(attributes, removeRedundancy);
 		}
-		else if(removeRedundancy && attributes.class) {
+		else if(removeRedundancy && attributes[getAttributeKey('class', attributes)]) {
 			removeClass(attributes, `${regEx.classLanguage}|${regEx.classLineNumbers}`);
 		}
 
@@ -71,13 +71,16 @@ module.exports = function(node, state, removeRedundancy) {
 
 	// Remove duplicate language and line-numbers classes
 	if(removeRedundancy && (isCode || isPre)) {
-		if(attributes.class) {
-			attributes.class = removeDuplicates(attributes.class, `${regEx.classLanguage}|${regEx.classLineNumbers}`);
+		const classKey = getAttributeKey('class', attributes);
+		const languageKey = getAttributeKey('data-language', attributes);
+
+		if(attributes[classKey]) {
+			attributes[classKey] = removeDuplicates(attributes[classKey], `${regEx.classLanguage}|${regEx.classLineNumbers}`);
 		}
 
 		// Remove duplicate data-language attributes
-		if(attributes['data-language']) {
-			attributes['data-language'] = [...new Set(attributes['data-language'].split(' '))].join(' ');
+		if(attributes[languageKey]) {
+			attributes[languageKey] = [...new Set(attributes[languageKey].split(' '))].join(' ');
 		}
 	}
 
@@ -90,17 +93,28 @@ module.exports = function(node, state, removeRedundancy) {
 }
 
 
+function getAttributeKey(attribute, attributes) {
+	// Can't access keys directly because of case sensitivity
+	for(const key of Object.keys(attributes)) {
+		if(key.toLowerCase() === attribute.toLowerCase()) {
+			return key;
+		}
+	}
+}
+
+
 function updateCodeLanguageClasses(attributes, state, removeRedundancy) {
 	const validLanguageClass = `language-${state.language.toLowerCase()}`;
 	const validLanguageRegEx = new RegExp(`${regEx.wordStart}${validLanguageClass}${regEx.wordEnd}`);
+	const classKey = getAttributeKey('class', attributes);
 
 	// If no matching language class, add it
-	if(!validLanguageRegEx.test(attributes.class)) {
+	if(!validLanguageRegEx.test(attributes[classKey])) {
 		addAttribute(attributes, 'class', validLanguageClass);
 	}
 
-	if(removeRedundancy) {
-		const languageClasses = attributes.class.match(new RegExp(regEx.classLanguage, 'g'));
+	if(removeRedundancy && attributes[classKey]) {
+		const languageClasses = attributes[classKey].match(new RegExp(regEx.classLanguage, 'g'));
 
 		languageClasses.forEach(languageClass => {
 			if(!validLanguageRegEx.test(languageClass)) {
@@ -120,9 +134,10 @@ function updateCodeLanguageClasses(attributes, state, removeRedundancy) {
 
 function updatePreClasses(attributes, removeRedundancy) {
 	const codeClasses = attributes.codeChildrenClasses.split(' ');
+	const classKey = getAttributeKey('class', attributes);
 
-	if(removeRedundancy && attributes.class) {
-		const preClasses = attributes.class.split(' ');
+	if(removeRedundancy && attributes[classKey]) {
+		const preClasses = attributes[classKey].split(' ');
 
 		preClasses.forEach(className => {
 			const languageOrLineNumberRegEx = new RegExp(`${regEx.classLanguage}|${regEx.classLineNumbers}`);
@@ -150,22 +165,22 @@ function removeInlineOptions(attributes) {
 }
 
 function normaliseClasses(attributes) {
-	if(attributes.class) {
+	const classKey = getAttributeKey('class', attributes);
+
+	if(attributes[classKey]) {
 		const languageOrLineNumbers = new RegExp(`${regEx.classLanguage}|${regEx.classLineNumbers}`, 'gi');
 
 		function lowerCaseAndReplace(match) {
 			return match.toLowerCase().replace('lang-', 'language-');
 		};
 
-		attributes.class = attributes.class.replace(languageOrLineNumbers, lowerCaseAndReplace);
+		attributes[classKey] = attributes[classKey].replace(languageOrLineNumbers, lowerCaseAndReplace);
 	}
 }
 
 function addAttribute(attributes, attributeName, attributeValue) {
 	// Can't access key directly because of case sensitivity
-	const key = Object.keys(attributes).find(property => {
-		return new RegExp(`^${attributeName}$`, 'i').test(property);
-	});
+	const key = getAttributeKey(attributeName, attributes);
 
 	// If attribute doesn't exist, add it with value
 	if(!key) {
@@ -183,12 +198,14 @@ function addAttribute(attributes, attributeName, attributeValue) {
 }
 
 function removeClass(attributes, regExString) {
-	if(attributes.class) {
-		attributes.class = removeWord(attributes.class, regExString);
+	const classKey = getAttributeKey('class', attributes);
+
+	if(attributes[classKey]) {
+		attributes[classKey] = removeWord(attributes[classKey], regExString);
 
 		// Don't create class="" attributes
-		if(attributes.class === '') {
-			delete attributes.class;
+		if(attributes[classKey] === '') {
+			delete attributes[classKey];
 		}
 	}
 }

@@ -72,19 +72,19 @@ function walkTree(node, parentNode, parentState) {
 		}
 	}
 	else {
-		if(node.tag === 'code') {
+		if(node.tag && node.tag.toLowerCase() === 'code') {
 			pageContainsCode = true;
 
 			if(state.isChildOfPre && !state.isChildOfCode && state.lineNumbers && state.needsFirstLine.status) {
 				addFirstLineNumbers(node, state);
 			}
 		}
-		else if(node.tag === 'pre' && state.lineNumbers) {
+		else if(node.tag && node.tag.toLowerCase() === 'pre' && state.lineNumbers) {
 			state.needsFirstLine = {status: true};
 		}
 
 		// Delay Pre so Code children languages can be added
-		if(node.tag !== 'pre') {
+		if(node.tag && node.tag.toLowerCase() !== 'pre') {
 			updateAttributes(node, state, removeRedundancy);
 		}
 
@@ -97,7 +97,7 @@ function walkTree(node, parentNode, parentState) {
 		}
 
 		// Update attributes after walking children so Code languages can be added
-		if(node.tag === 'pre') {
+		if(node.tag && node.tag.toLowerCase() === 'pre') {
 			updateAttributes(node, state, removeRedundancy);
 		}
 	}

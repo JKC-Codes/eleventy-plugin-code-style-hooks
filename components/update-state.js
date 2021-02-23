@@ -2,13 +2,13 @@ const regEx = require('./regular-expressions.js');
 
 module.exports = function(attributes, parentNode, parentState) {
 	const dataAttributes = attributes ? getDataAttributes(attributes) : {};
-	const classes = attributes && attributes.class ? getClasses(attributes.class) : {};
+	const classes = attributes ? getClasses(attributes) : {};
 	const state = Object.assign({}, parentState, dataAttributes, classes);
 
-	if(parentNode.tag === 'pre') {
+	if(parentNode.tag && parentNode.tag.toLowerCase() === 'pre') {
 		state.isChildOfPre = parentNode;
 	}
-	else if(parentNode.tag === 'code') {
+	else if(parentNode.tag && parentNode.tag.toLowerCase() === 'code') {
 		state.isChildOfCode = true;
 	}
 
@@ -40,7 +40,16 @@ function getDataAttributes(attributes) {
 	return state;
 }
 
-function getClasses(classesString) {
+function getClasses(attributes) {
+	let classesString = '';
+	// Can't access key directly because of case sensitivity
+	for(const [key, value] of Object.entries(attributes)) {
+		if(key.toLowerCase() === 'class') {
+			classesString = value;
+			break;
+		}
+	}
+
 	const state = {};
 	const languageClass = classesString.match(new RegExp(regEx.classLanguage, 'i'));
 
