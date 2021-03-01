@@ -213,7 +213,7 @@ module.exports = function(eleventyConfig) {
 ### prism
 - Accepts: Function
 
-Provides a function that can be called before Prism languages are loaded. Will be passed the Prism module as its only argument. Can be used to add/customise languages.
+Provides a function that can be called before Prism languages are loaded. Will be passed the Prism module as its first argument and Prism's `loadLanguages()` utility as its second argument. Can be used to add/customise languages.
 
 
 ### removeRedundancy

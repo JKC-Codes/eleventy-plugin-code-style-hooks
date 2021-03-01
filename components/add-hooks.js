@@ -12,7 +12,7 @@ module.exports = function(string, state, prismAPI) {
 
 	// Expose Prism to user so they can add new languages
 	if(prismAPI) {
-		prismAPI(Prism);
+		prismAPI(Prism, loadLanguage);
 	}
 
 	// Prism only loads markup, css, clike and javascript by default
