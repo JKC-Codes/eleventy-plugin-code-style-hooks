@@ -55,7 +55,7 @@ Then add your CSS file to the page (or [configure Code Style Hooks to do this au
 ### PostHTML
 Code Style Hooks provides a [PostHTML](https://posthtml.org/) compatible version so you can reduce build times by reusing an existing PostHTML syntax tree.
 
-The `posthtml` export provides a standalone version of Code Style Hooks. This could even be used outside of Eleventy.
+The `posthtml` export provides a stand-alone version of Code Style Hooks. This could even be used outside of Eleventy.
 
 The optional `parser` export provides an options parser to further reduce build times when using Eleventy's `--watch` or `--serve` options. Parsing your options outside of the transform will mean this is only done once at the start of watching or serving rather than every time Eleventy builds.
 
@@ -121,7 +121,7 @@ Works with CSS and other languages that extend the CSS language in Prism.
 
 [highlightSyntax](#highlightsyntax) must be `True`.
 
-See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/examples) of the Code Style Hooks repo for example CSS.
+See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/tree/main/examples) of the Code Style Hooks repo for example CSS.
 
 
 ### defaultLanguage
@@ -157,7 +157,7 @@ Keeps the case from the *language-xxx* class, for example, `class="language-JaVa
 
 [highlightSyntax](#highlightsyntax) must be `True`.
 
-See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/examples) of the Code Style Hooks repo for example CSS.
+See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/tree/main/examples) of the Code Style Hooks repo for example CSS.
 
 
 ### lineNumbers
@@ -178,7 +178,7 @@ Insert spans at the start of each line within a `code` block with a `pre` parent
 
 If you're getting an empty line at the end of Markdown generated code blocks, you may need to turn on [markdownTrimTrailingNewline](#markdowntrimtrailingnewline).
 
-See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/examples) of the Code Style Hooks repo for example CSS.
+See the [examples folder](https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/tree/main/examples) of the Code Style Hooks repo for example CSS.
 
 
 ### markdownTrimTrailingNewline
@@ -289,7 +289,7 @@ The following attributes will supersede the accompanying global option on that e
 ## Differences
 
 ### Official Plugin
-The [official syntax highlighting plugin](https://www.11ty.dev/docs/plugins/syntaxhighlight/) only applies to Markdown, Nunjucks and Liquid templates, the last two using shortcodes. Code Style Hooks uses a transform to look at all your HTML files and add Prism tags to all `code` elements automatically without shortcodes. This makes the official plugin more efficient but less convenient.
+The [official syntax highlighting plugin](https://www.11ty.dev/docs/plugins/syntaxhighlight/) only applies to Markdown, Nunjucks and Liquid templates, the last two using shortcodes. Code Style Hooks uses a transform to look at all your HTML files and add Prism tags to all `code` elements automatically without shortcodes. This makes the official plugin more efficient but Code Style Hooks more convenient.
 
 See below for the differences in major options available:
 | Option | Official Plugin | Code Style Hooks |
@@ -301,7 +301,7 @@ See below for the differences in major options available:
 | Auto add CSS/JS | ✗ no | ✓ yes |
 
 
-### Prism
+### Prism JS
 The main difference between [Prism](https://prismjs.com/) and Code Style Hooks is that Prism runs on the client side whereas Code Style Hooks runs at build time. This means that Prism plugins listed on prismjs.com likely won't work since they expect a DOM.
 
 The only other notable difference is that Code Style Hooks does not remove existing HTML and even allows `code` blocks to be nested.
