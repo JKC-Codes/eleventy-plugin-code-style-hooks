@@ -11,9 +11,7 @@
 		"highlight",
 		"prism",
 		"prismjs",
-		"posthtml",
-		"style",
-		"hook"
+		"posthtml"
 	],
 	"homepage": "https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks#readme",
 	"bugs": {
