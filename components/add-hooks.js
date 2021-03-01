@@ -80,7 +80,7 @@ if(!Prism.codeStyleHooksColorHookAdded) {
 	Prism.codeStyleHooksColorHookAdded = true;
 	// If Prism has a color token added, insert span with "token color-preview" class and style="--color-value: 'value'" property before all colours
 	Prism.hooks.add('wrap', function(env) {
-		if(env.type === 'color') {
+		if(env.type === 'color' || env.type === 'hexcode') {
 			// Prism only provides a string with tokens already added so they need to be removed before getting the colour
 			const plainText = env.content.replace(new RegExp(regEx.HTMLTag, 'g'), '');
 			const color = new RegExp(`${regEx.color}|${regEx.colorNamed}`, 'i').exec(plainText)[0];
