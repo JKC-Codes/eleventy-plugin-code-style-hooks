@@ -8,6 +8,7 @@
 		"eleventy-plugin",
 		"syntax",
 		"highlight",
+		"highlighting",
 		"prism",
 		"prismjs",
 		"posthtml"
