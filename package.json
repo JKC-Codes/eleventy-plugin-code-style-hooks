@@ -1,6 +1,5 @@
 {
 	"name": "eleventy-plugin-code-style-hooks",
-	"private": true,
 	"version": "0.0.1",
 	"description": "11ty plugin for adding code styling hooks to all of your HTML pages.",
 	"keywords": [
