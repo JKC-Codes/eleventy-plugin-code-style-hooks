@@ -4,21 +4,21 @@ An [11ty](https://www.11ty.dev/) plugin that adds style hooks to `code` elements
 
 - [Installation](#installation)
 - [Usage](#usage)
-	- [PostHTML](#posthtml)
+  - [PostHTML](#posthtml)
 - [Configuration](#configuration)
-	- [colorPreviews](#colorpreviews)
-	- [defaultLanguage](#defaultlanguage)
-	- [highlightSyntax](#highlightsyntax)
-	- [languageLabels](#languagelabels)
-	- [lineNumbers](#linenumbers)
-	- [markdownTrimTrailingNewline](#markdowntrimtrailingnewline)
-	- [removeRedundancy](#removeredundancy)
-	- [scripts](#scripts)
-	- [styles](#styles)
+  - [colorPreviews](#colorpreviews)
+  - [defaultLanguage](#defaultlanguage)
+  - [highlightSyntax](#highlightsyntax)
+  - [languageLabels](#languagelabels)
+  - [lineNumbers](#linenumbers)
+  - [markdownTrimTrailingNewline](#markdowntrimtrailingnewline)
+  - [removeRedundancy](#removeredundancy)
+  - [scripts](#scripts)
+  - [styles](#styles)
 - [Inline Options](#inline-options)
 - [Differences](#differences)
-	- [Official Plugin](#official-plugin)
-	- [Prism JS](#prism-js)
+  - [Official Plugin](#official-plugin)
+  - [Prism JS](#prism-js)
 - [Licence](#licence)
 
 
@@ -36,7 +36,7 @@ In your [Eleventy config file](https://www.11ty.dev/docs/config/) (`.eleventy.js
 const codeStyleHooks = require('eleventy-plugin-code-style-hooks');
 
 module.exports = function(eleventyConfig) {
-	eleventyConfig.addPlugin(codeStyleHooks);
+  eleventyConfig.addPlugin(codeStyleHooks);
 }
 ```
 
@@ -45,7 +45,7 @@ Then add your CSS file to the page (or [configure Code Style Hooks to do this au
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="/static/styles/prism.min.css">
+  <link rel="stylesheet" href="/static/styles/prism.min.css">
 </head>
 …
 </html>
@@ -66,16 +66,16 @@ const { posthtml: codeStyleHooks, parser } = require('eleventy-plugin-code-style
 const options = parser({defaultLanguage: 'js'});
 
 module.exports = function(eleventyConfig) {
-	eleventyConfig.addTransform('posthtml', function(HTMLString, outputPath) {
-		if(outputPath && outputPath.endsWith('.html')) {
-			return posthtml([codeStyleHooks(options), anotherPostHTMLPlugin()])
-				.process(HTMLString)
-				.then(result => result.html);
-		}
-		else {
-			return HTMLString;
-		}
-	});
+  eleventyConfig.addTransform('posthtml', function(HTMLString, outputPath) {
+    if(outputPath && outputPath.endsWith('.html')) {
+      return posthtml([codeStyleHooks(options), anotherPostHTMLPlugin()])
+        .process(HTMLString)
+        .then(result => result.html);
+    }
+    else {
+      return HTMLString;
+    }
+  });
 }
 ```
 
@@ -85,22 +85,22 @@ module.exports = function(eleventyConfig) {
 const codeStyleHooks = require('eleventy-plugin-code-style-hooks');
 
 module.exports = function(eleventyConfig) {
-	eleventyConfig.addPlugin(codeStyleHooks, {
-		colorPreviews: true,
-		defaultLanguage: 'js',
-		highlightSyntax: true,
-		languageLabels: true,
-		lineNumbers: true,
-		markdownTrimTrailingNewline: true,
-		prism: function(prism) {
-			prism.languages.example = {
-				tokenname: /\w+/i
-			}
-		}
-		removeRedundancy: true,
-		scripts: '/static/scripts/code-blocks.js',
-		styles: '/static/styles/prism.js'
-	});
+  eleventyConfig.addPlugin(codeStyleHooks, {
+    colorPreviews: true,
+    defaultLanguage: 'js',
+    highlightSyntax: true,
+    languageLabels: true,
+    lineNumbers: true,
+    markdownTrimTrailingNewline: true,
+    prism: function(prism) {
+      prism.languages.example = {
+        tokenname: /\w+/i
+      }
+    }
+    removeRedundancy: true,
+    scripts: '/static/scripts/code-blocks.js',
+    styles: '/static/styles/prism.js'
+  });
 }
 ```
 
@@ -194,18 +194,18 @@ const posthtml = require('posthtml');
 const { posthtml: codeStyleHooks, parser, markdownTrimTrailingNewline } = require('eleventy-plugin-code-style-hooks');
 
 module.exports = function(eleventyConfig) {
-	eleventyConfig.addPlugin(markdownTrimTrailingNewline);
+  eleventyConfig.addPlugin(markdownTrimTrailingNewline);
 
-	eleventyConfig.addTransform('posthtml', function(HTMLString, outputPath) {
-		if(outputPath && outputPath.endsWith('.html')) {
-			return posthtml([codeStyleHooks()])
-				.process(HTMLString)
-				.then(result => result.html);
-		}
-		else {
-			return HTMLString;
-		}
-	});
+  eleventyConfig.addTransform('posthtml', function(HTMLString, outputPath) {
+    if(outputPath && outputPath.endsWith('.html')) {
+      return posthtml([codeStyleHooks()])
+        .process(HTMLString)
+        .then(result => result.html);
+    }
+    else {
+      return HTMLString;
+    }
+  });
 }
 ```
 
@@ -245,8 +245,8 @@ If an object is given, each key will be added as an attribute with the key's val
 ```html
 <!--
 {
-	src: '/scripts/foo.js',
-	defer: ''
+  src: '/scripts/foo.js',
+  defer: ''
 }
 -->
 <script src="/scripts/foo.js" defer=""></script>
@@ -266,8 +266,8 @@ If an object is given, each key will be added as an attribute with the key's val
 ```html
 <!--
 {
-	href: '/styles/prism-dark.css',
-	media: '(prefers-color-scheme: dark)'
+  href: '/styles/prism-dark.css',
+  media: '(prefers-color-scheme: dark)'
 }
 -->
 <link rel="stylesheet" href="/styles/prism-dark.css" media="(prefers-color-scheme: dark)">
