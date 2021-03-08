@@ -96,7 +96,7 @@ module.exports = function(eleventyConfig) {
       prism.languages.example = {
         tokenname: /\w+/i
       }
-    }
+    },
     removeRedundancy: true,
     scripts: '/static/scripts/code-blocks.js',
     styles: '/static/styles/prism.js'
