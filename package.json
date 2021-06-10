@@ -17,7 +17,7 @@
 	"bugs": {
 		"url": "https://github.com/JKC-Codes/eleventy-plugin-code-style-hooks/issues"
 	},
-	"license": "GPL-3.0-or-later",
+	"license": "MPL-2.0",
 	"author": {
 		"name": "John Kemp-Cruz",
 		"url": "https://jkc.codes/"
@@ -43,7 +43,7 @@
 		"prismjs": "^1.23.0"
 	},
 	"devDependencies": {
-		"@11ty/eleventy": "^0.11.1",
+		"@11ty/eleventy": "^0.11.0",
 		"ava": "^3.15.0",
 		"npm-run-all": "^4.1.5",
 		"posthtml": "^0.15.1"

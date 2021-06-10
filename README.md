@@ -308,4 +308,4 @@ The only other notable difference is that Code Style Hooks does not remove exist
 
 
 ## Licence
-[GNU GPLv3 ](https://choosealicense.com/licenses/gpl-3.0/)
+[MPL-2.0](https://choosealicense.com/licenses/mpl-2.0/)
