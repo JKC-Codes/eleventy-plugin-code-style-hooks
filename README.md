@@ -53,11 +53,9 @@ Then add your CSS file to the page (or [configure Code Style Hooks to do this au
 
 
 ### PostHTML
-Code Style Hooks provides a [PostHTML](https://posthtml.org/) compatible version so you can reduce build times by reusing an existing PostHTML syntax tree.
+If you're already using [PostHTML](https://posthtml.org/) you can reduce build times by using the `posthtml` export as a plugin to your existing PostHTML syntax tree. It provides a stand-alone PostHTML version of Code Style Hooks that can even be used outside of Eleventy.
 
-The `posthtml` export provides a stand-alone version of Code Style Hooks. This could even be used outside of Eleventy.
-
-The optional `parser` export provides an options parser to further reduce build times when using Eleventy's `--watch` or `--serve` options. Parsing your options outside of the transform will mean this is only done once at the start of watching or serving rather than every time Eleventy builds.
+The optional `parser` export further reduces build times when using PostHTML with Eleventy's `--watch` or `--serve` arguments. Parsing your options outside of the transform will mean it's only done once at the start of watching or serving rather than every time Eleventy builds.
 
 ```js
 const posthtml = require('posthtml');
