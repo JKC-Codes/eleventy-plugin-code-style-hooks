@@ -1,7 +1,7 @@
 {
 	"name": "eleventy-plugin-code-style-hooks",
 	"version": "1.0.0",
-	"description": "11ty plugin for adding code styling hooks to all of your HTML pages.",
+	"description": "11ty plugin for automatic syntax highlighting without shortcodes or client side JavaScript.",
 	"keywords": [
 		"11ty",
 		"eleventy",

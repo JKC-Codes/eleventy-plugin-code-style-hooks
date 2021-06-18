@@ -1,5 +1,5 @@
 # Code Style Hooks
-An [11ty](https://www.11ty.dev/) plugin that adds style hooks to `code` elements at build time using [Prism](https://prismjs.com/) so you can highlight syntax using CSS.
+An [11ty](https://www.11ty.dev/) plugin that adds classes to `code` elements at build time using [Prism](https://prismjs.com/) so you can highlight syntax using CSS.
 
 
 - [Installation](#installation)
