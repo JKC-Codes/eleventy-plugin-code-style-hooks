@@ -43,13 +43,18 @@
 		"prismjs": "^1.23.0"
 	},
 	"devDependencies": {
-		"@11ty/eleventy": "^0.11.0",
+		"@11ty/eleventy": "0.11.0",
 		"ava": "^3.15.0",
 		"concurrently": "^6.2.0",
-		"posthtml": "^0.15.1"
+		"posthtml": "^0.15.0"
 	},
 	"peerDependencies": {
-		"@11ty/eleventy": "^0.11.0"
+		"@11ty/eleventy": "0.11 - 0.x"
+	},
+	"peerDependenciesMeta": {
+		"@11ty/eleventy": {
+			"optional": true
+		}
 	},
 	"engines": {
 		"node": ">=10.0.0"
