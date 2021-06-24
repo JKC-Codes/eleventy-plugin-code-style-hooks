@@ -1,4 +1,4 @@
-const parseHTML = require('posthtml-parser');
+const {default: parseHTML} = require('posthtml-parser');
 const updateState = require('./update-state.js');
 const updateAttributes = require('./update-attributes.js');
 const addFirstLineNumbers = require('./add-first-line-numbers.js');

@@ -1,7 +1,7 @@
 const test = require('ava');
 const walkTree = require('../components/walk-tree.js');
-const parseHTML = require('posthtml-parser');
-const renderHTML = require('posthtml-render');
+const {default: parseHTML} = require('posthtml-parser');
+const {default: renderHTML} = require('posthtml-render');
 
 
 function inlineOptions(HTMLString, options) {

@@ -1,7 +1,7 @@
 const Prism = require('prismjs');
 const loadLanguage = require('prismjs/components/');
-const parseHTML = require('posthtml-parser');
-const renderHTML = require('posthtml-render');
+const {default: parseHTML} = require('posthtml-parser');
+const {default: renderHTML} = require('posthtml-render');
 const regEx = require('./regular-expressions.js');
 
 
