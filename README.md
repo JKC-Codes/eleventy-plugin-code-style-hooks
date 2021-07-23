@@ -12,6 +12,7 @@ An [11ty](https://www.11ty.dev/) plugin that adds classes to `code` elements at 
   - [languageLabels](#languagelabels)
   - [lineNumbers](#linenumbers)
   - [markdownTrimTrailingNewline](#markdowntrimtrailingnewline)
+  - [prism](#prism)
   - [removeRedundancy](#removeredundancy)
   - [scripts](#scripts)
   - [styles](#styles)
