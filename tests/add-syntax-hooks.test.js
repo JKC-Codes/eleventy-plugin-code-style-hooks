@@ -1,7 +1,7 @@
 const test = require('ava');
 const walkTree = require('../components/walk-tree.js');
-const {default: parseHTML} = require('posthtml-parser');
-const {default: renderHTML} = require('posthtml-render');
+const {parser: parseHTML} = require('posthtml-parser');
+const {render: renderHTML} = require('posthtml-render');
 
 
 function addSyntaxHooks(HTMLString, options) {

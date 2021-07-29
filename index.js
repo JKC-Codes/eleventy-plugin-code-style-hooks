@@ -1,5 +1,5 @@
-const {default: parseHTML} = require('posthtml-parser');
-const {default: renderHTML} = require('posthtml-render');
+const {parser: parseHTML} = require('posthtml-parser');
+const {render: renderHTML} = require('posthtml-render');
 const defaultOptions = require('./components/options-default.js');
 const parseOptions = require('./components/options-parser.js');
 const removeTrailingWhitespace = require('./components/remove-trailing-whitespace.js');

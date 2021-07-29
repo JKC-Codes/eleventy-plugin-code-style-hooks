@@ -38,8 +38,8 @@
 		"prepublishOnly": "npm run test"
 	},
 	"dependencies": {
-		"posthtml-parser": "^0.9.0",
-		"posthtml-render": "^2.0.0",
+		"posthtml-parser": "^0.10.0",
+		"posthtml-render": "^3.0.0",
 		"prismjs": "^1.0.0"
 	},
 	"devDependencies": {
