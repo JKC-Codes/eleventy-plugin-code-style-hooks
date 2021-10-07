@@ -1,6 +1,6 @@
 {
 	"name": "eleventy-plugin-code-style-hooks",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "11ty plugin for automatic syntax highlighting without shortcodes or client side JavaScript.",
 	"keywords": [
 		"11ty",
