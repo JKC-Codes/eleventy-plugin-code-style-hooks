@@ -1,5 +1,6 @@
 @supports(--custom: properties) { /* Prevent older browsers from displaying an empty white box */
 	code .color-preview {
+		/* Create the colour preview box */
 		display: inline-block;
 		box-sizing: content-box;
 		width: 0.6em;
@@ -19,10 +20,34 @@
 		background-size: 100% 100%, 50% 50%, 50% 50%;
 	}
 
-	/* Code style hooks optimistically supports CSS Color Module Level 4 before browsers. This prevents showing empty white boxes */
-	code .color-preview[style^="--color-value:hwb"],
-	code .color-preview[style^="--color-value:lab"],
-	code .color-preview[style^="--color-value:lch"] {
-		display: none;
+	/* Code style hooks supports CSS Color Module Level 4 before some browsers. This prevents showing empty white boxes */
+	@supports not (color: hwb(0 0% 0%)) {
+		code .color-preview[style^="--color-value:hwb"] {
+			display: none;
+		}
+	}
+
+	@supports not (color: lab(0% 0 0)) {
+		code .color-preview[style^="--color-value:lab"] {
+			display: none;
+		}
+	}
+
+	@supports not (color: oklab(0% 0 0)) {
+		code .color-preview[style^="--color-value:oklab"] {
+			display: none;
+		}
+	}
+
+	@supports not (color: lch(0% 0 0)) {
+		code .color-preview[style^="--color-value:lch"] {
+			display: none;
+		}
+	}
+
+	@supports not (color: oklch(0% 0 0)) {
+		code .color-preview[style^="--color-value:oklch"] {
+			display: none;
+		}
 	}
 }

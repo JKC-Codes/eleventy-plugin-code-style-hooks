@@ -232,6 +232,11 @@ test('Adds Lab colour hooks', t => {
 	t.true(addsHooks('lab(50% -10 90 / 0.9)', 'lab', 4, true));
 	t.true(addsHooks('lab(50% -10 90 / 37%)', 'lab', 4, true));
 
+	t.true(addsHooks('oklab(50% -10 90/0.9)', 'oklab', 4, true));
+	t.true(addsHooks('oklab(50% -10 90/37%)', 'oklab', 4, true));
+	t.true(addsHooks('oklab(50% -10 90 / 0.9)', 'oklab', 4, true));
+	t.true(addsHooks('oklab(50% -10 90 / 37%)', 'oklab', 4, true));
+
 	t.is(addColorHooks('lab(50% 10 90)'), '<span class="token color"><span class="color-preview" style="--color-value:lab(50% 10 90)" aria-hidden="true"></span><span class="token function">lab</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token unit">%</span> <span class="token number">10</span> <span class="token number">90</span><span class="token punctuation">)</span></span>');
 	t.is(addColorHooks('lab(0% 500 0.24/.9)'), '<span class="token color"><span class="color-preview" style="--color-value:lab(0% 500 0.24/.9)" aria-hidden="true"></span><span class="token function">lab</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token unit">%</span> <span class="token number">500</span> <span class="token number">0.24</span><span class="token punctuation">/</span><span class="token number">.9</span><span class="token punctuation">)</span></span>');
 });
@@ -267,10 +272,21 @@ test('Adds LCH colour hooks', t => {
 	t.true(addsHooks('lch(50% 10 0.8turn)', 'lch'));
 	t.true(addsHooks('lch(50% 10 .8turn)', 'lch'));
 
+	t.true(addsHooks('oklch(50% 10 45deg)', 'oklch'));
+	t.true(addsHooks('oklch(50% 10 40grad)', 'oklch'));
+	t.true(addsHooks('oklch(50% 10 3.1416rad)', 'oklch'));
+	t.true(addsHooks('oklch(50% 10 0.8turn)', 'oklch'));
+	t.true(addsHooks('oklch(50% 10 .8turn)', 'oklch'));
+
 	t.true(addsHooks('lch(50% -10 90/0.9)', 'lch', 4, true));
 	t.true(addsHooks('lch(50% -10 90/37%)', 'lch', 4, true));
 	t.true(addsHooks('lch(50% -10 90 / 0.9)', 'lch', 4, true));
 	t.true(addsHooks('lch(50% -10 90 / 37%)', 'lch', 4, true));
+
+	t.true(addsHooks('oklch(50% -10 90/0.9)', 'oklch', 4, true));
+	t.true(addsHooks('oklch(50% -10 90/37%)', 'oklch', 4, true));
+	t.true(addsHooks('oklch(50% -10 90 / 0.9)', 'oklch', 4, true));
+	t.true(addsHooks('oklch(50% -10 90 / 37%)', 'oklch', 4, true));
 
 	t.is(addColorHooks('lch(50% 10 90)'), '<span class="token color"><span class="color-preview" style="--color-value:lch(50% 10 90)" aria-hidden="true"></span><span class="token function">lch</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token unit">%</span> <span class="token number">10</span> <span class="token number">90</span><span class="token punctuation">)</span></span>');
 	t.is(addColorHooks('lch(0% 500 0.24/.9)'), '<span class="token color"><span class="color-preview" style="--color-value:lch(0% 500 0.24/.9)" aria-hidden="true"></span><span class="token function">lch</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token unit">%</span> <span class="token number">500</span> <span class="token number">0.24</span><span class="token punctuation">/</span><span class="token number">.9</span><span class="token punctuation">)</span></span>');
