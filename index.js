@@ -13,7 +13,7 @@ module.exports = function(eleventyConfig, userOptions) {
 		if(outputPath && outputPath.endsWith('.html')) {
 			return renderHTML(
 				walkTree(options)(
-					parseHTML(HTMLString)
+					parseHTML(HTMLString, {recognizeNoValueAttribute: true})
 				)
 			);
 		}
