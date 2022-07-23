@@ -295,7 +295,6 @@ See below for the differences in major options available:
 |---:|:---:|:---:|
 | Line highlighting | ✓ yes | ✗ no |
 | Trim whitespace | ✓ yes | ✗ no |
-| Language labels | ✗ no | ✓ yes |
 | Colour previews | ✗ no | ✓ yes |
 | Auto add CSS/JS | ✗ no | ✓ yes |
 
